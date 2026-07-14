@@ -1,0 +1,6 @@
+{
+  "name": "Simulador de Exames Angola",
+  "description": "Simulador de exames de concursos públicos em Angola para o MININT e MINSA, com cronómetro, folha de respostas e correção detalhada.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

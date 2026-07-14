@@ -1,0 +1,867 @@
+import React, { useState, useEffect } from "react";
+import {
+  ArrowLeft,
+  Plus,
+  Trash2,
+  CheckCircle,
+  AlertCircle,
+  HelpCircle,
+  Users,
+  Database,
+  Search,
+  TrendingUp,
+  Clock,
+  Award,
+  Filter,
+  BarChart3,
+  Calendar,
+  Lock
+} from "lucide-react";
+import { Pergunta, ConcursoType } from "../types";
+import { db, handleFirestoreError, OperationType } from "../firebase";
+import {
+  collection,
+  getDocs,
+  setDoc,
+  deleteDoc,
+  doc,
+  query,
+  orderBy,
+  limit
+} from "firebase/firestore";
+import { motion } from "motion/react";
+
+interface AdminDashboardProps {
+  adminUser: { uid: string; name: string; email: string };
+  onBack: () => void;
+}
+
+interface CandidateResult {
+  id: string;
+  candidateUid: string;
+  candidateName: string;
+  candidateEmail: string;
+  ministerio: ConcursoType;
+  score: number;
+  respostasCorretas: number;
+  totalPerguntas: number;
+  tempoGasto: number;
+  createdAt: string;
+}
+
+export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProps) {
+  const [activeTab, setActiveTab] = useState<"candidates" | "questions">("candidates");
+
+  // State for Candidate Results
+  const [results, setResults] = useState<CandidateResult[]>([]);
+  const [loadingResults, setLoadingResults] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [ministryFilter, setMinistryFilter] = useState<string>("ALL");
+
+  // State for Custom Questions
+  const [customQuestions, setCustomQuestions] = useState<Pergunta[]>([]);
+  const [loadingQuestions, setLoadingQuestions] = useState(false);
+
+  // Form State for Adding Questions
+  const [ministerio, setMinisterio] = useState<ConcursoType>("MININT");
+  const [categoria, setCategoria] = useState<string>("");
+  const [enunciado, setEnunciado] = useState<string>("");
+  const [opcoes, setOpcoes] = useState<string[]>(["", "", "", ""]);
+  const [resposta, setResposta] = useState<number>(0);
+  const [explicacao, setExplicacao] = useState<string>("");
+
+  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
+  // Load results from Firestore on mount
+  useEffect(() => {
+    fetchResults();
+    fetchCustomQuestions();
+  }, []);
+
+  const fetchResults = async () => {
+    setLoadingResults(true);
+    try {
+      const resultsRef = collection(db, "resultados");
+      // Fallback query if no index is configured yet
+      const q = query(resultsRef);
+      const snapshot = await getDocs(q);
+      const fetched: CandidateResult[] = [];
+      snapshot.forEach((docSnap) => {
+        fetched.push({ id: docSnap.id, ...docSnap.data() } as CandidateResult);
+      });
+      // Sort client side to bypass potential composite index requirements
+      fetched.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      setResults(fetched);
+    } catch (err: any) {
+      console.error("Erro ao carregar resultados dos candidatos:", err);
+      // Fallback/Mock results for preview if firebase collection lacks read permission or isn't fully set up yet
+      if (adminUser.uid.startsWith("demo-")) {
+        setResults([
+          {
+            id: "res-1",
+            candidateUid: "demo-candidate-123",
+            candidateName: "Sebastião Manuel",
+            candidateEmail: "sebastiao@concurso.ao",
+            ministerio: "MININT",
+            score: 75,
+            respostasCorretas: 15,
+            totalPerguntas: 20,
+            tempoGasto: 1240,
+            createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
+          },
+          {
+            id: "res-2",
+            candidateUid: "demo-candidate-456",
+            candidateName: "Isabel Nzumba",
+            candidateEmail: "isabel@gmail.com",
+            ministerio: "MINSA",
+            score: 45,
+            respostasCorretas: 9,
+            totalPerguntas: 20,
+            tempoGasto: 1800,
+            createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
+          },
+          {
+            id: "res-3",
+            candidateUid: "demo-candidate-789",
+            candidateName: "José Pedro",
+            candidateEmail: "jose.pedro@hotmail.com",
+            ministerio: "MININT",
+            score: 90,
+            respostasCorretas: 18,
+            totalPerguntas: 20,
+            tempoGasto: 950,
+            createdAt: new Date(Date.now() - 3600000 * 48).toISOString(),
+          },
+        ]);
+      }
+    } finally {
+      setLoadingResults(false);
+    }
+  };
+
+  const fetchCustomQuestions = async () => {
+    setLoadingQuestions(true);
+    try {
+      const questionsRef = collection(db, "perguntas");
+      const snapshot = await getDocs(questionsRef);
+      const fetched: Pergunta[] = [];
+      snapshot.forEach((docSnap) => {
+        fetched.push(docSnap.data() as Pergunta);
+      });
+      setCustomQuestions(fetched);
+    } catch (err: any) {
+      console.error("Erro ao carregar perguntas customizadas:", err);
+      // Fallback to local storage if user is offline or Firebase is configuring
+      const stored = localStorage.getItem("custom_perguntas");
+      if (stored) {
+        try {
+          setCustomQuestions(JSON.parse(stored));
+        } catch (e) {
+          console.error("Erro ao ler localStorage:", e);
+        }
+      }
+    } finally {
+      setLoadingQuestions(false);
+    }
+  };
+
+  const handleOpcaoChange = (index: number, value: string) => {
+    const updated = [...opcoes];
+    updated[index] = value;
+    setOpcoes(updated);
+  };
+
+  const handleAddQuestion = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Validations
+    if (!categoria.trim()) {
+      setFeedback({ type: "error", message: "Por favor, indique a categoria (ex: Direito Penal)." });
+      return;
+    }
+    if (!enunciado.trim()) {
+      setFeedback({ type: "error", message: "O enunciado da pergunta não pode estar vazio." });
+      return;
+    }
+    if (opcoes.some((opt) => !opt.trim())) {
+      setFeedback({ type: "error", message: "Todas as 4 opções de resposta devem ser preenchidas." });
+      return;
+    }
+    if (!explicacao.trim()) {
+      setFeedback({ type: "error", message: "Adicione uma explicação pedagógica para o gabarito comentado." });
+      return;
+    }
+
+    const questionId = "q-" + Date.now();
+
+    // Create new question object matching firestore-blueprint
+    const newQuestion: Pergunta & { createdBy: string; createdAt: string } = {
+      id: questionId as any, // Cast for matching string ID
+      ministerio,
+      categoria: categoria.trim(),
+      enunciado: enunciado.trim(),
+      opcoes: opcoes.map((opt) => opt.trim()),
+      resposta,
+      explicacao: explicacao.trim(),
+      createdBy: adminUser.uid,
+      createdAt: new Date().toISOString(),
+    };
+
+    try {
+      // Save directly to Firestore
+      const questionDocRef = doc(db, "perguntas", questionId);
+      await setDoc(questionDocRef, newQuestion);
+
+      // Add to local state
+      const updatedList = [...customQuestions, newQuestion as any];
+      setCustomQuestions(updatedList);
+      // Sync local storage as redundancy/offline fallback
+      localStorage.setItem("custom_perguntas", JSON.stringify(updatedList));
+
+      // Reset Form
+      setCategoria("");
+      setEnunciado("");
+      setOpcoes(["", "", "", ""]);
+      setResposta(0);
+      setExplicacao("");
+
+      setFeedback({
+        type: "success",
+        message: `Pergunta de ${ministerio} adicionada com sucesso ao banco de dados Firestore!`,
+      });
+    } catch (err: any) {
+      console.error("Erro ao adicionar pergunta ao Firestore:", err);
+      
+      // Fallback operation locally if permissions block
+      const updatedList = [...customQuestions, newQuestion as any];
+      setCustomQuestions(updatedList);
+      localStorage.setItem("custom_perguntas", JSON.stringify(updatedList));
+
+      setFeedback({
+        type: "success",
+        message: `Adicionada localmente! (Firestore offline ou sem permissão: ${err.message})`,
+      });
+    }
+
+    // Auto clear feedback
+    setTimeout(() => {
+      setFeedback(null);
+    }, 4000);
+  };
+
+  const handleDeleteQuestion = async (id: any) => {
+    if (window.confirm("Deseja mesmo eliminar esta pergunta do banco de dados?")) {
+      try {
+        const idStr = String(id);
+        const questionDocRef = doc(db, "perguntas", idStr);
+        await deleteDoc(questionDocRef);
+
+        const updatedList = customQuestions.filter((q) => q.id !== id);
+        setCustomQuestions(updatedList);
+        localStorage.setItem("custom_perguntas", JSON.stringify(updatedList));
+
+        setFeedback({
+          type: "success",
+          message: "Pergunta eliminada com sucesso.",
+        });
+      } catch (err: any) {
+        console.error("Erro ao eliminar pergunta:", err);
+        const updatedList = customQuestions.filter((q) => q.id !== id);
+        setCustomQuestions(updatedList);
+        localStorage.setItem("custom_perguntas", JSON.stringify(updatedList));
+        setFeedback({
+          type: "error",
+          message: `Erro ao eliminar do Firestore. Removida localmente. (${err.message})`,
+        });
+      }
+      setTimeout(() => setFeedback(null), 3000);
+    }
+  };
+
+  // Stats Aggregations
+  const totalExams = results.length;
+  const passedExams = results.filter((r) => r.score >= 50).length;
+  const passRate = totalExams > 0 ? Math.round((passedExams / totalExams) * 100) : 0;
+  const averageScore =
+    totalExams > 0
+      ? Math.round(results.reduce((acc, r) => acc + r.score, 0) / totalExams)
+      : 0;
+
+  const filteredResults = results.filter((res) => {
+    const matchesSearch =
+      res.candidateName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      res.candidateEmail.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesMinistry = ministryFilter === "ALL" || res.ministerio === ministryFilter;
+    return matchesSearch && matchesMinistry;
+  });
+
+  const formatTempo = (segundos: number) => {
+    const mins = Math.floor(segundos / 60);
+    const secs = segundos % 60;
+    return `${mins}m ${secs}s`;
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      {/* Back button & Admin Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <button
+          onClick={onBack}
+          className="inline-flex items-center space-x-2 text-slate-600 hover:text-[#1A365D] font-bold text-sm transition-colors cursor-pointer"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Voltar ao Simulador</span>
+        </button>
+
+        <div className="bg-[#1A365D]/10 text-[#1A365D] text-xs font-bold px-3.5 py-1.5 rounded-full flex items-center gap-1.5">
+          <Lock className="w-3.5 h-3.5" />
+          <span>Portal Administrador: {adminUser.name}</span>
+        </div>
+      </div>
+
+      <div className="mb-8">
+        <h1 className="text-3xl font-sans font-extrabold tracking-tight text-[#1A365D]">
+          Painel de Controlo Concurso Público
+        </h1>
+        <p className="text-sm text-[#64748B] mt-1">
+          Monitorize as submissões de exames de candidatos em tempo real e faça a gestão do banco de perguntas do MININT e MINSA.
+        </p>
+      </div>
+
+      {/* Stats Cards (Rendered when Results Tab is Active) */}
+      {activeTab === "candidates" && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+          <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
+            <div className="w-12 h-12 bg-blue-50 text-[#1A365D] rounded-xl flex items-center justify-center">
+              <Users className="w-6 h-6" />
+            </div>
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                Total de Submissões
+              </span>
+              <span className="text-2xl font-black text-slate-800">{totalExams}</span>
+            </div>
+          </div>
+
+          <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
+            <div className="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
+              <Award className="w-6 h-6" />
+            </div>
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                Média de Pontuação
+              </span>
+              <span className="text-2xl font-black text-slate-800">{averageScore}%</span>
+            </div>
+          </div>
+
+          <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
+            <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
+              <TrendingUp className="w-6 h-6" />
+            </div>
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                Taxa de Aprovação
+              </span>
+              <span className="text-2xl font-black text-slate-800">{passRate}%</span>
+            </div>
+          </div>
+
+          <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
+            <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
+              <Database className="w-6 h-6" />
+            </div>
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                Perguntas Customizadas
+              </span>
+              <span className="text-2xl font-black text-slate-800">
+                {customQuestions.length}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tabs Switcher */}
+      <div className="flex border-b border-[#E2E8F0] mb-8 gap-1.5">
+        <button
+          onClick={() => setActiveTab("candidates")}
+          className={`px-5 py-3 text-sm font-bold border-b-2 transition-all cursor-pointer flex items-center gap-2 ${
+            activeTab === "candidates"
+              ? "border-[#1A365D] text-[#1A365D]"
+              : "border-transparent text-slate-500 hover:text-slate-800"
+          }`}
+        >
+          <BarChart3 className="w-4 h-4" />
+          <span>Monitor de Candidatos ({results.length})</span>
+        </button>
+        <button
+          onClick={() => setActiveTab("questions")}
+          className={`px-5 py-3 text-sm font-bold border-b-2 transition-all cursor-pointer flex items-center gap-2 ${
+            activeTab === "questions"
+              ? "border-[#1A365D] text-[#1A365D]"
+              : "border-transparent text-slate-500 hover:text-slate-800"
+          }`}
+        >
+          <Database className="w-4 h-4" />
+          <span>Gestão de Perguntas ({customQuestions.length})</span>
+        </button>
+      </div>
+
+      {/* Tab Contents */}
+      {activeTab === "candidates" && (
+        <div className="bg-white border border-[#E2E8F0] rounded-2xl shadow-xs overflow-hidden">
+          {/* Filters Area */}
+          <div className="p-5 border-b border-[#E2E8F0] bg-slate-50/50 flex flex-col md:flex-row gap-4 justify-between items-center">
+            {/* Search */}
+            <div className="relative w-full md:max-w-md">
+              <Search className="absolute left-3.5 top-3 w-4.5 h-4.5 text-slate-400" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Pesquisar por nome ou email do candidato..."
+                className="w-full bg-white border border-[#CBD5E1] rounded-xl pl-10 pr-4 py-2 text-sm text-[#1C1E21] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1A365D]"
+              />
+            </div>
+
+            {/* Filter Buttons */}
+            <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto">
+              <Filter className="w-4 h-4 text-slate-400 flex-shrink-0" />
+              <button
+                onClick={() => setMinistryFilter("ALL")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap cursor-pointer transition-colors ${
+                  ministryFilter === "ALL"
+                    ? "bg-[#1A365D] text-white"
+                    : "bg-white border border-[#CBD5E1] text-slate-600 hover:bg-slate-100"
+                }`}
+              >
+                Todos
+              </button>
+              <button
+                onClick={() => setMinistryFilter("MININT")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap cursor-pointer transition-colors ${
+                  ministryFilter === "MININT"
+                    ? "bg-[#1A365D] text-white"
+                    : "bg-white border border-[#CBD5E1] text-slate-600 hover:bg-slate-100"
+                }`}
+              >
+                MININT
+              </button>
+              <button
+                onClick={() => setMinistryFilter("MINSA")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap cursor-pointer transition-colors ${
+                  ministryFilter === "MINSA"
+                    ? "bg-[#1A365D] text-white"
+                    : "bg-white border border-[#CBD5E1] text-slate-600 hover:bg-slate-100"
+                }`}
+              >
+                MINSA
+              </button>
+            </div>
+          </div>
+
+          {/* Results Table */}
+          {loadingResults ? (
+            <div className="py-16 text-center text-slate-500 text-sm">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1A365D] mx-auto mb-4"></div>
+              <span>A carregar classificações dos candidatos...</span>
+            </div>
+          ) : filteredResults.length === 0 ? (
+            <div className="py-16 text-center">
+              <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+              <h3 className="text-base font-bold text-slate-700">Nenhum Exame Encontrado</h3>
+              <p className="text-xs text-slate-400 mt-1">
+                Não existem tentativas gravadas que correspondam aos filtros de pesquisa.
+              </p>
+            </div>
+          ) : (
+            <div>
+              {/* Mobile Card List (visible only on small screens) */}
+              <div className="md:hidden divide-y divide-slate-100">
+                {filteredResults.map((res) => {
+                  const isPassed = res.score >= 50;
+                  return (
+                    <div key={res.id} className="p-4 flex flex-col gap-3">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <span className="font-bold text-slate-800 text-sm block">
+                            {res.candidateName}
+                          </span>
+                          <span className="text-[10px] text-slate-400 block mt-0.5">
+                            {res.candidateEmail}
+                          </span>
+                        </div>
+                        <span
+                          className={`px-2.5 py-1 rounded text-[10px] font-bold ${
+                            res.ministerio === "MININT"
+                              ? "bg-blue-50 text-[#1A365D] border border-blue-100"
+                              : "bg-red-50 text-[#C02424] border border-red-100"
+                          }`}
+                        >
+                          {res.ministerio}
+                        </span>
+                      </div>
+                      
+                      <div className="grid grid-cols-3 gap-2 bg-slate-50 p-2.5 rounded-lg text-center text-[10px]">
+                        <div>
+                          <span className="text-slate-400 block uppercase font-semibold">Nota</span>
+                          <span className="font-black text-slate-800 text-xs">{res.score}%</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block uppercase font-semibold">Respostas</span>
+                          <span className="font-bold text-slate-700 text-xs">
+                            {res.respostasCorretas}/{res.totalPerguntas}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block uppercase font-semibold">Tempo</span>
+                          <span className="font-bold text-slate-700 text-xs flex items-center justify-center gap-0.5">
+                            <Clock className="w-3 h-3 text-slate-400" />
+                            {formatTempo(res.tempoGasto)}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between text-[10px]">
+                        <span className="text-slate-400 flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                          {new Date(res.createdAt).toLocaleDateString("pt-AO", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </span>
+                        <span
+                          className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold ${
+                            isPassed
+                              ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
+                              : "bg-red-50 text-red-700 border border-red-100"
+                          }`}
+                        >
+                          <span
+                            className={`w-1 h-1 rounded-full ${
+                              isPassed ? "bg-emerald-500" : "bg-red-500"
+                            }`}
+                          />
+                          {isPassed ? "Aprovado" : "Reprovado"}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Desktop Table View (hidden on mobile/small screens) */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-slate-50 border-b border-[#E2E8F0] text-slate-500 text-[10px] uppercase font-bold tracking-wider">
+                      <th className="py-3 px-5">Candidato</th>
+                      <th className="py-3 px-5">Concurso</th>
+                      <th className="py-3 px-5 text-center">Pontuação</th>
+                      <th className="py-3 px-5 text-center">Respostas</th>
+                      <th className="py-3 px-5 text-center">Tempo Gasto</th>
+                      <th className="py-3 px-5">Data da Submissão</th>
+                      <th className="py-3 px-5 text-center">Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 text-xs text-slate-700">
+                    {filteredResults.map((res) => {
+                      const isPassed = res.score >= 50;
+                      return (
+                        <tr key={res.id} className="hover:bg-slate-50/50 transition-colors">
+                          <td className="py-4 px-5">
+                            <span className="font-bold text-slate-800 block text-sm">
+                              {res.candidateName}
+                            </span>
+                            <span className="text-[10px] text-slate-400 block mt-0.5">
+                              {res.candidateEmail}
+                            </span>
+                          </td>
+                          <td className="py-4 px-5 font-semibold">
+                            <span
+                              className={`px-2.5 py-1 rounded text-[10px] font-bold ${
+                                res.ministerio === "MININT"
+                                  ? "bg-blue-50 text-[#1A365D] border border-blue-100"
+                                  : "bg-red-50 text-[#C02424] border border-red-100"
+                              }`}
+                            >
+                              {res.ministerio}
+                            </span>
+                          </td>
+                          <td className="py-4 px-5 text-center font-black text-sm text-slate-800">
+                            {res.score}%
+                          </td>
+                          <td className="py-4 px-5 text-center text-slate-500 font-semibold">
+                            {res.respostasCorretas} / {res.totalPerguntas}
+                          </td>
+                          <td className="py-4 px-5 text-center text-slate-500 font-medium">
+                            <div className="flex items-center justify-center gap-1">
+                              <Clock className="w-3.5 h-3.5 text-slate-400" />
+                              <span>{formatTempo(res.tempoGasto)}</span>
+                            </div>
+                          </td>
+                          <td className="py-4 px-5 text-slate-500">
+                            <div className="flex items-center gap-1.5">
+                              <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                              <span>
+                                {new Date(res.createdAt).toLocaleDateString("pt-AO", {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="py-4 px-5 text-center">
+                            <span
+                              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                                isPassed
+                                  ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
+                                  : "bg-red-50 text-red-700 border border-red-100"
+                              }`}
+                            >
+                              <span
+                                className={`w-1.5 h-1.5 rounded-full ${
+                                  isPassed ? "bg-emerald-500" : "bg-red-500"
+                                }`}
+                              />
+                              {isPassed ? "Aprovado" : "Reprovado"}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === "questions" && (
+        <div className="grid lg:grid-cols-5 gap-8">
+          {/* Form to add question */}
+          <div className="lg:col-span-3 bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs h-fit">
+            <h2 className="text-lg font-bold text-[#1C1E21] mb-5 border-b border-[#E2E8F0] pb-3 flex items-center gap-2">
+              <Plus className="w-5 h-5 text-[#1A365D]" />
+              Formulário de Nova Questão
+            </h2>
+
+            {feedback && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`mb-5 p-4 rounded-xl border flex items-start space-x-3 text-sm ${
+                  feedback.type === "success"
+                    ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+                    : "bg-red-50 border-red-200 text-red-800"
+                }`}
+              >
+                {feedback.type === "success" ? (
+                  <CheckCircle className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+                )}
+                <span className="font-medium">{feedback.message}</span>
+              </motion.div>
+            )}
+
+            <form onSubmit={handleAddQuestion} className="space-y-5">
+              {/* Row 1: Ministério & Categoria */}
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider mb-1.5">
+                    Ministério / Concurso *
+                  </label>
+                  <select
+                    value={ministerio}
+                    onChange={(e) => setMinisterio(e.target.value as ConcursoType)}
+                    className="w-full bg-slate-50 border border-[#CBD5E1] rounded-lg px-3 py-2 text-sm text-[#1C1E21] font-semibold focus:outline-none focus:ring-2 focus:ring-[#1A365D]"
+                  >
+                    <option value="MININT">MININT (Interior)</option>
+                    <option value="MINSA">MINSA (Saúde)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider mb-1.5">
+                    Categoria da Pergunta *
+                  </label>
+                  <input
+                    type="text"
+                    value={categoria}
+                    onChange={(e) => setCategoria(e.target.value)}
+                    placeholder="Ex: Constituição (CRA), Deontologia"
+                    className="w-full bg-slate-50 border border-[#CBD5E1] rounded-lg px-3 py-2 text-sm text-[#1C1E21] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1A365D]"
+                  />
+                </div>
+              </div>
+
+              {/* Enunciado */}
+              <div>
+                <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider mb-1.5">
+                  Enunciado da Pergunta *
+                </label>
+                <textarea
+                  rows={3}
+                  value={enunciado}
+                  onChange={(e) => setEnunciado(e.target.value)}
+                  placeholder="Introduza o enunciado completo ou caso clínico da pergunta..."
+                  className="w-full bg-slate-50 border border-[#CBD5E1] rounded-lg p-3 text-sm text-[#1C1E21] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1A365D]"
+                />
+              </div>
+
+              {/* Opções de Resposta */}
+              <div className="space-y-3">
+                <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider">
+                  Opções de Resposta *
+                </label>
+
+                {["A", "B", "C", "D"].map((letra, index) => (
+                  <div key={letra} className="flex items-center space-x-2">
+                    <span className="w-8 h-8 flex-shrink-0 bg-slate-100 text-slate-600 font-bold text-xs rounded-lg flex items-center justify-center border border-slate-200">
+                      {letra}
+                    </span>
+                    <input
+                      type="text"
+                      value={opcoes[index]}
+                      onChange={(e) => handleOpcaoChange(index, e.target.value)}
+                      placeholder={`Texto para a opção ${letra}`}
+                      className="flex-grow bg-slate-50 border border-[#CBD5E1] rounded-lg px-3 py-2 text-sm text-[#1C1E21] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1A365D]"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Opção Correta */}
+              <div>
+                <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider mb-1.5">
+                  Gabarito (Opção Correta) *
+                </label>
+                <select
+                  value={resposta}
+                  onChange={(e) => setResposta(parseInt(e.target.value))}
+                  className="w-full bg-slate-50 border border-[#CBD5E1] rounded-lg px-3 py-2 text-sm text-[#1C1E21] font-semibold focus:outline-none focus:ring-2 focus:ring-[#1A365D]"
+                >
+                  <option value={0}>Opção A é a correta</option>
+                  <option value={1}>Opção B é a correta</option>
+                  <option value={2}>Opção C é a correta</option>
+                  <option value={3}>Opção D é a correta</option>
+                </select>
+              </div>
+
+              {/* Explicação */}
+              <div>
+                <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider mb-1.5">
+                  Explicação / Gabarito Comentado *
+                </label>
+                <textarea
+                  rows={3}
+                  value={explicacao}
+                  onChange={(e) => setExplicacao(e.target.value)}
+                  placeholder="Forneça a fundamentação pedagógica ou jurídica..."
+                  className="w-full bg-slate-50 border border-[#CBD5E1] rounded-lg p-3 text-sm text-[#1C1E21] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1A365D]"
+                />
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="w-full bg-[#1A365D] hover:bg-[#122744] text-white font-semibold py-3 px-4 rounded-xl text-sm transition-all shadow-xs flex items-center justify-center space-x-2 cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Gravar Pergunta no Firestore</span>
+              </button>
+            </form>
+          </div>
+
+          {/* Right Side: List of custom added questions */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs h-full flex flex-col">
+              <h2 className="text-lg font-bold text-[#1C1E21] border-b border-[#E2E8F0] pb-3 flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <HelpCircle className="w-5 h-5 text-slate-500" />
+                  Perguntas Criadas
+                </span>
+                <span className="bg-[#1A365D] text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                  {customQuestions.length}
+                </span>
+              </h2>
+
+              {loadingQuestions ? (
+                <div className="py-12 text-center text-slate-400 text-xs">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-slate-500 mx-auto mb-2"></div>
+                  <span>A carregar banco customizado...</span>
+                </div>
+              ) : customQuestions.length === 0 ? (
+                <div className="flex-grow flex flex-col items-center justify-center text-center py-12 px-4">
+                  <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mb-3">
+                    <HelpCircle className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-sm font-semibold text-[#1C1E21] mb-1">Nenhuma Pergunta Adicionada</h3>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Perguntas que adicionar ao Firestore aparecerão listadas aqui para eliminação rápida.
+                  </p>
+                </div>
+              ) : (
+                <div className="flex-grow overflow-y-auto max-h-[550px] space-y-3.5 pr-1 mt-4">
+                  {customQuestions.map((q) => (
+                    <div
+                      key={q.id}
+                      className="border border-[#E2E8F0] rounded-lg p-3.5 bg-slate-50 relative group transition-colors hover:border-[#1A365D]"
+                    >
+                      <button
+                        onClick={() => handleDeleteQuestion(q.id)}
+                        className="absolute top-3 right-3 p-1.5 rounded-md hover:bg-red-50 text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
+                        title="Eliminar Pergunta"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+
+                      <div className="flex items-center space-x-2 mb-2 pr-6">
+                        <span
+                          className={`text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider ${
+                            q.ministerio === "MININT"
+                              ? "bg-blue-100 text-[#1A365D]"
+                              : "bg-red-100 text-[#C02424]"
+                          }`}
+                        >
+                          {q.ministerio}
+                        </span>
+                        <span className="text-[10px] font-semibold text-slate-500 max-w-[120px] truncate">
+                          {q.categoria}
+                        </span>
+                      </div>
+
+                      <h4 className="text-xs font-bold text-slate-800 line-clamp-2 mb-2 pr-4 leading-normal">
+                        {q.enunciado}
+                      </h4>
+
+                      <div className="text-[11px] text-emerald-700 font-medium flex items-center space-x-1">
+                        <span className="bg-emerald-100 px-1.5 py-0.5 rounded text-[9px] font-bold text-emerald-800">
+                          R: {["A", "B", "C", "D"][q.resposta]}
+                        </span>
+                        <span className="truncate max-w-[140px] text-slate-500">
+                          {q.opcoes[q.resposta]}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

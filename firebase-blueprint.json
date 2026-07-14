@@ -1,0 +1,165 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with role",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "The unique Firebase Authentication UID of the user"
+        },
+        "name": {
+          "type": "string",
+          "description": "The full name of the candidate or admin"
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the user"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["admin", "candidate"],
+          "description": "The role of the user inside the application"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the user account was initialized"
+        }
+      },
+      "required": ["uid", "name", "email", "role", "createdAt"]
+    },
+    "Pergunta": {
+      "title": "Pergunta",
+      "description": "Custom question added by admin",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the question"
+        },
+        "ministerio": {
+          "type": "string",
+          "enum": ["MININT", "MINSA"],
+          "description": "Which ministry this question is targeted for"
+        },
+        "categoria": {
+          "type": "string",
+          "description": "The category of the question"
+        },
+        "enunciado": {
+          "type": "string",
+          "description": "The question prompt text"
+        },
+        "opcoes": {
+          "type": "array",
+          "description": "List of 4 choices for the question"
+        },
+        "resposta": {
+          "type": "integer",
+          "description": "The correct answer index, from 0 to 3"
+        },
+        "explicacao": {
+          "type": "string",
+          "description": "The explanation for the correct answer"
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "The UID of the admin who created the question"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the question was created"
+        }
+      },
+      "required": [
+        "id",
+        "ministerio",
+        "categoria",
+        "enunciado",
+        "opcoes",
+        "resposta",
+        "explicacao",
+        "createdBy",
+        "createdAt"
+      ]
+    },
+    "Resultado": {
+      "title": "Resultado",
+      "description": "Exam result completed by a candidate",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique result identifier"
+        },
+        "candidateUid": {
+          "type": "string",
+          "description": "UID of the candidate who took the exam"
+        },
+        "candidateName": {
+          "type": "string",
+          "description": "The candidate's display name"
+        },
+        "candidateEmail": {
+          "type": "string",
+          "description": "The candidate's email"
+        },
+        "ministerio": {
+          "type": "string",
+          "enum": ["MININT", "MINSA"],
+          "description": "Which exam ministry simulator"
+        },
+        "score": {
+          "type": "number",
+          "description": "The final grade/score percentage"
+        },
+        "respostasCorretas": {
+          "type": "integer",
+          "description": "Number of correct answers"
+        },
+        "totalPerguntas": {
+          "type": "integer",
+          "description": "Total questions in the simulator"
+        },
+        "tempoGasto": {
+          "type": "integer",
+          "description": "Seconds taken to finish"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the exam was completed"
+        }
+      },
+      "required": [
+        "id",
+        "candidateUid",
+        "candidateName",
+        "candidateEmail",
+        "ministerio",
+        "score",
+        "respostasCorretas",
+        "totalPerguntas",
+        "tempoGasto",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "Collection of users storing profile info and roles"
+    },
+    "perguntas/{perguntaId}": {
+      "schema": "Pergunta",
+      "description": "Collection of custom questions created by admins"
+    },
+    "resultados/{resultadoId}": {
+      "schema": "Resultado",
+      "description": "Collection of exam history results for candidates"
+    }
+  }
+}

@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Exames para Concursos Públicos - Angola</title>
+  <!-- Tailwind CSS v3 via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-[#F0F2F5] text-[#1C1E21] min-h-screen flex flex-col justify-between">
+
+  <!-- Header Institucional Principal -->
+  <header class="bg-[#1A365D] text-white border-b-4 border-[#C02424] sticky top-0 z-40 shadow-md">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-2.5 cursor-pointer" onclick="restartSimulador()">
+        <div class="w-9 h-9 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center text-white shadow-md transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M12 14l9-5-9-5-9 5 9 5z" />
+            <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+          </svg>
+        </div>
+        <div>
+          <span class="font-extrabold text-sm md:text-base text-white tracking-tight block leading-none">
+            SIMULADOR DE EXAMES ANGOLA
+          </span>
+          <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest block mt-0.5">
+            Função Pública de Angola
+          </span>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2.5">
+        <!-- Bandeira de Angola (Estilizada) -->
+        <div class="flex space-x-1">
+          <span class="w-2.5 h-4 bg-red-600 rounded-sm shadow-sm"></span>
+          <span class="w-2.5 h-4 bg-yellow-500 rounded-sm shadow-sm"></span>
+          <span class="w-2.5 h-4 bg-black rounded-sm shadow-sm"></span>
+        </div>
+        <span class="text-xs font-bold text-slate-200 hidden sm:inline-block">MININT / MINSA</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="flex-grow">
+    
+    <!-- ECRÃ 1: SELEÇÃO INICIAL -->
+    <section id="screen-selection" class="max-w-4xl mx-auto px-4 py-8 md:py-16">
+      <div class="text-center mb-12 md:mb-16">
+        <div class="inline-flex items-center justify-center space-x-2 bg-[#E2E8F0] text-[#475569] px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 border border-[#CBD5E1]">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#475569]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+          </svg>
+          <span>Portal de Preparação Oficial</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-[#1A365D] mb-4">
+          Selecione o Ministério do Concurso
+        </h1>
+        <p class="text-lg text-[#64748B] max-w-2xl mx-auto">
+          Prepare-se para os concursos públicos de ingresso na Função Pública de Angola. Teste os seus conhecimentos com a nossa simulação de exames oficiais de admissão.
+        </p>
+      </div>
+
+      <!-- Alerta de Erro de CORS / Fetch -->
+      <div id="error-alert" class="hidden mb-8 bg-red-50 border border-red-200 text-red-800 rounded-xl p-6 text-sm max-w-2xl mx-auto shadow-sm">
+        <div class="font-semibold flex items-center mb-2 text-base text-red-900">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-red-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <span>Erro ao Carregar as Perguntas</span>
+        </div>
+        <p id="error-message" class="mb-4 leading-relaxed"></p>
+        <div class="bg-white rounded-lg p-3.5 border border-red-100 text-xs text-gray-700">
+          <p class="font-bold text-gray-900 mb-1">Nota sobre Políticas de Segurança CORS:</p>
+          <p>Ao abrir o ficheiro <code class="bg-gray-100 px-1 py-0.5 rounded font-mono font-semibold">index.html</code> diretamente clicando nele no seu computador (protocolo <code class="bg-gray-100 px-1 py-0.5 rounded font-mono">file://</code>), o seu navegador de Internet bloqueia a leitura do ficheiro de dados <code class="bg-gray-100 px-1 py-0.5 rounded font-mono">perguntas.json</code> por motivos de segurança.</p>
+          <p class="mt-2 font-semibold text-blue-700">Para solucionar este problema:</p>
+          <ul class="list-disc pl-4 mt-1 space-y-1">
+            <li>Abra este projeto usando a extensão <strong>Live Server</strong> no VS Code.</li>
+            <li>Ou abra uma consola no diretório do projeto e execute: <code class="bg-gray-100 px-1 py-0.5 rounded font-mono font-semibold">python -m http.server 8000</code>, e aceda a <code class="bg-gray-100 px-1 py-0.5 rounded font-mono text-blue-700">http://localhost:8000</code>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Cards de Concursos -->
+      <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+        <!-- Card MININT -->
+        <button onclick="iniciarConcurso('MININT')" class="group text-left bg-white border border-[#E2E8F0] hover:border-[#1A365D] rounded-xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 relative overflow-hidden flex flex-col justify-between h-full">
+          <div class="absolute top-0 left-0 w-full h-1.5 bg-[#1A365D]"></div>
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <div class="p-4 bg-slate-100 text-[#1A365D] rounded-xl group-hover:bg-[#1A365D] group-hover:text-white transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618-3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <span class="text-xs font-bold text-[#1A365D] tracking-wider bg-slate-100 px-3 py-1 rounded-full uppercase">
+                MININT
+              </span>
+            </div>
+            <h2 class="text-xl md:text-2xl font-bold text-[#1A365D] mb-2">
+              Ministério do Interior
+            </h2>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-6">
+              Exames para a Polícia Nacional, Serviço de Investigação Criminal (SIC), Migração e Estrangeiros (SME) e Proteção Civil. Incide sobre a Constituição da República, Legislação Policial e Deontologia.
+            </p>
+          </div>
+          <div class="flex items-center text-sm font-semibold text-[#1A365D] mt-auto">
+            <span>Iniciar Simulação</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </button>
+
+        <!-- Card MINSA -->
+        <button onclick="iniciarConcurso('MINSA')" class="group text-left bg-white border border-[#E2E8F0] hover:border-[#1A365D] rounded-xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 relative overflow-hidden flex flex-col justify-between h-full">
+          <div class="absolute top-0 left-0 w-full h-1.5 bg-[#C02424]"></div>
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <div class="p-4 bg-slate-100 text-[#C02424] rounded-xl group-hover:bg-[#1A365D] group-hover:text-white transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              </div>
+              <span class="text-xs font-bold text-[#C02424] tracking-wider bg-red-50 px-3 py-1 rounded-full uppercase">
+                MINSA
+              </span>
+            </div>
+            <h2 class="text-xl md:text-2xl font-bold text-[#1A365D] mb-2">
+              Ministério da Saúde
+            </h2>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-6">
+              Exames para Médicos, Enfermeiros, Técnicos de Diagnóstico e Terapeutas. Incide sobre o Serviço Nacional de Saúde (SNS), Saúde Pública de Angola, Epidemiologia, Ética e Cuidados de Saúde Primários.
+            </p>
+          </div>
+          <div class="flex items-center text-sm font-semibold text-[#1A365D] mt-auto">
+            <span>Iniciar Simulação</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </button>
+      </div>
+
+      <!-- Rodapé Decorativo -->
+      <div class="mt-16 md:mt-24 text-center border-t border-gray-150 pt-8 max-w-lg mx-auto">
+        <p class="text-xs text-gray-400">
+          República de Angola • Ministério da Administração do Território • Escola de Formação de Quadros
+        </p>
+      </div>
+    </section>
+
+    <!-- ECRÃ 2: SIMULADOR (DUAS COLUNAS EM ECRÃS GRANDES) -->
+    <section id="screen-simulator" class="hidden max-w-6xl mx-auto px-4 py-6">
+      <!-- Barra Superior de Progresso e Tempo -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-4 mb-6 gap-4">
+        <div class="flex items-center space-x-3">
+          <div id="sim-badge-ministerio" class="p-2 rounded-lg font-bold text-xs bg-[#E2E8F0] text-[#1A365D] uppercase tracking-wider">
+            CONCURSO MININT
+          </div>
+          <span class="text-[#E2E8F0]">|</span>
+          <span id="sim-progress-text" class="text-xs md:text-sm font-medium text-[#475569]">
+            0 de 5 perguntas respondidas
+          </span>
+        </div>
+
+        <!-- Barra de Progresso Visual -->
+        <div class="w-full md:w-48 bg-[#E2E8F0] rounded-full h-2">
+          <div id="sim-progress-bar" class="h-2 rounded-full bg-[#1A365D] transition-all duration-350" style="width: 0%"></div>
+        </div>
+
+        <!-- Cronómetro -->
+        <div id="sim-timer-container" class="flex items-center space-x-2.5 px-4 py-1.5 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] text-[#C02424]">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#C02424]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span class="font-mono text-xl font-bold tracking-wider" id="sim-timer">45:00</span>
+        </div>
+      </div>
+
+      <!-- Grid Principal de Duas Colunas -->
+      <div class="grid lg:grid-cols-3 gap-6">
+        
+        <!-- Coluna Esquerda: Área da Pergunta (Ocupa 2 colunas em telas grandes) -->
+        <div class="lg:col-span-2 flex flex-col justify-between bg-white border border-[#E2E8F0] rounded-xl p-6 shadow-sm min-h-[500px]">
+          <div>
+            <!-- Cabeçalho da Pergunta -->
+            <div class="flex justify-between items-center mb-6 border-b border-[#E2E8F0] pb-4">
+              <span id="sim-pergunta-categoria" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#E2E8F0] text-[#475569] border border-[#CBD5E1] uppercase tracking-wider">
+                CONSTITUIÇÃO DA REPÚBLICA
+              </span>
+              <span id="sim-pergunta-indicador" class="text-sm font-medium text-[#64748B]">
+                Pergunta 1 de 5
+              </span>
+            </div>
+
+            <!-- Enunciado -->
+            <h3 id="sim-pergunta-enunciado" class="text-lg md:text-xl font-medium text-[#1C1E21] mb-6 leading-relaxed">
+              Enunciado da pergunta carregando...
+            </h3>
+
+            <!-- Opções de Resposta -->
+            <div id="sim-opcoes-container" class="space-y-3.5">
+              <!-- Renderizado via JS -->
+            </div>
+          </div>
+
+          <!-- Botões de Navegação Inferiores -->
+          <div class="flex items-center justify-between mt-8 border-t border-[#E2E8F0] pt-6">
+            <button id="btn-ant" onclick="perguntaAnterior()" class="flex items-center space-x-1.5 px-4 py-2.5 rounded-xl border border-[#E2E8F0] text-sm font-semibold text-[#475569] hover:bg-[#F8FAFC] hover:border-[#CBD5E1] transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+              <span>Anterior</span>
+            </button>
+
+            <button id="btn-seg" onclick="perguntaSeguinte()" class="flex items-center space-x-1.5 px-6 py-2.5 rounded-xl font-semibold text-white bg-[#1A365D] hover:bg-[#152c4a] shadow-sm transition-all">
+              <span id="btn-seg-text">Seguinte</span>
+              <svg id="btn-seg-icon" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Coluna Direita: Grelha / Folha de Respostas -->
+        <div class="bg-white border border-[#E2E8F0] rounded-xl p-6 shadow-sm flex flex-col h-full justify-between">
+          <div>
+            <h4 class="text-sm font-bold text-[#1C1E21] uppercase tracking-wider mb-4 flex items-center border-b border-[#E2E8F0] pb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 mr-2 text-[#475569]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+              </svg>
+              Folha de Respostas
+            </h4>
+            <p class="text-xs text-[#64748B] mb-4 leading-relaxed">
+              Clique num número para saltar diretamente para a pergunta. Os números ficam marcados a verde quando respondidos.
+            </p>
+
+            <!-- Grelha Dinâmica de Números -->
+            <div id="sim-grelha-respostas" class="grid grid-cols-5 gap-2.5 mb-6">
+              <!-- Renderizado via JS -->
+            </div>
+          </div>
+
+          <!-- Botão Submeter Rápido -->
+          <div class="border-t border-[#E2E8F0] pt-4 mt-6">
+            <button onclick="confirmarSubmissao()" class="w-full flex items-center justify-center space-x-2 bg-red-50 text-[#C02424] hover:bg-red-100 border border-red-200 px-4 py-3 rounded-xl text-sm font-semibold transition-colors">
+              <span>Submeter Exame Agora</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ECRÃ 3: RESULTADOS E CORREÇÃO DETALHADA -->
+    <section id="screen-results" class="hidden max-w-4xl mx-auto px-4 py-8">
+      <!-- Painel de Resumo do Candidato -->
+      <div class="bg-white border border-[#E2E8F0] rounded-xl p-6 md:p-8 shadow-sm mb-8 relative overflow-hidden">
+        <!-- Linha Superior de Status -->
+        <div id="res-status-bar" class="absolute top-0 left-0 w-full h-2 bg-emerald-500"></div>
+
+        <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+          <div class="text-center md:text-left">
+            <span class="text-xs font-bold text-[#64748B] uppercase tracking-widest block mb-2">
+              Resultado Oficial • Simulação Terminado
+            </span>
+            <h2 id="res-titulo" class="text-2xl md:text-3xl font-extrabold text-[#1A365D] mb-4">
+              Folha de Avaliação Individual
+            </h2>
+
+            <!-- Estatísticas de Acertos -->
+            <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+              <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-center">
+                <span class="text-xs text-[#64748B] block font-medium uppercase">Respostas</span>
+                <span id="res-total-respondidas" class="text-base font-bold text-[#1C1E21]">5 de 5</span>
+              </div>
+              <div class="bg-[#F0FDF4] border border-[#DCFCE7] rounded-xl px-4 py-2.5 text-center">
+                <span class="text-xs text-[#166534] block font-medium uppercase">Acertos</span>
+                <span id="res-total-acertos" class="text-base font-bold text-[#166534]">4 de 5</span>
+              </div>
+              <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-center">
+                <span class="text-xs text-[#64748B] block font-medium uppercase">Aproveitamento</span>
+                <span id="res-aproveitamento" class="text-base font-bold text-[#1C1E21]">80%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Medalha / Badge Grande de Nota -->
+          <div class="flex flex-col items-center bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-6 w-full md:w-56 text-center">
+            <span class="text-xs font-bold text-[#64748B] uppercase tracking-wider mb-2">Nota Final</span>
+            
+            <div class="text-4xl md:text-5xl font-extrabold font-mono mb-3 text-gray-900">
+              <span id="res-nota">16.0</span> <span class="text-sm font-semibold text-[#64748B]">/ 20</span>
+            </div>
+
+            <!-- Badge de APTO / EXCLUÍDO -->
+            <div id="res-badge-apto" class="inline-flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider bg-[#DCFCE7] text-[#166534] border border-[#DCFCE7]">
+              <span>APTO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botão Voltar -->
+      <div class="flex justify-center mb-12">
+        <button onclick="restartSimulador()" class="inline-flex items-center space-x-2 bg-[#1A365D] hover:bg-[#152c4a] text-white px-6 py-3.5 rounded-xl font-semibold shadow-md transition-all group">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span>Voltar ao Menu Principal</span>
+        </button>
+      </div>
+
+      <!-- Seção da Correção Detalhada -->
+      <div class="space-y-6">
+        <h3 class="text-xl font-bold text-[#1A365D] flex items-center mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-[#1A365D]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          Correção Comentada das Perguntas
+        </h3>
+
+        <div id="res-correcao-container" class="space-y-6">
+          <!-- Renderizado via JS -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Rodapé Institucional Geral -->
+  <footer class="bg-white border-t border-gray-200 py-6 text-center text-xs text-gray-400 mt-12">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+      <p>© 2026 Simulador de Exames Angola. Todos os direitos reservados.</p>
+      <div class="flex space-x-4">
+        <span class="hover:text-gray-600 cursor-help transition-colors">Termos de Utilização</span>
+        <span>•</span>
+        <span class="hover:text-gray-600 cursor-help transition-colors">Política de Privacidade</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL DE CONFIRMAÇÃO DE SUBMISSÃO -->
+  <div id="confirm-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 max-w-md w-full p-6 transition-all transform scale-95 duration-250">
+      <div class="flex items-center space-x-3 text-amber-600 mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <h3 class="text-lg font-bold text-gray-900">Finalizar Simulação?</h3>
+      </div>
+      
+      <p id="confirm-modal-text" class="text-sm text-gray-500 leading-relaxed mb-6">
+        Deseja mesmo finalizar o exame agora?
+      </p>
+
+      <div class="flex space-x-3">
+        <button onclick="fecharModal()" class="flex-1 py-2.5 rounded-xl border border-gray-200 font-semibold text-gray-700 hover:bg-gray-50 transition-colors text-sm">
+          Voltar à Prova
+        </button>
+        <button onclick="submeterExame()" class="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 font-semibold text-white shadow-sm transition-all text-sm">
+          Sim, Submeter
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LÓGICA DO SIMULADOR (JAVASCRIPT VANILLA) -->
+  <script>
+    // ESTADO GLOBAL DO APLICATIVO
+    let estado = {
+      concursoAtivo: null,      // "MININT" ou "MINSA"
+      todasPerguntas: [],       // Lista bruta lida do JSON
+      perguntasFiltradas: [],   // Perguntas do ministério selecionado
+      respostasUsuario: {},     // { perguntaId: indexDaOpcaoSelecionada }
+      indicePerguntaAtual: 0,   // Índice da pergunta ativa no momento
+      tempoRestante: 45 * 60,   // 45 minutos em segundos
+      timerInterval: null       // Referência ao cronómetro setInterval
+    };
+
+    // ELEMENTOS DO DOM RELEVANTES
+    const screens = {
+      selection: document.getElementById('screen-selection'),
+      simulator: document.getElementById('screen-simulator'),
+      results: document.getElementById('screen-results')
+    };
+
+    // Navegar entre Ecrãs
+    function mostrarEcra(ecraId) {
+      Object.keys(screens).forEach(key => {
+        if (key === ecraId) {
+          screens[key].classList.remove('hidden');
+        } else {
+          screens[key].classList.add('hidden');
+        }
+      });
+      // Scroll para o topo ao trocar de ecrã
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Inicializar Concurso (MININT / MINSA) ao clicar no Card
+    async function iniciarConcurso(ministerio) {
+      const errorAlert = document.getElementById('error-alert');
+      errorAlert.classList.add('hidden');
+
+      try {
+        // Fetch para ler "perguntas.json"
+        const response = await fetch('perguntas.json');
+        if (!response.ok) {
+          throw new Error(`Código de status HTTP: ${response.status} (${response.statusText})`);
+        }
+        
+        const perguntas = await response.json();
+        
+        // Filtra as perguntas pertencentes ao concurso selecionado
+        const perguntasFiltradas = perguntas.filter(p => p.ministerio === ministerio);
+        
+        if (perguntasFiltradas.length === 0) {
+          throw new Error(`Nenhuma pergunta encontrada para o concurso ${ministerio} no ficheiro JSON.`);
+        }
+
+        // Configurar o estado do exame
+        estado.concursoAtivo = ministerio;
+        estado.todasPerguntas = perguntas;
+        estado.perguntasFiltradas = perguntasFiltradas;
+        estado.respostasUsuario = {};
+        estado.indicePerguntaAtual = 0;
+        estado.tempoRestante = 45 * 60; // 45 minutos
+
+        // Configurar UI e iniciar cronómetro
+        atualizarLayoutSimulator();
+        renderizarPerguntaAtual();
+        iniciarCronometro();
+
+        // Ir para ecrã de simulação
+        mostrarEcra('simulator');
+
+      } catch (err) {
+        console.error("Erro detalhado do fetch:", err);
+        
+        // Exibe o erro amigável na tela
+        document.getElementById('error-message').innerText = err.message || "Erro desconhecido ao tentar ler as perguntas do simulador.";
+        errorAlert.classList.remove('hidden');
+        window.scrollTo({ top: errorAlert.offsetTop - 80, behavior: 'smooth' });
+      }
+    }
+
+    // Configurar layout com cores de acordo com o Ministério selecionado
+    function atualizarLayoutSimulator() {
+      const badge = document.getElementById('sim-badge-ministerio');
+      const progressBar = document.getElementById('sim-progress-bar');
+      const btnSeg = document.getElementById('btn-seg');
+
+      badge.innerText = `CONCURSO ${estado.concursoAtivo}`;
+      
+      badge.className = "p-2 rounded-lg font-bold text-xs bg-[#E2E8F0] text-[#1A365D] uppercase tracking-wider";
+      progressBar.className = "h-2 rounded-full bg-[#1A365D] transition-all duration-350";
+      btnSeg.className = "flex items-center space-x-1.5 px-6 py-2.5 rounded-xl font-semibold text-white bg-[#1A365D] hover:bg-[#152c4a] shadow-sm transition-all";
+    }
+
+    // Iniciar o Interval do Cronómetro
+    function iniciarCronometro() {
+      clearInterval(estado.timerInterval);
+      
+      const timerDisplay = document.getElementById('sim-timer');
+      const timerContainer = document.getElementById('sim-timer-container');
+      
+      timerContainer.className = "flex items-center space-x-2.5 px-4 py-1.5 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] text-[#C02424] text-sm font-bold";
+
+      estado.timerInterval = setInterval(() => {
+        estado.tempoRestante--;
+
+        const mins = Math.floor(estado.tempoRestante / 60);
+        const secs = estado.tempoRestante % 60;
+        timerDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+        // Alerta quando resta menos de 5 minutos (300 segundos)
+        if (estado.tempoRestante < 300) {
+          timerContainer.className = "flex items-center space-x-2.5 px-4 py-1.5 rounded-xl border border-red-200 bg-red-50 text-[#C02424] text-sm font-bold animate-pulse";
+        }
+
+        // Submissão automática se o tempo esgotar
+        if (estado.tempoRestante <= 0) {
+          clearInterval(estado.timerInterval);
+          submeterExame();
+        }
+      }, 1000);
+    }
+
+    // Renderizar a Pergunta Atual do Estado
+    function renderizarPerguntaAtual() {
+      const pergunta = estado.perguntasFiltradas[estado.indicePerguntaAtual];
+      if (!pergunta) return;
+
+      // Atualizar Categoria e Indicador
+      document.getElementById('sim-pergunta-categoria').innerText = pergunta.categoria;
+      document.getElementById('sim-pergunta-indicador').innerText = `Questão ${estado.indicePerguntaAtual + 1} de ${estado.perguntasFiltradas.length}`;
+      
+      // Atualizar Enunciado
+      document.getElementById('sim-pergunta-enunciado').innerText = pergunta.enunciado;
+
+      // Renderizar Opções
+      const opcoesContainer = document.getElementById('sim-opcoes-container');
+      opcoesContainer.innerHTML = '';
+
+      const letrasOpcoes = ['A', 'B', 'C', 'D'];
+      const respostaSelecionada = estado.respostasUsuario[pergunta.id];
+
+      pergunta.opcoes.forEach((opcao, index) => {
+        const isSelected = respostaSelecionada === index;
+        
+        let botaoClasses = "w-full text-left p-4 rounded-xl border-2 transition-all duration-200 flex items-start space-x-3 text-sm md:text-base ";
+        let letraClasses = "w-6 h-6 flex-shrink-0 rounded-full flex items-center justify-center font-bold text-xs uppercase ";
+
+        if (isSelected) {
+          botaoClasses += "border-[#1A365D] bg-[#EFF6FF] text-[#1A365D] font-semibold";
+          letraClasses += "bg-[#1A365D] text-white";
+        } else {
+          botaoClasses += "bg-white border-[#E2E8F0] hover:bg-[#F8FAFC] hover:border-[#CBD5E1] text-[#1C1E21]";
+          letraClasses += "bg-[#E2E8F0] text-[#475569]";
+        }
+
+        const btn = document.createElement('button');
+        btn.className = botaoClasses;
+        btn.onclick = () => selecionarOpcao(pergunta.id, index);
+        
+        btn.innerHTML = `
+          <span class="${letraClasses}">${letrasOpcoes[index]}</span>
+          <span class="flex-1 pt-0.5 leading-tight">${opcao}</span>
+        `;
+        opcoesContainer.appendChild(btn);
+      });
+
+      // Atualizar Botões de Navegação
+      const btnAnt = document.getElementById('btn-ant');
+      const btnSegText = document.getElementById('btn-seg-text');
+      const btnSegIcon = document.getElementById('btn-seg-icon');
+      const btnSeg = document.getElementById('btn-seg');
+
+      // Ocultar Anterior se for a primeira pergunta
+      if (estado.indicePerguntaAtual === 0) {
+        btnAnt.classList.add('invisible');
+      } else {
+        btnAnt.classList.remove('invisible');
+      }
+
+      // Mudar botão Seguinte para Finalizar na última pergunta
+      const isLast = estado.indicePerguntaAtual === estado.perguntasFiltradas.length - 1;
+      if (isLast) {
+        btnSegText.innerText = "Terminar e Corrigir";
+        btnSegIcon.classList.add('hidden');
+        btnSeg.className = "flex items-center space-x-1.5 px-6 py-2.5 rounded-xl font-semibold text-white bg-rose-600 hover:bg-rose-700 shadow-sm transition-all";
+      } else {
+        btnSegText.innerText = "Seguinte";
+        btnSegIcon.classList.remove('hidden');
+        btnSeg.className = "flex items-center space-x-1.5 px-6 py-2.5 rounded-xl font-semibold text-white bg-[#1A365D] hover:bg-[#152c4a] shadow-sm transition-all";
+      }
+
+      // Atualizar Grelha de Navegação Direta
+      renderizarGrelhaRespostas();
+      atualizarBarraProgressoSuperior();
+    }
+
+    // Atualizar a barra e textos de progresso na barra superior
+    function atualizarBarraProgressoSuperior() {
+      const total = estado.perguntasFiltradas.length;
+      const respondidas = Object.keys(estado.respostasUsuario).length;
+      
+      document.getElementById('sim-progress-text').innerText = `${respondidas} de ${total} perguntas respondidas`;
+      
+      const percentual = (respondidas / total) * 100;
+      document.getElementById('sim-progress-bar').style.width = `${percentual}%`;
+    }
+
+    // Selecionar Opção do Utilizador
+    function selecionarOpcao(perguntaId, opcaoIndex) {
+      estado.respostasUsuario[perguntaId] = opcaoIndex;
+      // Re-renderiza para dar feedback visual imediato
+      renderizarPerguntaAtual();
+    }
+
+    // Renderizar a Folha de Respostas (Grelha Lateral)
+    function renderizarGrelhaRespostas() {
+      const grelha = document.getElementById('sim-grelha-respostas');
+      grelha.innerHTML = '';
+
+      estado.perguntasFiltradas.forEach((p, index) => {
+        const isAnswered = estado.respostasUsuario[p.id] !== undefined;
+        const isActive = index === estado.indicePerguntaAtual;
+
+        let btnClasses = "h-11 rounded-xl text-sm border flex items-center justify-center transition-all duration-150 font-medium ";
+
+        if (isActive) {
+          btnClasses += "border-2 border-[#1A365D] bg-blue-50 text-[#1A365D] font-bold shadow-sm";
+        } else if (isAnswered) {
+          btnClasses += "bg-[#22C55E] border-[#16A34A] text-white font-medium hover:bg-[#16A34A]";
+        } else {
+          btnClasses += "bg-white border-[#E2E8F0] text-[#64748B] hover:bg-[#F8FAFC]";
+        }
+
+        const btn = document.createElement('button');
+        btn.className = btnClasses;
+        btn.innerText = index + 1;
+        btn.onclick = () => saltarParaPergunta(index);
+
+        grelha.appendChild(btn);
+      });
+    }
+
+    // Saltar para pergunta através da Folha de Respostas
+    function saltarParaPergunta(index) {
+      estado.indicePerguntaAtual = index;
+      renderizarPerguntaAtual();
+    }
+
+    // Navegação do botão "Anterior"
+    function perguntaAnterior() {
+      if (estado.indicePerguntaAtual > 0) {
+        estado.indicePerguntaAtual--;
+        renderizarPerguntaAtual();
+      }
+    }
+
+    // Navegação do botão "Seguinte"
+    function perguntaSeguinte() {
+      const isLast = estado.indicePerguntaAtual === estado.perguntasFiltradas.length - 1;
+      if (isLast) {
+        confirmarSubmissao();
+      } else {
+        estado.indicePerguntaAtual++;
+        renderizarPerguntaAtual();
+      }
+    }
+
+    // Abrir o Modal de Confirmação para Entrega
+    function confirmarSubmissao() {
+      const modal = document.getElementById('confirm-modal');
+      const text = document.getElementById('confirm-modal-text');
+      
+      const total = estado.perguntasFiltradas.length;
+      const respondidas = Object.keys(estado.respostasUsuario).length;
+
+      if (respondidas < total) {
+        text.innerHTML = `Ainda restam <strong>${total - respondidas} perguntas sem resposta</strong> no seu caderno de exame. Tem a certeza que deseja terminar e receber a sua nota agora?`;
+      } else {
+        text.innerHTML = `Parabéns! Respondeu a todas as <strong>${total} perguntas</strong>. Deseja submeter a prova e visualizar a correção comentada?`;
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    // Fechar o Modal de Confirmação
+    function fecharModal() {
+      document.getElementById('confirm-modal').classList.add('hidden');
+    }
+
+    // Executar a submissão e calcular nota
+    function submeterExame() {
+      fecharModal();
+      clearInterval(estado.timerInterval);
+
+      const total = estado.perguntasFiltradas.length;
+      let acertos = 0;
+
+      estado.perguntasFiltradas.forEach(p => {
+        const escolha = estado.respostasUsuario[p.id];
+        if (escolha === p.resposta) {
+          acertos++;
+        }
+      });
+
+      // Calcular nota de 0 a 20 valores
+      const nota = (acertos / total) * 20;
+      const isApto = nota >= 10;
+
+      // Preencher Dados no Ecrã de Resultados
+      document.getElementById('res-titulo').innerText = `Folha de Avaliação Individual - ${estado.concursoAtivo}`;
+      document.getElementById('res-total-respondidas').innerText = `${Object.keys(estado.respostasUsuario).length} de ${total}`;
+      document.getElementById('res-total-acertos').innerText = `${acertos} de ${total}`;
+      document.getElementById('res-aproveitamento').innerText = `${Math.round((acertos / total) * 100)}%`;
+      
+      // Nota Formatada
+      document.getElementById('res-nota').innerText = (nota % 1 === 0) ? nota : nota.toFixed(1);
+
+      // Badge e Barra Superior
+      const badgeApto = document.getElementById('res-badge-apto');
+      const statusBar = document.getElementById('res-status-bar');
+
+      if (isApto) {
+        badgeApto.innerText = "APTO";
+        badgeApto.className = "inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider bg-[#DCFCE7] text-[#166534] border border-[#DCFCE7]";
+        statusBar.className = "absolute top-0 left-0 w-full h-2 bg-[#22C55E]";
+      } else {
+        badgeApto.innerText = "EXCLUÍDO";
+        badgeApto.className = "inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider bg-[#FEE2E2] text-[#991B1B] border border-[#FEE2E2]";
+        statusBar.className = "absolute top-0 left-0 w-full h-2 bg-[#C02424]";
+      }
+
+      // Renderizar Correção Detalhada
+      renderizarCorrecaoDetalhada();
+
+      // Mudar Ecrã
+      mostrarEcra('results');
+    }
+
+    // Renderizar a lista de perguntas respondidas com explicação
+    function renderizarCorrecaoDetalhada() {
+      const container = document.getElementById('res-correcao-container');
+      container.innerHTML = '';
+
+      const letrasOpcoes = ['A', 'B', 'C', 'D'];
+
+      estado.perguntasFiltradas.forEach((p, index) => {
+        const userChoice = estado.respostasUsuario[p.id];
+        const isCorrect = userChoice === p.resposta;
+
+        // Bloco principal
+        const item = document.createElement('div');
+        item.className = "bg-white border border-[#E2E8F0] rounded-xl p-5 md:p-6 shadow-sm relative overflow-hidden";
+
+        // Faixa indicadora de acerto/erro
+        let faixaCor = "bg-[#CBD5E1]";
+        let statusBadgeText = "Não Respondida";
+        let statusBadgeClass = "bg-[#E2E8F0] text-[#475569] border border-[#CBD5E1]";
+
+        if (userChoice !== undefined) {
+          if (isCorrect) {
+            faixaCor = "bg-[#22C55E]";
+            statusBadgeText = "Acertou";
+            statusBadgeClass = "bg-[#DCFCE7] text-[#166534] border border-[#DCFCE7]";
+          } else {
+            faixaCor = "bg-[#C02424]";
+            statusBadgeText = "Errou";
+            statusBadgeClass = "bg-[#FEE2E2] text-[#991B1B] border border-[#FEE2E2]";
+          }
+        }
+
+        // HTML das Opções
+        let opcoesHTML = '';
+        p.opcoes.forEach((opcao, optIdx) => {
+          const isSelected = userChoice === optIdx;
+          const isCorrectAnswer = p.resposta === optIdx;
+
+          let optionBorder = "border-[#E2E8F0]";
+          let optionBg = "bg-white";
+          let textStyle = "text-[#1C1E21]";
+          let badge = '';
+
+          if (isCorrectAnswer) {
+            optionBorder = "border-[#22C55E] ring-1 ring-[#22C55E]";
+            optionBg = "bg-[#F0FDF4]";
+            textStyle = "text-[#166534] font-semibold";
+            badge = `<span class="text-xs font-bold text-[#166534] bg-[#DCFCE7] px-2 py-0.5 rounded uppercase">Gabarito Oficial</span>`;
+          } else if (isSelected && !isCorrect) {
+            optionBorder = "border-[#C02424] ring-1 ring-[#C02424]";
+            optionBg = "bg-[#FEF2F2]";
+            textStyle = "text-[#991B1B] font-semibold";
+            badge = `<span class="text-xs font-bold text-[#991B1B] bg-[#FEE2E2] px-2 py-0.5 rounded uppercase">A sua escolha</span>`;
+          } else if (isSelected && isCorrect) {
+            badge = `<span class="text-xs font-bold text-[#166534] bg-[#DCFCE7] px-2 py-0.5 rounded uppercase">A sua escolha (Correta)</span>`;
+          }
+
+          const letraBg = isCorrectAnswer ? 'bg-[#22C55E] text-white' : (isSelected ? 'bg-[#C02424] text-white' : 'bg-[#E2E8F0] text-[#475569]');
+
+          opcoesHTML += `
+            <div class="flex items-start justify-between p-3.5 rounded-xl border-2 text-sm ${optionBorder} ${optionBg} ${textStyle}">
+              <div class="flex items-start space-x-3">
+                <span class="w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center font-bold text-[10px] uppercase ${letraBg}">${letrasOpcoes[optIdx]}</span>
+                <span class="leading-tight">${opcao}</span>
+              </div>
+              ${badge}
+            </div>
+          `;
+        });
+
+        item.innerHTML = `
+          <div class="absolute top-0 left-0 w-1.5 h-full ${faixaCor}"></div>
+          <div class="pl-2">
+            <div class="flex justify-between items-center mb-4">
+              <span class="text-xs font-bold text-[#475569] uppercase tracking-wider bg-[#E2E8F0] px-2.5 py-1 rounded border border-[#CBD5E1]">
+                ${p.categoria}
+              </span>
+              <div class="flex items-center space-x-2">
+                <span class="text-xs font-semibold text-[#64748B]">Questão ${index + 1}</span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider ${statusBadgeClass}">
+                  ${statusBadgeText}
+                </span>
+              </div>
+            </div>
+
+            <h4 class="text-base font-bold text-[#1C1E21] mb-4 leading-relaxed">
+              ${p.enunciado}
+            </h4>
+
+            <div class="space-y-2 mb-4">
+              ${opcoesHTML}
+            </div>
+
+            <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-4 text-xs md:text-sm text-[#1C1E21] leading-relaxed">
+              <div class="font-bold flex items-center mb-1.5 text-[#1A365D] text-xs uppercase tracking-wider">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1 text-[#1A365D] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Enquadramento Legal e Pedagógico
+              </div>
+              <p class="font-light text-[#475569]">${p.explicacao}</p>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(item);
+      });
+    }
+
+    // Reiniciar Simulador (Voltar ao Menu Principal)
+    function restartSimulador() {
+      clearInterval(estado.timerInterval);
+      estado.concursoAtivo = null;
+      estado.perguntasFiltradas = [];
+      estado.respostasUsuario = {};
+      estado.indicePerguntaAtual = 0;
+      
+      mostrarEcra('selection');
+    }
+  </script>
+</body>
+</html>

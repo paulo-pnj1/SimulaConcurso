@@ -1,0 +1,155 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Reusable, hardened global helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      // Bootstrapped Admin using the runtime user email
+      return isEmailVerified() && (
+        request.auth.token.email == 'pnjpaulo175@gmail.com'
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // ==========================================
+    // 1. USERS COLLECTION
+    // ==========================================
+    match /users/{userId} {
+      allow get: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow list: if isAdmin();
+      
+      allow create: if isSignedIn() && 
+                      request.auth.uid == userId && 
+                      incoming().uid == userId && 
+                      incoming().role == 'candidate' && 
+                      incoming().name is string && 
+                      incoming().name.size() > 0 && 
+                      incoming().name.size() <= 100 && 
+                      incoming().email == request.auth.token.email &&
+                      incoming().createdAt == request.time;
+                      
+      allow update: if isSignedIn() && 
+                      request.auth.uid == userId && 
+                      incoming().uid == userId && 
+                      incoming().role == 'candidate' && 
+                      incoming().email == existing().email &&
+                      incoming().createdAt == existing().createdAt &&
+                      incoming().diff(existing()).affectedKeys().hasOnly(['name']) &&
+                      incoming().name is string && 
+                      incoming().name.size() > 0 && 
+                      incoming().name.size() <= 100;
+                      
+      allow delete: if isAdmin();
+    }
+
+    // ==========================================
+    // 2. PERGUNTAS (QUESTIONS) COLLECTION
+    // ==========================================
+    match /perguntas/{perguntaId} {
+      allow get: if isSignedIn();
+      allow list: if isSignedIn();
+      
+      allow create: if isAdmin() && 
+                      incoming().id == perguntaId &&
+                      incoming().ministerio in ['MININT', 'MINSA'] &&
+                      incoming().categoria is string &&
+                      incoming().categoria.size() > 0 &&
+                      incoming().categoria.size() <= 100 &&
+                      incoming().enunciado is string &&
+                      incoming().enunciado.size() > 0 &&
+                      incoming().enunciado.size() <= 2000 &&
+                      incoming().opcoes is list &&
+                      incoming().opcoes.size() == 4 &&
+                      incoming().opcoes[0] is string &&
+                      incoming().opcoes[0].size() > 0 &&
+                      incoming().opcoes[0].size() <= 500 &&
+                      incoming().opcoes[1] is string &&
+                      incoming().opcoes[1].size() > 0 &&
+                      incoming().opcoes[1].size() <= 500 &&
+                      incoming().opcoes[2] is string &&
+                      incoming().opcoes[2].size() > 0 &&
+                      incoming().opcoes[2].size() <= 500 &&
+                      incoming().opcoes[3] is string &&
+                      incoming().opcoes[3].size() > 0 &&
+                      incoming().opcoes[3].size() <= 500 &&
+                      incoming().resposta is int &&
+                      incoming().resposta >= 0 &&
+                      incoming().resposta <= 3 &&
+                      incoming().explicacao is string &&
+                      incoming().explicacao.size() > 0 &&
+                      incoming().explicacao.size() <= 2000 &&
+                      incoming().createdBy == request.auth.uid &&
+                      incoming().createdAt == request.time;
+
+      allow update: if isAdmin() && 
+                      incoming().id == perguntaId &&
+                      incoming().ministerio in ['MININT', 'MINSA'] &&
+                      incoming().categoria is string &&
+                      incoming().categoria.size() > 0 &&
+                      incoming().categoria.size() <= 100 &&
+                      incoming().enunciado is string &&
+                      incoming().enunciado.size() > 0 &&
+                      incoming().enunciado.size() <= 2000 &&
+                      incoming().opcoes is list &&
+                      incoming().opcoes.size() == 4 &&
+                      incoming().resposta is int &&
+                      incoming().resposta >= 0 &&
+                      incoming().resposta <= 3 &&
+                      incoming().explicacao is string &&
+                      incoming().createdBy == existing().createdBy &&
+                      incoming().createdAt == existing().createdAt;
+                      
+      allow delete: if isAdmin();
+    }
+
+    // ==========================================
+    // 3. RESULTADOS (EXAM RESULTS) COLLECTION
+    // ==========================================
+    match /resultados/{resultadoId} {
+      allow get: if isSignedIn() && (resource.data.candidateUid == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && (resource.data.candidateUid == request.auth.uid || isAdmin());
+      
+      allow create: if isSignedIn() && 
+                      incoming().id == resultadoId &&
+                      incoming().candidateUid == request.auth.uid &&
+                      incoming().candidateName is string &&
+                      incoming().candidateName.size() > 0 &&
+                      incoming().candidateName.size() <= 100 &&
+                      incoming().candidateEmail is string &&
+                      incoming().ministerio in ['MININT', 'MINSA'] &&
+                      incoming().score is number &&
+                      incoming().score >= 0 &&
+                      incoming().score <= 100 &&
+                      incoming().respostasCorretas is int &&
+                      incoming().totalPerguntas is int &&
+                      incoming().tempoGasto is int &&
+                      incoming().createdAt == request.time;
+                      
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+  }
+}
