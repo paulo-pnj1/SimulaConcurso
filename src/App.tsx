@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Pergunta, ConcursoType, RespostasUsuario } from "./types";
+import { Pergunta, ConcursoType, RespostasUsuario, UserProfile, PREMIUM_CONFIG } from "./types";
 import SelectionScreen from "./components/SelectionScreen";
 import SimulatorScreen from "./components/SimulatorScreen";
 import ResultsScreen from "./components/ResultsScreen";
@@ -14,15 +14,11 @@ type ScreenType = "auth" | "selection" | "simulator" | "results" | "manage";
 
 export default function App() {
   const [screen, setScreen] = useState<ScreenType>("auth");
-  const [currentUser, setCurrentUser] = useState<{
-    uid: string;
-    name: string;
-    email: string;
-    role: "admin" | "candidate";
-  } | null>(null);
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
 
   const [selectedMinisterio, setSelectedMinisterio] = useState<ConcursoType | null>(null);
   const [perguntasFiltro, setPerguntasFiltro] = useState<Pergunta[]>([]);
+  const [isTrial, setIsTrial] = useState<boolean>(false);
   const [respostas, setRespostas] = useState<RespostasUsuario>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,17 +39,19 @@ export default function App() {
           const isAdminEmail = user.email.toLowerCase() === "pnjpaulo175@gmail.com";
           const role = isAdminEmail ? "admin" : "candidate";
 
-          const profile = {
+          const profile: UserProfile = {
             uid: user.uid,
             name: user.displayName || user.email.split("@")[0],
             email: user.email,
             role: role as "admin" | "candidate",
+            isPremium: false,
           };
 
           if (userSnap.exists()) {
             const data = userSnap.data();
             profile.name = data.name || profile.name;
             profile.role = data.role || profile.role;
+            profile.isPremium = data.isPremium === true;
           } else {
             await setDoc(userRef, {
               ...profile,
@@ -71,6 +69,7 @@ export default function App() {
             name: user.displayName || user.email.split("@")[0],
             email: user.email,
             role: isAdminEmail ? "admin" : "candidate",
+            isPremium: false,
           });
           setScreen("selection");
         } finally {
@@ -175,11 +174,19 @@ export default function App() {
       }
 
       // Filter questions by ministery
-      const filtered = allQuestions.filter((q) => q.ministerio === ministerio);
+      let filtered = allQuestions.filter((q) => q.ministerio === ministerio);
 
       if (filtered.length === 0) {
         throw new Error(`Sem perguntas para o ministério ${ministerio}.`);
       }
+
+      // Candidatos sem acesso Premium recebem apenas uma amostra gratuita
+      const hasFullAccess = currentUser?.role === "admin" || currentUser?.isPremium === true;
+      const trialNow = !hasFullAccess && filtered.length > PREMIUM_CONFIG.freeQuestionLimit;
+      if (trialNow) {
+        filtered = filtered.slice(0, PREMIUM_CONFIG.freeQuestionLimit);
+      }
+      setIsTrial(trialNow);
 
       setPerguntasFiltro(filtered);
       setSelectedMinisterio(ministerio);
@@ -269,14 +276,24 @@ export default function App() {
     }
   };
 
-  const handleAuthSuccess = (userProfile: {
-    uid: string;
-    name: string;
-    email: string;
-    role: "admin" | "candidate";
-  }) => {
+  const handleAuthSuccess = (userProfile: UserProfile) => {
     setCurrentUser(userProfile);
     setScreen("selection");
+  };
+
+  // Permite ao candidato verificar se o Admin já ativou o seu acesso Premium
+  const handleRefreshPremiumStatus = async () => {
+    if (!currentUser || currentUser.uid.startsWith("demo-")) return;
+    try {
+      const userRef = doc(db, "users", currentUser.uid);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) {
+        const data = userSnap.data();
+        setCurrentUser((prev) => (prev ? { ...prev, isPremium: data.isPremium === true } : prev));
+      }
+    } catch (e) {
+      console.error("Erro ao verificar estado Premium:", e);
+    }
   };
 
   return (
@@ -324,6 +341,7 @@ export default function App() {
             onOpenManage={() => setScreen("manage")}
             userResults={userResults}
             loadingResults={loadingResults}
+            onRefreshPremiumStatus={handleRefreshPremiumStatus}
           />
         )}
 
@@ -338,6 +356,7 @@ export default function App() {
             respostas={respostas}
             onSelectOption={handleSelectOption}
             onSubmit={handleSubmitExam}
+            isTrial={isTrial}
           />
         )}
 

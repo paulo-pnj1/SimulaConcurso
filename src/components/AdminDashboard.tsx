@@ -15,9 +15,13 @@ import {
   Filter,
   BarChart3,
   Calendar,
-  Lock
+  Lock,
+  Sparkles,
+  ShieldCheck,
+  ShieldOff,
+  Wallet
 } from "lucide-react";
-import { Pergunta, ConcursoType } from "../types";
+import { Pergunta, ConcursoType, PREMIUM_CONFIG } from "../types";
 import { db, handleFirestoreError, OperationType } from "../firebase";
 import {
   collection,
@@ -49,8 +53,25 @@ interface CandidateResult {
   createdAt: string;
 }
 
+interface CandidateUser {
+  uid: string;
+  name: string;
+  email: string;
+  role: "admin" | "candidate";
+  isPremium?: boolean;
+  premiumActivatedAt?: string;
+  createdAt?: string;
+}
+
 export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProps) {
-  const [activeTab, setActiveTab] = useState<"candidates" | "questions">("candidates");
+  const [activeTab, setActiveTab] = useState<"candidates" | "questions" | "premium">("candidates");
+
+  // State for Premium Management
+  const [users, setUsers] = useState<CandidateUser[]>([]);
+  const [loadingUsers, setLoadingUsers] = useState(false);
+  const [userSearch, setUserSearch] = useState("");
+  const [premiumFilter, setPremiumFilter] = useState<"ALL" | "PREMIUM" | "FREE">("ALL");
+  const [updatingUid, setUpdatingUid] = useState<string | null>(null);
 
   // State for Candidate Results
   const [results, setResults] = useState<CandidateResult[]>([]);
@@ -76,7 +97,93 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
   useEffect(() => {
     fetchResults();
     fetchCustomQuestions();
+    fetchUsers();
   }, []);
+
+  const fetchUsers = async () => {
+    setLoadingUsers(true);
+    try {
+      const usersRef = collection(db, "users");
+      const snapshot = await getDocs(usersRef);
+      const fetched: CandidateUser[] = [];
+      snapshot.forEach((docSnap) => {
+        fetched.push(docSnap.data() as CandidateUser);
+      });
+      fetched.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+      setUsers(fetched);
+    } catch (err: any) {
+      console.error("Erro ao carregar lista de candidatos:", err);
+      if (adminUser.uid.startsWith("demo-")) {
+        setUsers([
+          {
+            uid: "demo-candidate-123",
+            name: "Sebastião Manuel",
+            email: "sebastiao@concurso.ao",
+            role: "candidate",
+            isPremium: true,
+            premiumActivatedAt: new Date(Date.now() - 3600000 * 5).toISOString(),
+          },
+          {
+            uid: "demo-candidate-456",
+            name: "Isabel Nzumba",
+            email: "isabel@gmail.com",
+            role: "candidate",
+            isPremium: false,
+          },
+        ]);
+      }
+    } finally {
+      setLoadingUsers(false);
+    }
+  };
+
+  // Concede ou revoga o acesso Premium de um candidato depois de confirmar o
+  // comprovativo de pagamento (Multicaixa Express / Transferência) recebido no WhatsApp.
+  const handleTogglePremium = async (candidate: CandidateUser) => {
+    const grantingAccess = !candidate.isPremium;
+    const confirmMsg = grantingAccess
+      ? `Confirma que recebeu e validou o comprovativo de pagamento de ${candidate.name} (${candidate.email})? Isto vai ativar o acesso Premium vitalício.`
+      : `Tem a certeza que quer revogar o acesso Premium de ${candidate.name} (${candidate.email})?`;
+
+    if (!window.confirm(confirmMsg)) return;
+
+    setUpdatingUid(candidate.uid);
+    try {
+      const userRef = doc(db, "users", candidate.uid);
+      await setDoc(
+        userRef,
+        {
+          isPremium: grantingAccess,
+          premiumActivatedAt: grantingAccess ? new Date().toISOString() : null,
+        },
+        { merge: true }
+      );
+
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.uid === candidate.uid
+            ? { ...u, isPremium: grantingAccess, premiumActivatedAt: grantingAccess ? new Date().toISOString() : undefined }
+            : u
+        )
+      );
+
+      setFeedback({
+        type: "success",
+        message: grantingAccess
+          ? `Acesso Premium ativado para ${candidate.name}.`
+          : `Acesso Premium revogado para ${candidate.name}.`,
+      });
+    } catch (err: any) {
+      console.error("Erro ao atualizar estado Premium:", err);
+      setFeedback({
+        type: "error",
+        message: `Não foi possível atualizar o Premium. Verifique as regras do Firestore. (${err.message})`,
+      });
+    } finally {
+      setUpdatingUid(null);
+      setTimeout(() => setFeedback(null), 4000);
+    }
+  };
 
   const fetchResults = async () => {
     setLoadingResults(true);
@@ -296,6 +403,23 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
     return matchesSearch && matchesMinistry;
   });
 
+  // Premium stats & filtering
+  const candidateUsers = users.filter((u) => u.role !== "admin");
+  const premiumCount = candidateUsers.filter((u) => u.isPremium).length;
+  const priceNumber = parseInt(PREMIUM_CONFIG.priceLabel.replace(/[^\d]/g, ""), 10) || 0;
+  const estimatedRevenue = premiumCount * priceNumber;
+
+  const filteredUsers = candidateUsers.filter((u) => {
+    const matchesSearch =
+      (u.name || "").toLowerCase().includes(userSearch.toLowerCase()) ||
+      (u.email || "").toLowerCase().includes(userSearch.toLowerCase());
+    const matchesFilter =
+      premiumFilter === "ALL" ||
+      (premiumFilter === "PREMIUM" && u.isPremium) ||
+      (premiumFilter === "FREE" && !u.isPremium);
+    return matchesSearch && matchesFilter;
+  });
+
   const formatTempo = (segundos: number) => {
     const mins = Math.floor(segundos / 60);
     const secs = segundos % 60;
@@ -408,7 +532,35 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
           <Database className="w-4 h-4" />
           <span>Gestão de Perguntas ({customQuestions.length})</span>
         </button>
+        <button
+          onClick={() => setActiveTab("premium")}
+          className={`px-5 py-3 text-sm font-bold border-b-2 transition-all cursor-pointer flex items-center gap-2 ${
+            activeTab === "premium"
+              ? "border-[#1A365D] text-[#1A365D]"
+              : "border-transparent text-slate-500 hover:text-slate-800"
+          }`}
+        >
+          <Wallet className="w-4 h-4" />
+          <span>Pagamentos / Premium ({premiumCount})</span>
+        </button>
       </div>
+
+      {feedback && (
+        <div
+          className={`mb-6 rounded-xl p-4 text-sm font-semibold flex items-center gap-2 ${
+            feedback.type === "success"
+              ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+              : "bg-red-50 text-red-800 border border-red-200"
+          }`}
+        >
+          {feedback.type === "success" ? (
+            <CheckCircle className="w-4 h-4 flex-shrink-0" />
+          ) : (
+            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          )}
+          <span>{feedback.message}</span>
+        </div>
+      )}
 
       {/* Tab Contents */}
       {activeTab === "candidates" && (
@@ -859,6 +1011,152 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                 </div>
               )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === "premium" && (
+        <div>
+          {/* Revenue Stats */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
+            <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
+              <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
+                <Sparkles className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                  Candidatos Premium
+                </span>
+                <span className="text-2xl font-black text-slate-800">{premiumCount}</span>
+              </div>
+            </div>
+            <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
+              <div className="w-12 h-12 bg-blue-50 text-[#1A365D] rounded-xl flex items-center justify-center">
+                <Wallet className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                  Receita Estimada
+                </span>
+                <span className="text-2xl font-black text-slate-800">
+                  {estimatedRevenue.toLocaleString("pt-AO")} Kz
+                </span>
+              </div>
+            </div>
+            <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
+              <div className="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
+                <Users className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                  Total de Candidatos
+                </span>
+                <span className="text-2xl font-black text-slate-800">{candidateUsers.length}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-amber-50 border border-amber-200 text-amber-900 rounded-xl p-4 text-xs leading-relaxed mb-6">
+            <strong>Como aprovar um pagamento:</strong> quando um candidato lhe enviar o comprovativo pelo
+            WhatsApp (Multicaixa Express ou transferência), confirme o valor e o nome, depois procure o
+            candidato abaixo pelo email e clique em "Ativar Premium". O acesso completo é liberado de imediato.
+          </div>
+
+          <div className="bg-white border border-[#E2E8F0] rounded-2xl shadow-xs overflow-hidden">
+            {/* Filters */}
+            <div className="p-5 border-b border-[#E2E8F0] bg-slate-50/50 flex flex-col md:flex-row gap-4 justify-between items-center">
+              <div className="relative w-full md:max-w-md">
+                <Search className="absolute left-3.5 top-3 w-4.5 h-4.5 text-slate-400" />
+                <input
+                  type="text"
+                  value={userSearch}
+                  onChange={(e) => setUserSearch(e.target.value)}
+                  placeholder="Pesquisar por nome ou email do candidato..."
+                  className="w-full bg-white border border-[#CBD5E1] rounded-xl pl-10 pr-4 py-2 text-sm text-[#1C1E21] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1A365D]"
+                />
+              </div>
+              <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto">
+                <Filter className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                {(["ALL", "PREMIUM", "FREE"] as const).map((f) => (
+                  <button
+                    key={f}
+                    onClick={() => setPremiumFilter(f)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap cursor-pointer transition-colors ${
+                      premiumFilter === f
+                        ? "bg-[#1A365D] text-white"
+                        : "bg-white border border-[#CBD5E1] text-slate-600 hover:bg-slate-100"
+                    }`}
+                  >
+                    {f === "ALL" ? "Todos" : f === "PREMIUM" ? "Premium" : "Gratuito"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {loadingUsers ? (
+              <div className="py-16 text-center text-slate-500 text-sm">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1A365D] mx-auto mb-4"></div>
+                <span>A carregar candidatos...</span>
+              </div>
+            ) : filteredUsers.length === 0 ? (
+              <div className="py-16 text-center">
+                <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                <h3 className="text-base font-bold text-slate-700">Nenhum Candidato Encontrado</h3>
+                <p className="text-xs text-slate-400 mt-1">
+                  Ajuste a pesquisa ou o filtro acima.
+                </p>
+              </div>
+            ) : (
+              <div className="divide-y divide-slate-100">
+                {filteredUsers.map((u) => (
+                  <div
+                    key={u.uid}
+                    className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${
+                          u.isPremium ? "bg-emerald-50 text-emerald-600" : "bg-slate-100 text-slate-400"
+                        }`}
+                      >
+                        {u.isPremium ? <ShieldCheck className="w-4.5 h-4.5" /> : <ShieldOff className="w-4.5 h-4.5" />}
+                      </div>
+                      <div>
+                        <span className="font-bold text-slate-800 text-sm block">{u.name}</span>
+                        <span className="text-[10px] text-slate-400 block mt-0.5">{u.email}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <span
+                        className={`text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
+                          u.isPremium
+                            ? "bg-emerald-100 text-emerald-700"
+                            : "bg-slate-100 text-slate-500"
+                        }`}
+                      >
+                        {u.isPremium ? "Premium ativo" : "Acesso gratuito"}
+                      </span>
+                      <button
+                        onClick={() => handleTogglePremium(u)}
+                        disabled={updatingUid === u.uid}
+                        className={`text-xs font-bold px-4 py-2 rounded-xl transition-all cursor-pointer disabled:opacity-50 ${
+                          u.isPremium
+                            ? "border border-red-200 text-red-600 hover:bg-red-50"
+                            : "bg-[#1A365D] hover:bg-[#122744] text-white"
+                        }`}
+                      >
+                        {updatingUid === u.uid
+                          ? "A atualizar..."
+                          : u.isPremium
+                          ? "Revogar Premium"
+                          : "Ativar Premium"}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

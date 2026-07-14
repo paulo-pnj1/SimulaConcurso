@@ -8,6 +8,7 @@ interface SimulatorScreenProps {
   respostas: RespostasUsuario;
   onSelectOption: (perguntaId: number, opcaoIndice: number) => void;
   onSubmit: (secondsElapsed: number) => void;
+  isTrial?: boolean;
 }
 
 export default function SimulatorScreen({
@@ -16,6 +17,7 @@ export default function SimulatorScreen({
   respostas,
   onSelectOption,
   onSubmit,
+  isTrial,
 }: SimulatorScreenProps) {
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [tempoRestante, setTempoRestante] = useState<number>(45 * 60); // 45 minutos em segundos
@@ -73,6 +75,15 @@ export default function SimulatorScreen({
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
+      {isTrial && (
+        <div className="mb-4 bg-amber-50 border border-amber-200 text-amber-900 rounded-xl px-4 py-3 text-xs font-medium flex items-center gap-2">
+          <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
+          <span>
+            Está a fazer a <strong>amostra gratuita</strong> ({totalPerguntas} perguntas). Ative o acesso Premium para
+            desbloquear o banco completo de perguntas de {ministerio} e simulações ilimitadas.
+          </span>
+        </div>
+      )}
       {/* Top Header of Simulator */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-4 mb-6 gap-4">
         <div className="flex items-center space-x-3">

@@ -51,16 +51,28 @@ service cloud.firestore {
                       incoming().email == request.auth.token.email &&
                       incoming().createdAt == request.time;
                       
-      allow update: if isSignedIn() && 
-                      request.auth.uid == userId && 
-                      incoming().uid == userId && 
-                      incoming().role == 'candidate' && 
-                      incoming().email == existing().email &&
-                      incoming().createdAt == existing().createdAt &&
-                      incoming().diff(existing()).affectedKeys().hasOnly(['name']) &&
-                      incoming().name is string && 
-                      incoming().name.size() > 0 && 
-                      incoming().name.size() <= 100;
+      allow update: if isSignedIn() && (
+                      // Candidato só pode editar o próprio nome
+                      (request.auth.uid == userId &&
+                       incoming().uid == userId &&
+                       incoming().role == 'candidate' &&
+                       incoming().email == existing().email &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['name']) &&
+                       incoming().name is string &&
+                       incoming().name.size() > 0 &&
+                       incoming().name.size() <= 100)
+                      ||
+                      // Admin só pode ativar/revogar o acesso Premium, nada mais
+                      (isAdmin() &&
+                       incoming().uid == existing().uid &&
+                       incoming().email == existing().email &&
+                       incoming().name == existing().name &&
+                       incoming().role == existing().role &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['isPremium', 'premiumActivatedAt']) &&
+                       incoming().isPremium is bool)
+                    );
                       
       allow delete: if isAdmin();
     }
