@@ -93,14 +93,8 @@ export default function App() {
           setIsLoading(false);
         }
       } else {
-        // Only reset if we are not signed in as a local Demo user
-        setCurrentUser((prev) => {
-          if (prev?.uid.startsWith("demo-")) {
-            return prev; // keep demo user session active
-          }
-          setScreen("auth");
-          return null;
-        });
+        setCurrentUser(null);
+        setScreen("auth");
       }
     });
 
@@ -124,23 +118,6 @@ export default function App() {
       setUserResults(fetched);
     } catch (err) {
       console.error("Erro ao carregar histórico do candidato:", err);
-      // fallback mock results for Demo user
-      if (uid.startsWith("demo-")) {
-        setUserResults([
-          {
-            id: "demo-res-1",
-            candidateUid: "demo-candidate-123",
-            candidateName: "Candidato de Teste",
-            candidateEmail: "candidato@concurso.ao",
-            ministerio: "MININT" as ConcursoType,
-            score: 70,
-            respostasCorretas: 14,
-            totalPerguntas: 20,
-            tempoGasto: 1045,
-            createdAt: new Date(Date.now() - 3600000 * 3).toISOString(),
-          }
-        ]);
-      }
     } finally {
       setLoadingResults(false);
     }
@@ -229,18 +206,12 @@ export default function App() {
   };
 
   const handleSignOut = async () => {
-    if (currentUser?.uid.startsWith("demo-")) {
-      // Clear demo state locally
+    try {
+      await signOut(auth);
       setCurrentUser(null);
       setScreen("auth");
-    } else {
-      try {
-        await signOut(auth);
-        setCurrentUser(null);
-        setScreen("auth");
-      } catch (e) {
-        console.error("Erro no logout:", e);
-      }
+    } catch (e) {
+      console.error("Erro no logout:", e);
     }
   };
 
@@ -251,7 +222,7 @@ export default function App() {
 
   // Permite ao candidato verificar se o Admin já ativou o seu acesso Premium
   const handleRefreshPremiumStatus = async () => {
-    if (!currentUser || currentUser.uid.startsWith("demo-")) return;
+    if (!currentUser) return;
     try {
       const userRef = doc(db, "users", currentUser.uid);
       const userSnap = await getDoc(userRef);
@@ -278,10 +249,6 @@ export default function App() {
   // a mensagem de "aguarde, vamos verificar e ativar".
   const handleMarkPaymentPending = async () => {
     if (!currentUser) return;
-    if (currentUser.uid.startsWith("demo-")) {
-      setCurrentUser((prev) => (prev ? { ...prev, paymentStatus: "pending" } : prev));
-      return;
-    }
     try {
       const userRef = doc(db, "users", currentUser.uid);
       await setDoc(userRef, { paymentStatus: "pending", pendingSince: new Date().toISOString() }, { merge: true });

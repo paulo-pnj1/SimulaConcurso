@@ -115,29 +115,6 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
       setUsers(fetched);
     } catch (err: any) {
       console.error("Erro ao carregar lista de candidatos:", err);
-      if (adminUser.uid.startsWith("demo-")) {
-        setUsers([
-          {
-            uid: "demo-candidate-123",
-            name: "Sebastião Manuel",
-            email: "sebastiao@concurso.ao",
-            telefone: "923 111 222",
-            role: "candidate",
-            isPremium: true,
-            paymentStatus: "none",
-            premiumActivatedAt: new Date(Date.now() - 3600000 * 5).toISOString(),
-          },
-          {
-            uid: "demo-candidate-456",
-            name: "Isabel Nzumba",
-            email: "isabel@gmail.com",
-            telefone: "912 333 444",
-            role: "candidate",
-            isPremium: false,
-            paymentStatus: "pending",
-          },
-        ]);
-      }
     } finally {
       setLoadingUsers(false);
     }
@@ -213,47 +190,6 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
       setResults(fetched);
     } catch (err: any) {
       console.error("Erro ao carregar resultados dos candidatos:", err);
-      // Fallback/Mock results for preview if firebase collection lacks read permission or isn't fully set up yet
-      if (adminUser.uid.startsWith("demo-")) {
-        setResults([
-          {
-            id: "res-1",
-            candidateUid: "demo-candidate-123",
-            candidateName: "Sebastião Manuel",
-            candidateEmail: "sebastiao@concurso.ao",
-            ministerio: "MININT",
-            score: 75,
-            respostasCorretas: 15,
-            totalPerguntas: 20,
-            tempoGasto: 1240,
-            createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-          },
-          {
-            id: "res-2",
-            candidateUid: "demo-candidate-456",
-            candidateName: "Isabel Nzumba",
-            candidateEmail: "isabel@gmail.com",
-            ministerio: "MINSA",
-            score: 45,
-            respostasCorretas: 9,
-            totalPerguntas: 20,
-            tempoGasto: 1800,
-            createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-          },
-          {
-            id: "res-3",
-            candidateUid: "demo-candidate-789",
-            candidateName: "José Pedro",
-            candidateEmail: "jose.pedro@hotmail.com",
-            ministerio: "MININT",
-            score: 90,
-            respostasCorretas: 18,
-            totalPerguntas: 20,
-            tempoGasto: 950,
-            createdAt: new Date(Date.now() - 3600000 * 48).toISOString(),
-          },
-        ]);
-      }
     } finally {
       setLoadingResults(false);
     }

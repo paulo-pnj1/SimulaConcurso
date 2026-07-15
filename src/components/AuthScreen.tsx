@@ -203,26 +203,6 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
     }
   };
 
-  // Acessos rápidos de demonstração (não passam pelo Firebase, só para testar a app)
-  const handleDemoLogin = (role: "admin" | "candidate") => {
-    setIsLoading(true);
-    setError(null);
-    setTimeout(() => {
-      const isCandidate = role === "candidate";
-      const demoUser: UserProfile = {
-        uid: isCandidate ? "demo-candidate-123" : "demo-admin-456",
-        name: isCandidate ? "Candidato de Teste" : "Administrador (Paulo)",
-        email: isCandidate ? "923000000@candidatos.simulador-angola.local" : "pnjpaulo175@gmail.com",
-        telefone: isCandidate ? "923 000 000" : undefined,
-        role,
-        isPremium: !isCandidate,
-        paymentStatus: "none",
-      };
-      setIsLoading(false);
-      onAuthSuccess(demoUser);
-    }, 500);
-  };
-
   return (
     <div className="max-w-md mx-auto px-4 py-12">
       <motion.div
@@ -401,41 +381,6 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
             </button>
           </form>
         )}
-
-        {/* Quick Demo Access */}
-        <div className="relative my-6 flex items-center justify-center">
-          <span className="absolute inset-x-0 h-px bg-[#E3D9C4]" />
-          <span className="relative bg-white px-3 text-[10px] font-bold text-stone-400 uppercase tracking-widest">
-            Ambiente de Teste
-          </span>
-        </div>
-        <div className="grid grid-cols-2 gap-3.5">
-          <button
-            onClick={() => handleDemoLogin("candidate")}
-            disabled={isLoading}
-            className="flex flex-col items-center justify-center p-3 border border-[#E3D9C4] hover:border-[#12233F] bg-stone-50 hover:bg-stone-50/50 rounded-xl transition-all cursor-pointer group text-center"
-          >
-            <User className="w-5 h-5 text-stone-500 group-hover:text-[#12233F] mb-1.5" />
-            <span className="text-xs font-bold text-stone-800">Modo Candidato</span>
-            <span className="text-[9px] text-stone-400 mt-0.5">Testar como aluno</span>
-          </button>
-
-          <button
-            onClick={() => handleDemoLogin("admin")}
-            disabled={isLoading}
-            className="flex flex-col items-center justify-center p-3 border border-[#E3D9C4] hover:border-[#A62639] bg-stone-50 hover:bg-stone-50/50 rounded-xl transition-all cursor-pointer group text-center"
-          >
-            <Shield className="w-5 h-5 text-stone-500 group-hover:text-[#A62639] mb-1.5" />
-            <span className="text-xs font-bold text-stone-800">Modo Admin</span>
-            <span className="text-[9px] text-stone-400 mt-0.5">Gerir perguntas</span>
-          </button>
-        </div>
-
-        <div className="mt-6 pt-4 border-t border-stone-100 text-center">
-          <p className="text-[10px] text-stone-400 leading-normal">
-            As contas de demonstração guardam dados locais para permitir testes ágeis sem necessidade de credenciais reais.
-          </p>
-        </div>
       </motion.div>
     </div>
   );
