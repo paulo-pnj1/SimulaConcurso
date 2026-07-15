@@ -1,11 +1,19 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, doc, getDocFromServer } from "firebase/firestore";
+import { getFunctions, httpsCallable } from "firebase/functions";
 import firebaseConfig from "./firebase-applet-config.json";
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+export const functions = getFunctions(app);
+
+// Server-side question delivery + grading (see /functions/src/index.ts).
+// Using callables instead of raw Firestore reads/writes keeps the correct
+// answers (`resposta`/`explicacao`) off the client until after submission.
+export const getExamQuestionsFn = httpsCallable(functions, "getExamQuestions");
+export const submitExamFn = httpsCallable(functions, "submitExam");
 
 export enum OperationType {
   CREATE = "create",

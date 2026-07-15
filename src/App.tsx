@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Pergunta, ConcursoType, RespostasUsuario, UserProfile, PREMIUM_CONFIG } from "./types";
+import { Pergunta, ConcursoType, RespostasUsuario, UserProfile, Resultado, SubmitExamResponse } from "./types";
 import SelectionScreen from "./components/SelectionScreen";
 import SimulatorScreen from "./components/SimulatorScreen";
 import ResultsScreen from "./components/ResultsScreen";
 import AuthScreen from "./components/AuthScreen";
 import AdminDashboard from "./components/AdminDashboard";
 import { GraduationCap } from "lucide-react";
-import { auth, db } from "./firebase";
+import { auth, db, getExamQuestionsFn, submitExamFn } from "./firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { doc, getDoc, setDoc, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { isAdminEmail } from "./config/admin";
 
 type ScreenType = "auth" | "selection" | "simulator" | "results" | "manage";
 
@@ -24,7 +25,7 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
 
   // Candidate Exam History
-  const [userResults, setUserResults] = useState<any[]>([]);
+  const [userResults, setUserResults] = useState<Resultado[]>([]);
   const [loadingResults, setLoadingResults] = useState<boolean>(false);
 
   // Track Auth state change
@@ -36,8 +37,7 @@ export default function App() {
           const userRef = doc(db, "users", user.uid);
           const userSnap = await getDoc(userRef);
           
-          const isAdminEmail = user.email.toLowerCase() === "pnjpaulo175@gmail.com";
-          const role = isAdminEmail ? "admin" : "candidate";
+          const role = isAdminEmail(user.email) ? "admin" : "candidate";
 
           const profile: UserProfile = {
             uid: user.uid,
@@ -63,12 +63,11 @@ export default function App() {
           setScreen("selection");
         } catch (e) {
           console.error("Erro ao carregar perfil do utilizador:", e);
-          const isAdminEmail = user.email.toLowerCase() === "pnjpaulo175@gmail.com";
           setCurrentUser({
             uid: user.uid,
             name: user.displayName || user.email.split("@")[0],
             email: user.email,
-            role: isAdminEmail ? "admin" : "candidate",
+            role: isAdminEmail(user.email) ? "admin" : "candidate",
             isPremium: false,
           });
           setScreen("selection");
@@ -95,13 +94,12 @@ export default function App() {
     setLoadingResults(true);
     try {
       const resultsRef = collection(db, "resultados");
-      const snapshot = await getDocs(resultsRef);
-      const fetched: any[] = [];
+      const resultsQuery = query(resultsRef, where("candidateUid", "==", uid));
+      const snapshot = await getDocs(resultsQuery);
+      const fetched: Resultado[] = [];
       snapshot.forEach((docSnap) => {
         const data = docSnap.data();
-        if (data.candidateUid === uid) {
-          fetched.push({ id: docSnap.id, ...data });
-        }
+        fetched.push({ id: docSnap.id, ...data } as Resultado);
       });
       // Sort newest first
       fetched.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -143,52 +141,18 @@ export default function App() {
     setError(null);
 
     try {
-      // 1. Fetch official base questions from public/perguntas.json
-      const response = await fetch("/perguntas.json");
-      if (!response.ok) {
-        throw new Error(`Erro ao aceder a perguntas.json: ${response.status}`);
-      }
-      let allQuestions: Pergunta[] = await response.json();
+      // Questions come from the getExamQuestions Cloud Function, which
+      // strips `resposta`/`explicacao` server-side and applies the trial
+      // limit for non-premium candidates. This is what stops anyone from
+      // reading the answer key out of the network tab before answering.
+      const response = await getExamQuestionsFn({ ministerio });
+      const { perguntas, isTrial: trialNow } = response.data as {
+        perguntas: Pergunta[];
+        isTrial: boolean;
+      };
 
-      // 2. Fetch custom questions from Firestore db
-      try {
-        const questionsRef = collection(db, "perguntas");
-        const qSnapshot = await getDocs(questionsRef);
-        const firestoreQuestions: Pergunta[] = [];
-        qSnapshot.forEach((docSnap) => {
-          firestoreQuestions.push(docSnap.data() as Pergunta);
-        });
-        allQuestions = [...allQuestions, ...firestoreQuestions];
-      } catch (fErr) {
-        console.warn("Erro ao buscar do Firestore (a usar localStorage como fallback):", fErr);
-        // Fallback to local storage if Firestore is unreachable
-        const storedCustom = localStorage.getItem("custom_perguntas");
-        if (storedCustom) {
-          try {
-            const customQuestions = JSON.parse(storedCustom) as Pergunta[];
-            allQuestions = [...allQuestions, ...customQuestions];
-          } catch (e) {
-            console.error("Erro ao mesclar do localStorage:", e);
-          }
-        }
-      }
-
-      // Filter questions by ministery
-      let filtered = allQuestions.filter((q) => q.ministerio === ministerio);
-
-      if (filtered.length === 0) {
-        throw new Error(`Sem perguntas para o ministério ${ministerio}.`);
-      }
-
-      // Candidatos sem acesso Premium recebem apenas uma amostra gratuita
-      const hasFullAccess = currentUser?.role === "admin" || currentUser?.isPremium === true;
-      const trialNow = !hasFullAccess && filtered.length > PREMIUM_CONFIG.freeQuestionLimit;
-      if (trialNow) {
-        filtered = filtered.slice(0, PREMIUM_CONFIG.freeQuestionLimit);
-      }
       setIsTrial(trialNow);
-
-      setPerguntasFiltro(filtered);
+      setPerguntasFiltro(perguntas);
       setSelectedMinisterio(ministerio);
       setRespostas({}); // Reset answers
       setScreen("simulator");
@@ -207,49 +171,39 @@ export default function App() {
     }));
   };
 
-  // On submit, calculate score and write permanently to Firestore
+  // On submit, ask the submitExam Cloud Function to grade the exam
+  // server-side (it holds the answer key; the client never does) and
+  // persist the result. The function also returns the correct answers for
+  // the questions actually shown, which we merge back into perguntasFiltro
+  // so ResultsScreen can render the review (correct option + explicacao).
   const handleSubmitExam = async (secondsElapsed: number) => {
-    setScreen("results");
+    if (!currentUser || !selectedMinisterio) {
+      setScreen("results");
+      return;
+    }
 
-    if (currentUser && selectedMinisterio) {
-      // Calculate correct answers
-      let acertosCount = 0;
-      perguntasFiltro.forEach((p) => {
-        if (respostas[p.id] === p.resposta) {
-          acertosCount++;
-        }
-      });
-
-      const scorePercentage = Math.round((acertosCount / perguntasFiltro.length) * 100);
-      const resultId = "res-" + Date.now();
-
-      const newResult = {
-        id: resultId,
-        candidateUid: currentUser.uid,
-        candidateName: currentUser.name,
-        candidateEmail: currentUser.email,
+    try {
+      const response = await submitExamFn({
         ministerio: selectedMinisterio,
-        score: scorePercentage,
-        respostasCorretas: acertosCount,
-        totalPerguntas: perguntasFiltro.length,
-        tempoGasto: secondsElapsed,
-        createdAt: new Date().toISOString(),
-      };
+        respostas,
+        secondsElapsed,
+      });
+      const { revisao } = response.data as SubmitExamResponse;
 
-      try {
-        await setDoc(doc(db, "resultados", resultId), newResult);
-        // Refresh candidate dashboard history
-        fetchUserResults(currentUser.uid);
-      } catch (err) {
-        console.error("Erro ao gravar classificação no Firestore:", err);
-        // Save local storage as fallback
-        const existingResults = localStorage.getItem("local_resultados")
-          ? JSON.parse(localStorage.getItem("local_resultados")!)
-          : [];
-        existingResults.push(newResult);
-        localStorage.setItem("local_resultados", JSON.stringify(existingResults));
-        setUserResults((prev) => [newResult, ...prev]);
-      }
+      const revisaoById = new Map(revisao.map((r) => [r.id, r]));
+      setPerguntasFiltro((prev) =>
+        prev.map((p) => {
+          const r = revisaoById.get(p.id);
+          return r ? { ...p, resposta: r.resposta, explicacao: r.explicacao } : p;
+        })
+      );
+
+      fetchUserResults(currentUser.uid);
+    } catch (err: any) {
+      console.error("Erro ao submeter exame:", err);
+      setError(err.message || "Não foi possível submeter o exame. Tente novamente.");
+    } finally {
+      setScreen("results");
     }
   };
 

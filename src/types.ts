@@ -14,6 +14,36 @@ export interface RespostasUsuario {
   [perguntaId: number]: number; // perguntaId -> indice da opcao selecionada
 }
 
+export interface Resultado {
+  id: string;
+  candidateUid: string;
+  candidateName: string;
+  candidateEmail: string;
+  ministerio: ConcursoType;
+  score: number;
+  respostasCorretas: number;
+  totalPerguntas: number;
+  tempoGasto: number;
+  createdAt: string;
+}
+
+// Question shape returned by the getExamQuestions Cloud Function: no
+// `resposta`/`explicacao` until the exam has been submitted and graded.
+export type PerguntaSemGabarito = Omit<Pergunta, "resposta" | "explicacao">;
+
+export interface RevisaoItem {
+  id: number;
+  resposta: number;
+  explicacao: string;
+}
+
+export interface SubmitExamResponse {
+  score: number;
+  respostasCorretas: number;
+  totalPerguntas: number;
+  revisao: RevisaoItem[];
+}
+
 export interface UserProfile {
   uid: string;
   name: string;

@@ -80,9 +80,16 @@ service cloud.firestore {
     // ==========================================
     // 2. PERGUNTAS (QUESTIONS) COLLECTION
     // ==========================================
+    // NOTE: perguntas contains the correct answer (`resposta`) and
+    // `explicacao`. Candidates must NEVER read this collection directly -
+    // otherwise they can see the answer key before answering. Exam
+    // questions are served to candidates stripped of `resposta`/`explicacao`
+    // by the `getExamQuestions` Cloud Function (which uses the Admin SDK and
+    // bypasses these rules). Only admins may read this collection from the
+    // client, to manage the question bank in AdminDashboard.
     match /perguntas/{perguntaId} {
-      allow get: if isSignedIn();
-      allow list: if isSignedIn();
+      allow get: if isAdmin();
+      allow list: if isAdmin();
       
       allow create: if isAdmin() && 
                       incoming().id == perguntaId &&
@@ -143,23 +150,12 @@ service cloud.firestore {
     match /resultados/{resultadoId} {
       allow get: if isSignedIn() && (resource.data.candidateUid == request.auth.uid || isAdmin());
       allow list: if isSignedIn() && (resource.data.candidateUid == request.auth.uid || isAdmin());
-      
-      allow create: if isSignedIn() && 
-                      incoming().id == resultadoId &&
-                      incoming().candidateUid == request.auth.uid &&
-                      incoming().candidateName is string &&
-                      incoming().candidateName.size() > 0 &&
-                      incoming().candidateName.size() <= 100 &&
-                      incoming().candidateEmail is string &&
-                      incoming().ministerio in ['MININT', 'MINSA'] &&
-                      incoming().score is number &&
-                      incoming().score >= 0 &&
-                      incoming().score <= 100 &&
-                      incoming().respostasCorretas is int &&
-                      incoming().totalPerguntas is int &&
-                      incoming().tempoGasto is int &&
-                      incoming().createdAt == request.time;
-                      
+
+      // Grading now happens exclusively inside the `submitExam` Cloud
+      // Function (Admin SDK, bypasses these rules). This prevents a
+      // candidate from writing a forged score/respostasCorretas directly
+      // from the browser.
+      allow create: if false;
       allow update: if isAdmin();
       allow delete: if isAdmin();
     }
