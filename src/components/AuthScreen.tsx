@@ -1,60 +1,64 @@
 import React, { useState } from "react";
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../firebase";
-import { Shield, User, GraduationCap, LogIn, AlertCircle } from "lucide-react";
+import { Shield, User, GraduationCap, LogIn, AlertCircle, Phone } from "lucide-react";
 import { motion } from "motion/react";
+import { UserProfile } from "../types";
+import { isAdminEmail } from "../config/admin";
 
 interface AuthScreenProps {
-  onAuthSuccess: (user: { uid: string; name: string; email: string; role: "admin" | "candidate" }) => void;
+  onAuthSuccess: (user: UserProfile) => void;
+}
+
+// Utilizador Google autenticado mas ainda sem número de telemóvel gravado —
+// falta um último passo antes de entrar na aplicação.
+interface PendingPhoneUser {
+  uid: string;
+  name: string;
+  email: string;
+  role: "admin" | "candidate";
 }
 
 export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [pendingPhoneUser, setPendingPhoneUser] = useState<PendingPhoneUser | null>(null);
+  const [telefoneInput, setTelefoneInput] = useState("");
 
   // Helper to handle user document in Firestore
   const handleUserDocument = async (uid: string, email: string, displayName: string) => {
-    try {
-      const userRef = doc(db, "users", uid);
-      const userSnap = await getDoc(userRef);
+    const userRef = doc(db, "users", uid);
+    const userSnap = await getDoc(userRef);
 
-      // Determine role based on admin email from metadata
-      const isAdminEmail = email.toLowerCase() === "pnjpaulo175@gmail.com";
-      const role = isAdminEmail ? "admin" : "candidate";
+    const role = isAdminEmail(email) ? "admin" : "candidate";
 
-      const userData = {
-        uid,
-        name: displayName || email.split("@")[0],
-        email,
-        role,
-        createdAt: new Date().toISOString(),
-      };
-
-      if (!userSnap.exists()) {
-        // Save new user
-        await setDoc(userRef, userData);
-        return userData;
-      } else {
-        const existingData = userSnap.data();
-        return {
-          uid,
-          name: existingData.name || userData.name,
-          email: existingData.email || userData.email,
-          role: existingData.role || userData.role,
-        };
-      }
-    } catch (err: any) {
-      console.error("Erro ao salvar perfil do utilizador:", err);
-      // Fallback in case Firestore rules prevent access during initial setup
-      const isAdminEmail = email.toLowerCase() === "pnjpaulo175@gmail.com";
-      return {
-        uid,
-        name: displayName || email.split("@")[0],
-        email,
-        role: isAdminEmail ? ("admin" as const) : ("candidate" as const),
-      };
+    if (!userSnap.exists()) {
+      // Novo utilizador: ainda não temos o número de telemóvel dele —
+      // pedimos antes de o deixar entrar (é o que o admin usa para
+      // confirmar o pagamento Multicaixa Express).
+      return { needsPhone: true as const, uid, name: displayName || email.split("@")[0], email, role: role as "admin" | "candidate" };
     }
+
+    const existingData = userSnap.data();
+    if (!existingData.telefone) {
+      return { needsPhone: true as const, uid, name: existingData.name || displayName || email.split("@")[0], email, role: (existingData.role || role) as "admin" | "candidate" };
+    }
+
+    return {
+      needsPhone: false as const,
+      profile: {
+        uid,
+        name: existingData.name || displayName || email.split("@")[0],
+        email: existingData.email || email,
+        telefone: existingData.telefone,
+        role: existingData.role || role,
+        isPremium: existingData.isPremium === true,
+        premiumActivatedAt: existingData.premiumActivatedAt,
+        paymentStatus: existingData.paymentStatus || "none",
+        pendingSince: existingData.pendingSince,
+      } as UserProfile,
+    };
   };
 
   const handleGoogleSignIn = async () => {
@@ -64,12 +68,16 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       if (result.user && result.user.email) {
-        const profile = await handleUserDocument(
+        const outcome = await handleUserDocument(
           result.user.uid,
           result.user.email,
           result.user.displayName || ""
         );
-        onAuthSuccess(profile as any);
+        if (outcome.needsPhone) {
+          setPendingPhoneUser({ uid: outcome.uid, name: outcome.name, email: outcome.email, role: outcome.role });
+        } else {
+          onAuthSuccess(outcome.profile!);
+        }
       } else {
         throw new Error("Não foi possível obter o email da conta Google.");
       }
@@ -98,16 +106,123 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
     // Mimic standard profile delay
     setTimeout(async () => {
       const isCandidate = role === "candidate";
-      const demoUser = {
+      const demoUser: UserProfile = {
         uid: isCandidate ? "demo-candidate-123" : "demo-admin-456",
         name: isCandidate ? "Candidato de Teste" : "Administrador (Paulo)",
         email: isCandidate ? "candidato@concurso.ao" : "pnjpaulo175@gmail.com",
+        telefone: isCandidate ? "923 000 000" : undefined,
         role: role,
+        isPremium: !isCandidate,
+        paymentStatus: "none",
       };
       setIsLoading(false);
       onAuthSuccess(demoUser);
     }, 600);
   };
+
+  // Passo final do registo: grava o número de telemóvel do candidato antes
+  // de o deixar entrar. É este número que o admin compara com o número do
+  // ordenante da transferência Multicaixa Express para ativar o acesso.
+  const handleConfirmPhone = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!pendingPhoneUser) return;
+    const telefone = telefoneInput.trim();
+    if (telefone.length < 9) {
+      setError("Introduza um número de telemóvel válido (com pelo menos 9 dígitos).");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+    try {
+      const userRef = doc(db, "users", pendingPhoneUser.uid);
+      const userSnap = await getDoc(userRef);
+      const profile: UserProfile = {
+        uid: pendingPhoneUser.uid,
+        name: pendingPhoneUser.name,
+        email: pendingPhoneUser.email,
+        telefone,
+        role: pendingPhoneUser.role,
+        isPremium: userSnap.exists() ? userSnap.data().isPremium === true : false,
+        paymentStatus: userSnap.exists() ? userSnap.data().paymentStatus || "none" : "none",
+      };
+
+      await setDoc(
+        userRef,
+        {
+          uid: profile.uid,
+          name: profile.name,
+          email: profile.email,
+          telefone,
+          role: profile.role,
+          isPremium: profile.isPremium,
+          paymentStatus: profile.paymentStatus,
+          createdAt: userSnap.exists() ? userSnap.data().createdAt : serverTimestamp(),
+        },
+        { merge: true }
+      );
+
+      onAuthSuccess(profile);
+    } catch (err: any) {
+      console.error("Erro ao gravar número de telemóvel:", err);
+      setError("Não foi possível gravar o número de telemóvel. Tente novamente.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (pendingPhoneUser) {
+    return (
+      <div className="max-w-md mx-auto px-4 py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white border border-[#E3D9C4] border-t-4 border-t-[#C89B3C] rounded-2xl p-8 shadow-md"
+        >
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-[#12233F] border-2 border-[#12233F] mb-4">
+              <Phone className="w-8 h-8" />
+            </div>
+            <h2 className="font-display text-2xl font-semibold tracking-tight text-[#12233F]">
+              Falta só um passo, {pendingPhoneUser.name.split(" ")[0]}
+            </h2>
+            <p className="text-xs text-[#7A7060] mt-1.5 leading-relaxed">
+              Introduza o número de telemóvel que vai usar para pagar por Multicaixa Express. É esse número que o
+              administrador vai confirmar para ativar o seu acesso.
+            </p>
+          </div>
+
+          {error && (
+            <div className="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2.5 leading-relaxed">
+              <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleConfirmPhone} className="space-y-4">
+            <div>
+              <label className="text-xs font-bold text-stone-600 block mb-1.5">Número de Telemóvel</label>
+              <input
+                type="tel"
+                value={telefoneInput}
+                onChange={(e) => setTelefoneInput(e.target.value)}
+                placeholder="Ex: 923 000 000"
+                autoFocus
+                className="w-full bg-white border border-[#D8CBB0] rounded-xl px-4 py-3 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-[#12233F] hover:bg-[#0C1A2E] text-white text-sm font-bold py-3 rounded-xl transition-all cursor-pointer disabled:opacity-50"
+            >
+              {isLoading ? "A gravar..." : "Continuar"}
+            </button>
+          </form>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-md mx-auto px-4 py-12">

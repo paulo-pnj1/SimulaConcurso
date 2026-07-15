@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Shield,
   HeartPulse,
@@ -13,12 +13,8 @@ import {
   Lock,
   CheckCircle,
   XCircle,
-  Sparkles,
-  Copy,
-  MessageCircle,
-  RefreshCw
 } from "lucide-react";
-import { ConcursoType, UserProfile, PREMIUM_CONFIG } from "../types";
+import { ConcursoType, UserProfile } from "../types";
 import { motion } from "motion/react";
 
 interface SelectionScreenProps {
@@ -30,7 +26,6 @@ interface SelectionScreenProps {
   onOpenManage: () => void;
   userResults: any[];
   loadingResults: boolean;
-  onRefreshPremiumStatus?: () => Promise<void>;
 }
 
 export default function SelectionScreen({
@@ -42,31 +37,8 @@ export default function SelectionScreen({
   onOpenManage,
   userResults,
   loadingResults,
-  onRefreshPremiumStatus,
 }: SelectionScreenProps) {
   const isAdmin = currentUser?.role === "admin";
-  const isPremium = isAdmin || currentUser?.isPremium === true;
-  const [showPayInfo, setShowPayInfo] = useState(false);
-  const [checkingStatus, setCheckingStatus] = useState(false);
-  const [copiedField, setCopiedField] = useState<string | null>(null);
-
-  const handleCopy = (text: string, field: string) => {
-    navigator.clipboard?.writeText(text).catch(() => {});
-    setCopiedField(field);
-    setTimeout(() => setCopiedField(null), 1500);
-  };
-
-  const handleCheckStatus = async () => {
-    if (!onRefreshPremiumStatus) return;
-    setCheckingStatus(true);
-    await onRefreshPremiumStatus();
-    setCheckingStatus(false);
-  };
-
-  const whatsappMessage = encodeURIComponent(
-    `Olá! Fiz o pagamento de ${PREMIUM_CONFIG.priceLabel} para ativar o acesso Premium do Simulador de Exames Angola.\nNome: ${currentUser?.name || ""}\nEmail: ${currentUser?.email || ""}\nEnvio o comprovativo em anexo.`
-  );
-  const whatsappLink = `https://wa.me/${PREMIUM_CONFIG.whatsappAdmin}?text=${whatsappMessage}`;
 
   const formatTempo = (segundos: number) => {
     const mins = Math.floor(segundos / 60);
@@ -140,120 +112,6 @@ export default function SelectionScreen({
             <span>⚠️ Erro ao Carregar Perguntas</span>
           </div>
           <p className="mb-3 leading-relaxed">{error}</p>
-        </div>
-      )}
-
-      {/* Premium Upsell / Status Card */}
-      {!isAdmin && currentUser && (
-        <div className="max-w-3xl mx-auto mb-10">
-          {isPremium ? (
-            <div className="flex items-center justify-center gap-3 text-[#1F5C3B] px-4 py-3">
-              <div className="stamp text-xs">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Premium</span>
-              </div>
-              <span className="text-xs font-semibold text-[#1F5C3B]">
-                Acesso ativo — banco completo de perguntas e simulações ilimitadas.
-              </span>
-            </div>
-          ) : (
-            <div className="bg-white border border-amber-200 rounded-2xl p-6 shadow-xs">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0">
-                    <Sparkles className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-stone-800 text-sm">Desbloqueie o Acesso Premium</h3>
-                    <p className="text-xs text-stone-500 mt-0.5">
-                      Neste momento só tem acesso a uma amostra gratuita de perguntas por ministério.
-                    </p>
-                  </div>
-                </div>
-                <div className="text-right flex-shrink-0">
-                  <span className="text-2xl font-extrabold text-[#12233F]">{PREMIUM_CONFIG.priceLabel}</span>
-                  <p className="text-[10px] text-stone-400 -mt-0.5">pagamento único • acesso vitalício</p>
-                </div>
-              </div>
-
-              <ul className="grid sm:grid-cols-2 gap-2 mb-5">
-                {[
-                  "Banco completo de perguntas MININT e MINSA",
-                  "Simulações ilimitadas, sem restrições",
-                  "Histórico completo de classificações",
-                  "Explicações detalhadas de cada resposta",
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-xs text-stone-600">
-                    <CheckCircle className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-
-              {!showPayInfo ? (
-                <button
-                  onClick={() => setShowPayInfo(true)}
-                  className="w-full bg-[#12233F] hover:bg-[#0C1A2E] text-white text-xs font-bold py-3 rounded-xl transition-all cursor-pointer"
-                >
-                  Ver Instruções de Pagamento
-                </button>
-              ) : (
-                <div className="bg-stone-50 border border-[#E3D9C4] rounded-xl p-4 space-y-3">
-                  <p className="text-xs text-stone-600 leading-relaxed">
-                    Efetue o pagamento de <strong>{PREMIUM_CONFIG.priceLabel}</strong> por{" "}
-                    <strong>Multicaixa Express</strong> ou transferência bancária, depois envie o comprovativo
-                    pelo WhatsApp para ativarmos o seu acesso.
-                  </p>
-
-                  <div className="flex items-center justify-between bg-white border border-[#E3D9C4] rounded-lg px-3 py-2">
-                    <div>
-                      <span className="text-[9px] font-bold text-stone-400 uppercase block">Multicaixa Express</span>
-                      <span className="text-sm font-bold text-stone-800">{PREMIUM_CONFIG.multicaixaExpressNumber}</span>
-                    </div>
-                    <button
-                      onClick={() => handleCopy(PREMIUM_CONFIG.multicaixaExpressNumber, "mcx")}
-                      className="text-[10px] font-bold text-[#12233F] flex items-center gap-1 cursor-pointer"
-                    >
-                      <Copy className="w-3 h-3" /> {copiedField === "mcx" ? "Copiado!" : "Copiar"}
-                    </button>
-                  </div>
-
-                  <div className="flex items-center justify-between bg-white border border-[#E3D9C4] rounded-lg px-3 py-2">
-                    <div>
-                      <span className="text-[9px] font-bold text-stone-400 uppercase block">IBAN / Titular</span>
-                      <span className="text-xs font-bold text-stone-800">{PREMIUM_CONFIG.ibanTransferencia}</span>
-                      <span className="text-[10px] text-stone-500 block">{PREMIUM_CONFIG.nomeTitular}</span>
-                    </div>
-                    <button
-                      onClick={() => handleCopy(PREMIUM_CONFIG.ibanTransferencia, "iban")}
-                      className="text-[10px] font-bold text-[#12233F] flex items-center gap-1 cursor-pointer"
-                    >
-                      <Copy className="w-3 h-3" /> {copiedField === "iban" ? "Copiado!" : "Copiar"}
-                    </button>
-                  </div>
-
-                  <a
-                    href={whatsappLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-3 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    Já Paguei — Enviar Comprovativo no WhatsApp
-                  </a>
-
-                  <button
-                    onClick={handleCheckStatus}
-                    disabled={checkingStatus}
-                    className="w-full text-[#12233F] text-xs font-bold py-2 rounded-xl border border-[#D8CBB0] hover:bg-stone-50 transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
-                  >
-                    <RefreshCw className={`w-3.5 h-3.5 ${checkingStatus ? "animate-spin" : ""}`} />
-                    {checkingStatus ? "A verificar..." : "Já fui aprovado, verificar acesso"}
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
         </div>
       )}
 

@@ -5,6 +5,7 @@ import SimulatorScreen from "./components/SimulatorScreen";
 import ResultsScreen from "./components/ResultsScreen";
 import AuthScreen from "./components/AuthScreen";
 import AdminDashboard from "./components/AdminDashboard";
+import PaymentGateScreen from "./components/PaymentGateScreen";
 import { GraduationCap } from "lucide-react";
 import { auth, db, getExamQuestionsFn, submitExamFn } from "./firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
@@ -19,7 +20,6 @@ export default function App() {
 
   const [selectedMinisterio, setSelectedMinisterio] = useState<ConcursoType | null>(null);
   const [perguntasFiltro, setPerguntasFiltro] = useState<Pergunta[]>([]);
-  const [isTrial, setIsTrial] = useState<boolean>(false);
   const [respostas, setRespostas] = useState<RespostasUsuario>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,31 +36,48 @@ export default function App() {
         try {
           const userRef = doc(db, "users", user.uid);
           const userSnap = await getDoc(userRef);
-          
           const role = isAdminEmail(user.email) ? "admin" : "candidate";
-
-          const profile: UserProfile = {
-            uid: user.uid,
-            name: user.displayName || user.email.split("@")[0],
-            email: user.email,
-            role: role as "admin" | "candidate",
-            isPremium: false,
-          };
 
           if (userSnap.exists()) {
             const data = userSnap.data();
-            profile.name = data.name || profile.name;
-            profile.role = data.role || profile.role;
-            profile.isPremium = data.isPremium === true;
-          } else {
-            await setDoc(userRef, {
-              ...profile,
-              createdAt: new Date().toISOString(),
+            if (role === "candidate" && !data.telefone) {
+              // Registo incompleto (falta o número de telemóvel). Volta ao
+              // ecrã de autenticação, que trata desse passo antes de entrar.
+              await signOut(auth);
+              setCurrentUser(null);
+              setScreen("auth");
+              return;
+            }
+            setCurrentUser({
+              uid: user.uid,
+              name: data.name || user.displayName || user.email.split("@")[0],
+              email: user.email,
+              telefone: data.telefone,
+              role: data.role || role,
+              isPremium: data.isPremium === true,
+              paymentStatus: data.paymentStatus || "none",
+              premiumActivatedAt: data.premiumActivatedAt,
             });
+            setScreen("selection");
+          } else if (role === "admin") {
+            // Conta de administrador pré-configurada manualmente no Firebase;
+            // se ainda não tiver documento, funciona em modo só-leitura local.
+            setCurrentUser({
+              uid: user.uid,
+              name: user.displayName || user.email.split("@")[0],
+              email: user.email,
+              role: "admin",
+              isPremium: true,
+              paymentStatus: "none",
+            });
+            setScreen("selection");
+          } else {
+            // Candidato sem documento (nunca completou o registo do
+            // telemóvel). Volta ao ecrã de autenticação para o fazer.
+            await signOut(auth);
+            setCurrentUser(null);
+            setScreen("auth");
           }
-
-          setCurrentUser(profile);
-          setScreen("selection");
         } catch (e) {
           console.error("Erro ao carregar perfil do utilizador:", e);
           setCurrentUser({
@@ -69,6 +86,7 @@ export default function App() {
             email: user.email,
             role: isAdminEmail(user.email) ? "admin" : "candidate",
             isPremium: false,
+            paymentStatus: "none",
           });
           setScreen("selection");
         } finally {
@@ -146,12 +164,8 @@ export default function App() {
       // limit for non-premium candidates. This is what stops anyone from
       // reading the answer key out of the network tab before answering.
       const response = await getExamQuestionsFn({ ministerio });
-      const { perguntas, isTrial: trialNow } = response.data as {
-        perguntas: Pergunta[];
-        isTrial: boolean;
-      };
+      const { perguntas } = response.data as { perguntas: Pergunta[] };
 
-      setIsTrial(trialNow);
       setPerguntasFiltro(perguntas);
       setSelectedMinisterio(ministerio);
       setRespostas({}); // Reset answers
@@ -243,10 +257,37 @@ export default function App() {
       const userSnap = await getDoc(userRef);
       if (userSnap.exists()) {
         const data = userSnap.data();
-        setCurrentUser((prev) => (prev ? { ...prev, isPremium: data.isPremium === true } : prev));
+        setCurrentUser((prev) =>
+          prev
+            ? {
+                ...prev,
+                isPremium: data.isPremium === true,
+                paymentStatus: data.paymentStatus || "none",
+                premiumActivatedAt: data.premiumActivatedAt,
+              }
+            : prev
+        );
       }
     } catch (e) {
       console.error("Erro ao verificar estado Premium:", e);
+    }
+  };
+
+  // O candidato clica em "Já Paguei": deixamos um sinal em Firestore para o
+  // admin saber que há um comprovativo a caminho pelo WhatsApp, e mostramos
+  // a mensagem de "aguarde, vamos verificar e ativar".
+  const handleMarkPaymentPending = async () => {
+    if (!currentUser) return;
+    if (currentUser.uid.startsWith("demo-")) {
+      setCurrentUser((prev) => (prev ? { ...prev, paymentStatus: "pending" } : prev));
+      return;
+    }
+    try {
+      const userRef = doc(db, "users", currentUser.uid);
+      await setDoc(userRef, { paymentStatus: "pending", pendingSince: new Date().toISOString() }, { merge: true });
+      setCurrentUser((prev) => (prev ? { ...prev, paymentStatus: "pending", pendingSince: new Date().toISOString() } : prev));
+    } catch (e) {
+      console.error("Erro ao registar pedido de ativação:", e);
     }
   };
 
@@ -287,7 +328,16 @@ export default function App() {
       <main className="flex-grow">
         {screen === "auth" && <AuthScreen onAuthSuccess={handleAuthSuccess} />}
 
-        {screen === "selection" && (
+        {screen === "selection" && currentUser && currentUser.role !== "admin" && !currentUser.isPremium && (
+          <PaymentGateScreen
+            currentUser={currentUser}
+            onSignOut={handleSignOut}
+            onMarkPending={handleMarkPaymentPending}
+            onRefreshStatus={handleRefreshPremiumStatus}
+          />
+        )}
+
+        {screen === "selection" && currentUser && (currentUser.role === "admin" || currentUser.isPremium) && (
           <SelectionScreen
             currentUser={currentUser}
             onSignOut={handleSignOut}
@@ -297,7 +347,6 @@ export default function App() {
             onOpenManage={() => setScreen("manage")}
             userResults={userResults}
             loadingResults={loadingResults}
-            onRefreshPremiumStatus={handleRefreshPremiumStatus}
           />
         )}
 
@@ -312,7 +361,6 @@ export default function App() {
             respostas={respostas}
             onSelectOption={handleSelectOption}
             onSubmit={handleSubmitExam}
-            isTrial={isTrial}
           />
         )}
 

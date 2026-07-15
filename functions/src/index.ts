@@ -1,6 +1,6 @@
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
-import { ADMIN_EMAIL, PREMIUM_CONFIG } from "./config";
+import { ADMIN_EMAIL } from "./config";
 import baseQuestions from "../data/perguntas.json";
 
 admin.initializeApp();
@@ -40,28 +40,19 @@ async function hasFullAccess(uid: string, email: string | undefined): Promise<bo
   return data.role === "admin" || data.isPremium === true;
 }
 
-/**
- * Deterministically selects the subset of questions a candidate is allowed
- * to see: the full bank for admins/premium users, or the first
- * `freeQuestionLimit` questions for everyone else (a trial sample).
- * The SAME function is used both when serving questions and when grading,
- * so the two stay in sync as long as the underlying data hasn't changed
- * between fetch and submit.
- */
-function applyAccessLimit(questions: Pergunta[], fullAccess: boolean): Pergunta[] {
-  if (fullAccess || questions.length <= PREMIUM_CONFIG.freeQuestionLimit) return questions;
-  return questions.slice(0, PREMIUM_CONFIG.freeQuestionLimit);
-}
-
 function stripAnswers(questions: Pergunta[]) {
   return questions.map(({ resposta, explicacao, ...rest }) => rest);
 }
+
+const ACCESS_DENIED_MESSAGE =
+  "É necessário ativar o acesso pago para aceder aos estudos e simulações. Efetue o pagamento por Multicaixa Express e aguarde a validação do administrador.";
 
 /**
  * Callable: returns the question set for a ministry WITHOUT the correct
  * answer or explanation. This replaces the old client-side
  * fetch("/perguntas.json") + Firestore read, which leaked answers to anyone
- * who opened devtools before answering.
+ * who opened devtools before answering. There is no free-trial subset: a
+ * candidate either has full paid access, or gets no questions at all.
  */
 export const getExamQuestions = onCall(async (request) => {
   if (!request.auth) {
@@ -72,16 +63,17 @@ export const getExamQuestions = onCall(async (request) => {
     throw new HttpsError("invalid-argument", "Ministério inválido.");
   }
 
+  const fullAccess = await hasFullAccess(request.auth.uid, request.auth.token.email);
+  if (!fullAccess) {
+    throw new HttpsError("permission-denied", ACCESS_DENIED_MESSAGE);
+  }
+
   const all = await loadFullQuestionBank(ministerio);
   if (all.length === 0) {
     throw new HttpsError("not-found", `Sem perguntas para o ministério ${ministerio}.`);
   }
 
-  const fullAccess = await hasFullAccess(request.auth.uid, request.auth.token.email);
-  const selected = applyAccessLimit(all, fullAccess);
-  const isTrial = !fullAccess && selected.length < all.length;
-
-  return { perguntas: stripAnswers(selected), isTrial };
+  return { perguntas: stripAnswers(all) };
 });
 
 /**
@@ -108,12 +100,16 @@ export const submitExam = onCall(async (request) => {
 
   const uid = request.auth.uid;
   const email = request.auth.token.email as string | undefined;
+
+  const fullAccess = await hasFullAccess(uid, email);
+  if (!fullAccess) {
+    throw new HttpsError("permission-denied", ACCESS_DENIED_MESSAGE);
+  }
+
   const userSnap = await db.collection("users").doc(uid).get();
   const userData = userSnap.exists ? (userSnap.data() as { name?: string }) : undefined;
 
-  const all = await loadFullQuestionBank(ministerio);
-  const fullAccess = await hasFullAccess(uid, email);
-  const graded = applyAccessLimit(all, fullAccess);
+  const graded = await loadFullQuestionBank(ministerio);
 
   let acertosCount = 0;
   const revisao = graded.map((p) => {

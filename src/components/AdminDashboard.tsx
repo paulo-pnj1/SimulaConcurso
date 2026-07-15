@@ -57,9 +57,11 @@ interface CandidateUser {
   uid: string;
   name: string;
   email: string;
+  telefone?: string;
   role: "admin" | "candidate";
   isPremium?: boolean;
   premiumActivatedAt?: string;
+  paymentStatus?: "none" | "pending";
   createdAt?: string;
 }
 
@@ -70,7 +72,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
   const [users, setUsers] = useState<CandidateUser[]>([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [userSearch, setUserSearch] = useState("");
-  const [premiumFilter, setPremiumFilter] = useState<"ALL" | "PREMIUM" | "FREE">("ALL");
+  const [premiumFilter, setPremiumFilter] = useState<"ALL" | "PREMIUM" | "PENDING" | "FREE">("ALL");
   const [updatingUid, setUpdatingUid] = useState<string | null>(null);
 
   // State for Candidate Results
@@ -119,16 +121,20 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
             uid: "demo-candidate-123",
             name: "Sebastião Manuel",
             email: "sebastiao@concurso.ao",
+            telefone: "923 111 222",
             role: "candidate",
             isPremium: true,
+            paymentStatus: "none",
             premiumActivatedAt: new Date(Date.now() - 3600000 * 5).toISOString(),
           },
           {
             uid: "demo-candidate-456",
             name: "Isabel Nzumba",
             email: "isabel@gmail.com",
+            telefone: "912 333 444",
             role: "candidate",
             isPremium: false,
+            paymentStatus: "pending",
           },
         ]);
       }
@@ -155,6 +161,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
         {
           isPremium: grantingAccess,
           premiumActivatedAt: grantingAccess ? new Date().toISOString() : null,
+          paymentStatus: "none",
         },
         { merge: true }
       );
@@ -162,7 +169,12 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
       setUsers((prev) =>
         prev.map((u) =>
           u.uid === candidate.uid
-            ? { ...u, isPremium: grantingAccess, premiumActivatedAt: grantingAccess ? new Date().toISOString() : undefined }
+            ? {
+                ...u,
+                isPremium: grantingAccess,
+                premiumActivatedAt: grantingAccess ? new Date().toISOString() : undefined,
+                paymentStatus: "none",
+              }
             : u
         )
       );
@@ -406,17 +418,20 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
   // Premium stats & filtering
   const candidateUsers = users.filter((u) => u.role !== "admin");
   const premiumCount = candidateUsers.filter((u) => u.isPremium).length;
+  const pendingCount = candidateUsers.filter((u) => !u.isPremium && u.paymentStatus === "pending").length;
   const priceNumber = parseInt(PREMIUM_CONFIG.priceLabel.replace(/[^\d]/g, ""), 10) || 0;
   const estimatedRevenue = premiumCount * priceNumber;
 
   const filteredUsers = candidateUsers.filter((u) => {
     const matchesSearch =
       (u.name || "").toLowerCase().includes(userSearch.toLowerCase()) ||
-      (u.email || "").toLowerCase().includes(userSearch.toLowerCase());
+      (u.email || "").toLowerCase().includes(userSearch.toLowerCase()) ||
+      (u.telefone || "").includes(userSearch);
     const matchesFilter =
       premiumFilter === "ALL" ||
       (premiumFilter === "PREMIUM" && u.isPremium) ||
-      (premiumFilter === "FREE" && !u.isPremium);
+      (premiumFilter === "PENDING" && !u.isPremium && u.paymentStatus === "pending") ||
+      (premiumFilter === "FREE" && !u.isPremium && u.paymentStatus !== "pending");
     return matchesSearch && matchesFilter;
   });
 
@@ -1018,7 +1033,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
       {activeTab === "premium" && (
         <div>
           {/* Revenue Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
             <div className="bg-white border border-[#E3D9C4] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
               <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
                 <Sparkles className="w-6 h-6" />
@@ -1045,6 +1060,17 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
             </div>
             <div className="bg-white border border-[#E3D9C4] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
               <div className="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
+                <Clock className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">
+                  A Aguardar Verificação
+                </span>
+                <span className="text-2xl font-black text-stone-800">{pendingCount}</span>
+              </div>
+            </div>
+            <div className="bg-white border border-[#E3D9C4] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
+              <div className="w-12 h-12 bg-stone-100 text-stone-600 rounded-xl flex items-center justify-center">
                 <Users className="w-6 h-6" />
               </div>
               <div>
@@ -1058,8 +1084,9 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
 
           <div className="bg-amber-50 border border-amber-200 text-amber-900 rounded-xl p-4 text-xs leading-relaxed mb-6">
             <strong>Como aprovar um pagamento:</strong> quando um candidato lhe enviar o comprovativo pelo
-            WhatsApp (Multicaixa Express ou transferência), confirme o valor e o nome, depois procure o
-            candidato abaixo pelo email e clique em "Ativar Premium". O acesso completo é liberado de imediato.
+            WhatsApp, confirme se o número de telemóvel que aparece como ordenante da transferência Multicaixa
+            Express corresponde ao número registado do candidato (mostrado abaixo, junto ao nome). Se coincidir,
+            procure o candidato pelo nome, email ou número e clique em "Ativar Premium".
           </div>
 
           <div className="bg-white border border-[#E3D9C4] rounded-2xl shadow-xs overflow-hidden">
@@ -1071,13 +1098,13 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                   type="text"
                   value={userSearch}
                   onChange={(e) => setUserSearch(e.target.value)}
-                  placeholder="Pesquisar por nome ou email do candidato..."
+                  placeholder="Pesquisar por nome, email ou telemóvel do candidato..."
                   className="w-full bg-white border border-[#D8CBB0] rounded-xl pl-10 pr-4 py-2 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
                 />
               </div>
               <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto">
                 <Filter className="w-4 h-4 text-stone-400 flex-shrink-0" />
-                {(["ALL", "PREMIUM", "FREE"] as const).map((f) => (
+                {(["ALL", "PENDING", "PREMIUM", "FREE"] as const).map((f) => (
                   <button
                     key={f}
                     onClick={() => setPremiumFilter(f)}
@@ -1087,7 +1114,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                         : "bg-white border border-[#D8CBB0] text-stone-600 hover:bg-stone-100"
                     }`}
                   >
-                    {f === "ALL" ? "Todos" : f === "PREMIUM" ? "Premium" : "Gratuito"}
+                    {f === "ALL" ? "Todos" : f === "PENDING" ? "Pendentes" : f === "PREMIUM" ? "Premium" : "Gratuito"}
                   </button>
                 ))}
               </div>
@@ -1124,6 +1151,9 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                       <div>
                         <span className="font-bold text-stone-800 text-sm block">{u.name}</span>
                         <span className="text-[10px] text-stone-400 block mt-0.5">{u.email}</span>
+                        <span className="text-[10px] text-stone-500 font-semibold block mt-0.5">
+                          📱 {u.telefone || "sem número registado"}
+                        </span>
                       </div>
                     </div>
 
@@ -1132,10 +1162,12 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                         className={`text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
                           u.isPremium
                             ? "bg-emerald-100 text-emerald-700"
+                            : u.paymentStatus === "pending"
+                            ? "bg-amber-100 text-amber-700"
                             : "bg-stone-100 text-stone-500"
                         }`}
                       >
-                        {u.isPremium ? "Premium ativo" : "Acesso gratuito"}
+                        {u.isPremium ? "Premium ativo" : u.paymentStatus === "pending" ? "Pendente de verificação" : "Acesso bloqueado"}
                       </span>
                       <button
                         onClick={() => handleTogglePremium(u)}

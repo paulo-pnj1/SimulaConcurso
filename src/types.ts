@@ -48,17 +48,19 @@ export interface UserProfile {
   uid: string;
   name: string;
   email: string;
+  telefone?: string; // Número de telemóvel do candidato (usado para confirmar o pagamento Multicaixa Express)
   role: "admin" | "candidate";
   isPremium?: boolean;
   premiumActivatedAt?: string;
+  // "none": ainda não pagou / "pending": disse que pagou, aguarda verificação do admin
+  paymentStatus?: "none" | "pending";
+  pendingSince?: string;
 }
 
 // ==========================================================
 // CONFIGURAÇÃO DO PLANO PREMIUM — edite estes valores livremente
 // ==========================================================
 export const PREMIUM_CONFIG = {
-  // Número de perguntas gratuitas por simulação (amostra) para quem NÃO é Premium
-  freeQuestionLimit: 2,
   // Preço de acesso vitalício (ajuste conforme desejar)
   priceLabel: "500 Kz",
   // Dados de pagamento por Multicaixa Express / Transferência (EDITE com os seus dados reais)

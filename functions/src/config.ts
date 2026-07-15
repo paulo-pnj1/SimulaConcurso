@@ -8,7 +8,3 @@
  * places on purpose. If you ever change the admin email, update all three.
  */
 export const ADMIN_EMAIL = "pnjpaulo175@gmail.com";
-
-export const PREMIUM_CONFIG = {
-  freeQuestionLimit: 2,
-};

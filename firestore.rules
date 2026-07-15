@@ -49,28 +49,40 @@ service cloud.firestore {
                       incoming().name.size() > 0 && 
                       incoming().name.size() <= 100 && 
                       incoming().email == request.auth.token.email &&
+                      incoming().telefone is string &&
+                      incoming().telefone.size() >= 9 &&
+                      incoming().telefone.size() <= 20 &&
+                      incoming().isPremium == false &&
+                      incoming().paymentStatus == 'none' &&
                       incoming().createdAt == request.time;
                       
       allow update: if isSignedIn() && (
-                      // Candidato só pode editar o próprio nome
+                      // Candidato só pode editar o próprio nome/telefone, ou
+                      // sinalizar que já pagou (paymentStatus -> 'pending').
+                      // Nunca pode tocar em isPremium/premiumActivatedAt.
                       (request.auth.uid == userId &&
                        incoming().uid == userId &&
                        incoming().role == 'candidate' &&
                        incoming().email == existing().email &&
                        incoming().createdAt == existing().createdAt &&
-                       incoming().diff(existing()).affectedKeys().hasOnly(['name']) &&
+                       incoming().isPremium == existing().isPremium &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['name', 'telefone', 'paymentStatus', 'pendingSince']) &&
                        incoming().name is string &&
                        incoming().name.size() > 0 &&
-                       incoming().name.size() <= 100)
+                       incoming().name.size() <= 100 &&
+                       incoming().telefone is string &&
+                       incoming().telefone.size() >= 9 &&
+                       incoming().telefone.size() <= 20 &&
+                       incoming().paymentStatus in ['none', 'pending'])
                       ||
-                      // Admin só pode ativar/revogar o acesso Premium, nada mais
+                      // Admin só pode ativar/revogar o acesso Premium e limpar o estado pendente, nada mais
                       (isAdmin() &&
                        incoming().uid == existing().uid &&
                        incoming().email == existing().email &&
                        incoming().name == existing().name &&
                        incoming().role == existing().role &&
                        incoming().createdAt == existing().createdAt &&
-                       incoming().diff(existing()).affectedKeys().hasOnly(['isPremium', 'premiumActivatedAt']) &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['isPremium', 'premiumActivatedAt', 'paymentStatus']) &&
                        incoming().isPremium is bool)
                     );
                       
