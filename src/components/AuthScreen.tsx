@@ -114,17 +114,17 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white border border-[#E2E8F0] rounded-2xl p-8 shadow-md"
+        className="bg-white border border-[#E3D9C4] border-t-4 border-t-[#C89B3C] rounded-2xl p-8 shadow-md"
       >
         {/* Header Icon / Branding */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-tr from-[#1A365D] to-[#2B6CB0] rounded-2xl mx-auto flex items-center justify-center text-white shadow-md mb-4">
-            <GraduationCap className="w-9 h-9" />
+          <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-[#12233F] border-2 border-[#12233F] mb-4">
+            <GraduationCap className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-sans font-extrabold tracking-tight text-[#1A365D]">
+          <h2 className="font-display text-2xl font-semibold tracking-tight text-[#12233F]">
             Aceder ao Simulador
           </h2>
-          <p className="text-xs text-[#64748B] mt-1.5 leading-relaxed">
+          <p className="text-xs text-[#7A7060] mt-1.5 leading-relaxed">
             Entre na sua conta para registar as suas classificações, consultar o seu histórico de exames e aceder ao painel administrativo.
           </p>
         </div>
@@ -144,7 +144,7 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
           <button
             onClick={handleGoogleSignIn}
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-3 bg-white hover:bg-slate-50 text-slate-700 font-semibold border border-[#CBD5E1] py-3 px-4 rounded-xl text-sm transition-all shadow-xs cursor-pointer disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-3 bg-white hover:bg-stone-50 text-stone-700 font-semibold border border-[#D8CBB0] py-3 px-4 rounded-xl text-sm transition-all shadow-xs cursor-pointer disabled:opacity-50"
           >
             <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
               <path
@@ -169,8 +169,8 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
 
           {/* Separation line */}
           <div className="relative my-6 flex items-center justify-center">
-            <span className="absolute inset-x-0 h-px bg-[#E2E8F0]" />
-            <span className="relative bg-white px-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            <span className="absolute inset-x-0 h-px bg-[#E3D9C4]" />
+            <span className="relative bg-white px-3 text-[10px] font-bold text-stone-400 uppercase tracking-widest">
               Ambiente de Simulação
             </span>
           </div>
@@ -180,28 +180,28 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
             <button
               onClick={() => handleDemoLogin("candidate")}
               disabled={isLoading}
-              className="flex flex-col items-center justify-center p-3 border border-[#E2E8F0] hover:border-[#1A365D] bg-slate-50 hover:bg-slate-50/50 rounded-xl transition-all cursor-pointer group text-center"
+              className="flex flex-col items-center justify-center p-3 border border-[#E3D9C4] hover:border-[#12233F] bg-stone-50 hover:bg-stone-50/50 rounded-xl transition-all cursor-pointer group text-center"
             >
-              <User className="w-5 h-5 text-slate-500 group-hover:text-[#1A365D] mb-1.5" />
-              <span className="text-xs font-bold text-slate-800">Modo Candidato</span>
-              <span className="text-[9px] text-slate-400 mt-0.5">Testar como aluno</span>
+              <User className="w-5 h-5 text-stone-500 group-hover:text-[#12233F] mb-1.5" />
+              <span className="text-xs font-bold text-stone-800">Modo Candidato</span>
+              <span className="text-[9px] text-stone-400 mt-0.5">Testar como aluno</span>
             </button>
 
             <button
               onClick={() => handleDemoLogin("admin")}
               disabled={isLoading}
-              className="flex flex-col items-center justify-center p-3 border border-[#E2E8F0] hover:border-[#C02424] bg-slate-50 hover:bg-slate-50/50 rounded-xl transition-all cursor-pointer group text-center"
+              className="flex flex-col items-center justify-center p-3 border border-[#E3D9C4] hover:border-[#A62639] bg-stone-50 hover:bg-stone-50/50 rounded-xl transition-all cursor-pointer group text-center"
             >
-              <Shield className="w-5 h-5 text-slate-500 group-hover:text-[#C02424] mb-1.5" />
-              <span className="text-xs font-bold text-slate-800">Modo Admin</span>
-              <span className="text-[9px] text-slate-400 mt-0.5">Gerir perguntas</span>
+              <Shield className="w-5 h-5 text-stone-500 group-hover:text-[#A62639] mb-1.5" />
+              <span className="text-xs font-bold text-stone-800">Modo Admin</span>
+              <span className="text-[9px] text-stone-400 mt-0.5">Gerir perguntas</span>
             </button>
           </div>
         </div>
 
         {/* Informative Footer */}
-        <div className="mt-8 pt-4 border-t border-slate-100 text-center">
-          <p className="text-[10px] text-slate-400 leading-normal">
+        <div className="mt-8 pt-4 border-t border-stone-100 text-center">
+          <p className="text-[10px] text-stone-400 leading-normal">
             As contas de demonstração guardam dados locais ou de simulação para permitir testes ágeis sem necessidade de credenciais.
           </p>
         </div>

@@ -85,21 +85,21 @@ export default function SimulatorScreen({
         </div>
       )}
       {/* Top Header of Simulator */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-4 mb-6 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white border border-[#E3D9C4] shadow-sm rounded-xl p-4 mb-6 gap-4">
         <div className="flex items-center space-x-3">
-          <div className="p-2 rounded-lg font-bold text-xs bg-[#E2E8F0] text-[#1A365D] uppercase tracking-wider">
+          <div className="p-2 rounded-lg font-bold text-xs bg-[#E3D9C4] text-[#12233F] uppercase tracking-wider">
             CONCURSO {ministerio}
           </div>
-          <span className="text-[#E2E8F0]">|</span>
-          <span className="text-xs md:text-sm font-medium text-[#475569]">
+          <span className="text-[#E3D9C4]">|</span>
+          <span className="text-xs md:text-sm font-medium text-[#5C5346]">
             {respondidasCount} de {totalPerguntas} perguntas respondidas
           </span>
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full md:w-48 bg-[#E2E8F0] rounded-full h-2">
+        <div className="w-full md:w-48 bg-[#E3D9C4] rounded-full h-2">
           <div
-            className="h-2 rounded-full transition-all duration-300 bg-[#1A365D]"
+            className="h-2 rounded-full transition-all duration-300 bg-[#12233F]"
             style={{ width: `${(respondidasCount / totalPerguntas) * 100}%` }}
           />
         </div>
@@ -107,10 +107,10 @@ export default function SimulatorScreen({
         {/* Timer Badge */}
         <div className={`flex items-center space-x-2.5 px-4 py-1.5 rounded-xl border transition-colors ${
           isTimeLow 
-            ? "bg-red-50 text-[#C02424] border-red-200 animate-pulse" 
-            : "bg-[#F8FAFC] text-[#C02424] border-[#E2E8F0]"
+            ? "bg-red-50 text-[#A62639] border-red-200 animate-pulse" 
+            : "bg-[#FBF7EE] text-[#A62639] border-[#E3D9C4]"
         }`}>
-          <Clock className="w-4 h-4 text-[#C02424]" />
+          <Clock className="w-4 h-4 text-[#A62639]" />
           <span className="font-mono text-xl font-bold tracking-wider">{formatTime(tempoRestante)}</span>
         </div>
       </div>
@@ -118,21 +118,21 @@ export default function SimulatorScreen({
       {/* Main 2-Column Grid */}
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Left Column: Question area (2 cols wide on desktop) */}
-        <div className="lg:col-span-2 flex flex-col justify-between bg-white border border-[#E2E8F0] rounded-xl p-4 sm:p-6 shadow-sm min-h-[500px]">
+        <div className="lg:col-span-2 flex flex-col justify-between bg-white border border-[#E3D9C4] rounded-xl p-4 sm:p-6 shadow-sm min-h-[500px]">
           <div>
             {/* Category and Index */}
-            <div className="flex justify-between items-center mb-6 border-b border-[#E2E8F0] pb-4">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#E2E8F0] text-[#475569] border border-[#CBD5E1] uppercase tracking-wider">
+            <div className="flex justify-between items-center mb-6 border-b border-[#E3D9C4] pb-4">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#E3D9C4] text-[#5C5346] border border-[#D8CBB0] uppercase tracking-wider">
                 <HelpCircle className="w-3.5 h-3.5 mr-1" />
                 {currentPergunta.categoria}
               </span>
-              <span className="text-sm font-medium text-[#64748B]">
+              <span className="text-sm font-medium text-[#7A7060]">
                 Questão {currentIdx + 1} de {totalPerguntas}
               </span>
             </div>
 
             {/* Enunciado */}
-            <h3 id={`pergunta-${currentPergunta.id}-enunciado`} className="text-lg md:text-xl font-medium text-[#1C1E21] mb-6 leading-relaxed">
+            <h3 id={`pergunta-${currentPergunta.id}-enunciado`} className="text-lg md:text-xl font-medium text-[#201C16] mb-6 leading-relaxed">
               {currentPergunta.enunciado}
             </h3>
 
@@ -147,14 +147,14 @@ export default function SimulatorScreen({
                     onClick={() => handleOptionClick(idx)}
                     className={`w-full text-left p-3.5 sm:p-4 rounded-xl border-2 transition-all duration-200 flex items-start space-x-3 text-sm md:text-base ${
                       isSelected
-                        ? "border-[#1A365D] bg-[#EFF6FF] text-[#1A365D] font-semibold"
-                        : "bg-white border-[#E2E8F0] hover:bg-[#F8FAFC] hover:border-[#CBD5E1] text-[#1C1E21]"
+                        ? "border-[#12233F] bg-[#EAF0F7] text-[#12233F] font-semibold"
+                        : "bg-white border-[#E3D9C4] hover:bg-[#FBF7EE] hover:border-[#D8CBB0] text-[#201C16]"
                     }`}
                   >
                     <span className={`w-6 h-6 flex-shrink-0 rounded-full flex items-center justify-center font-bold text-xs uppercase ${
                       isSelected
-                        ? "bg-[#1A365D] text-white"
-                        : "bg-[#E2E8F0] text-[#475569]"
+                        ? "bg-[#12233F] text-white"
+                        : "bg-[#E3D9C4] text-[#5C5346]"
                     }`}>
                       {["A", "B", "C", "D"][idx]}
                     </span>
@@ -166,11 +166,11 @@ export default function SimulatorScreen({
           </div>
 
           {/* Navigation Controls */}
-          <div className="flex items-center justify-between mt-8 border-t border-[#E2E8F0] pt-6">
+          <div className="flex items-center justify-between mt-8 border-t border-[#E3D9C4] pt-6">
             <button
               id="btn-anterior"
               onClick={handlePrev}
-              className={`flex items-center space-x-1.5 px-4 py-2.5 rounded-xl border border-[#E2E8F0] text-sm font-semibold text-[#475569] hover:bg-[#F8FAFC] hover:border-[#CBD5E1] transition-colors ${
+              className={`flex items-center space-x-1.5 px-4 py-2.5 rounded-xl border border-[#E3D9C4] text-sm font-semibold text-[#5C5346] hover:bg-[#FBF7EE] hover:border-[#D8CBB0] transition-colors ${
                 isFirst ? "invisible" : ""
               }`}
             >
@@ -181,7 +181,7 @@ export default function SimulatorScreen({
             <button
               id="btn-seguinte"
               onClick={handleNext}
-              className={`flex items-center space-x-1.5 px-6 py-2.5 rounded-xl font-semibold text-white shadow-sm transition-all bg-[#1A365D] hover:bg-[#152c4a]`}
+              className={`flex items-center space-x-1.5 px-6 py-2.5 rounded-xl font-semibold text-white shadow-sm transition-all bg-[#12233F] hover:bg-[#16294A]`}
             >
               <span>{isLast ? "Terminar e Corrigir" : "Seguinte"}</span>
               {!isLast && <ChevronRight className="w-4 h-4" />}
@@ -190,13 +190,13 @@ export default function SimulatorScreen({
         </div>
 
         {/* Right Column: Status Panel (1 col wide on desktop) */}
-        <div className="bg-white border border-[#E2E8F0] rounded-xl p-4 sm:p-6 shadow-sm flex flex-col h-full justify-between">
+        <div className="bg-white border border-[#E3D9C4] rounded-xl p-4 sm:p-6 shadow-sm flex flex-col h-full justify-between">
           <div>
-            <h4 className="text-sm font-bold text-[#1C1E21] uppercase tracking-wider mb-4 flex items-center border-b border-[#E2E8F0] pb-2">
-              <CheckSquare className="w-4 h-4 mr-2 text-[#475569]" />
+            <h4 className="text-sm font-bold text-[#201C16] uppercase tracking-wider mb-4 flex items-center border-b border-[#E3D9C4] pb-2">
+              <CheckSquare className="w-4 h-4 mr-2 text-[#5C5346]" />
               Folha de Respostas
             </h4>
-            <p className="text-xs text-[#64748B] mb-4 leading-relaxed">
+            <p className="text-xs text-[#7A7060] mb-4 leading-relaxed">
               Clique num número para saltar diretamente para a pergunta correspondente. Os números ficam marcados a verde quando respondidos.
             </p>
 
@@ -208,11 +208,11 @@ export default function SimulatorScreen({
 
                 let btnStyles = "";
                 if (isActive) {
-                  btnStyles = "border-2 border-[#1A365D] bg-blue-50 text-[#1A365D] font-bold shadow-sm";
+                  btnStyles = "border-2 border-[#12233F] bg-[#EAF0F7] text-[#12233F] font-bold shadow-sm";
                 } else if (isAnswered) {
-                  btnStyles = "bg-[#22C55E] border-[#16A34A] text-white font-medium hover:bg-[#16A34A]";
+                  btnStyles = "bg-[#2F9E5E] border-[#278A4C] text-white font-medium hover:bg-[#278A4C]";
                 } else {
-                  btnStyles = "bg-white border-[#E2E8F0] text-[#64748B] hover:bg-[#F8FAFC]";
+                  btnStyles = "bg-white border-[#E3D9C4] text-[#7A7060] hover:bg-[#FBF7EE]";
                 }
 
                 return (
@@ -229,11 +229,11 @@ export default function SimulatorScreen({
             </div>
           </div>
 
-          <div className="border-t border-[#E2E8F0] pt-4 mt-6">
+          <div className="border-t border-[#E3D9C4] pt-4 mt-6">
             <button
               id="btn-submeter-lateral"
               onClick={() => setShowConfirmModal(true)}
-              className="w-full flex items-center justify-center space-x-2 bg-red-50 text-[#C02424] hover:bg-red-100 border border-red-200 px-4 py-3 rounded-xl text-sm font-semibold transition-colors"
+              className="w-full flex items-center justify-center space-x-2 bg-red-50 text-[#A62639] hover:bg-red-100 border border-red-200 px-4 py-3 rounded-xl text-sm font-semibold transition-colors"
             >
               <span>Submeter Exame Agora</span>
             </button>
@@ -244,13 +244,13 @@ export default function SimulatorScreen({
       {/* Confirmation Modal */}
       {showConfirmModal && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-100 max-w-md w-full p-6 animate-in fade-in zoom-in-95 duration-250">
+          <div className="bg-white rounded-2xl shadow-xl border border-stone-100 max-w-md w-full p-6 animate-in fade-in zoom-in-95 duration-250">
             <div className="flex items-center space-x-3 text-amber-600 mb-4">
               <AlertTriangle className="w-8 h-8" />
-              <h3 className="text-lg font-bold text-gray-900">Finalizar Simulação?</h3>
+              <h3 className="font-display text-lg font-semibold text-stone-900">Finalizar Simulação?</h3>
             </div>
             
-            <p className="text-sm text-gray-500 leading-relaxed mb-6">
+            <p className="text-sm text-stone-500 leading-relaxed mb-6">
               {respondidasCount < totalPerguntas ? (
                 <span>Ainda restam <strong>{totalPerguntas - respondidasCount} perguntas sem resposta</strong> no seu caderno de exame. Tem a certeza que deseja terminar e receber a sua nota agora?</span>
               ) : (
@@ -262,7 +262,7 @@ export default function SimulatorScreen({
               <button
                 id="btn-modal-cancelar"
                 onClick={() => setShowConfirmModal(false)}
-                className="flex-1 py-2.5 rounded-xl border border-gray-200 font-semibold text-gray-700 hover:bg-gray-50 transition-colors text-sm"
+                className="flex-1 py-2.5 rounded-xl border border-stone-200 font-semibold text-stone-700 hover:bg-stone-50 transition-colors text-sm"
               >
                 Voltar à Prova
               </button>

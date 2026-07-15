@@ -432,23 +432,23 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <button
           onClick={onBack}
-          className="inline-flex items-center space-x-2 text-slate-600 hover:text-[#1A365D] font-bold text-sm transition-colors cursor-pointer"
+          className="inline-flex items-center space-x-2 text-stone-600 hover:text-[#12233F] font-bold text-sm transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Voltar ao Simulador</span>
         </button>
 
-        <div className="bg-[#1A365D]/10 text-[#1A365D] text-xs font-bold px-3.5 py-1.5 rounded-full flex items-center gap-1.5">
+        <div className="bg-[#12233F]/10 text-[#12233F] text-xs font-bold px-3.5 py-1.5 rounded-full flex items-center gap-1.5">
           <Lock className="w-3.5 h-3.5" />
           <span>Portal Administrador: {adminUser.name}</span>
         </div>
       </div>
 
       <div className="mb-8">
-        <h1 className="text-3xl font-sans font-extrabold tracking-tight text-[#1A365D]">
+        <h1 className="text-3xl font-sans font-extrabold tracking-tight text-[#12233F]">
           Painel de Controlo Concurso Público
         </h1>
-        <p className="text-sm text-[#64748B] mt-1">
+        <p className="text-sm text-[#7A7060] mt-1">
           Monitorize as submissões de exames de candidatos em tempo real e faça a gestão do banco de perguntas do MININT e MINSA.
         </p>
       </div>
@@ -456,51 +456,51 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
       {/* Stats Cards (Rendered when Results Tab is Active) */}
       {activeTab === "candidates" && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-          <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
-            <div className="w-12 h-12 bg-blue-50 text-[#1A365D] rounded-xl flex items-center justify-center">
+          <div className="bg-white border border-[#E3D9C4] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
+            <div className="w-12 h-12 bg-[#EAF0F7] text-[#12233F] rounded-xl flex items-center justify-center">
               <Users className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+              <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">
                 Total de Submissões
               </span>
-              <span className="text-2xl font-black text-slate-800">{totalExams}</span>
+              <span className="text-2xl font-black text-stone-800">{totalExams}</span>
             </div>
           </div>
 
-          <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
+          <div className="bg-white border border-[#E3D9C4] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
             <div className="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
               <Award className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+              <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">
                 Média de Pontuação
               </span>
-              <span className="text-2xl font-black text-slate-800">{averageScore}%</span>
+              <span className="text-2xl font-black text-stone-800">{averageScore}%</span>
             </div>
           </div>
 
-          <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
+          <div className="bg-white border border-[#E3D9C4] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
             <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
               <TrendingUp className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+              <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">
                 Taxa de Aprovação
               </span>
-              <span className="text-2xl font-black text-slate-800">{passRate}%</span>
+              <span className="text-2xl font-black text-stone-800">{passRate}%</span>
             </div>
           </div>
 
-          <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
+          <div className="bg-white border border-[#E3D9C4] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
             <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
               <Database className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+              <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">
                 Perguntas Customizadas
               </span>
-              <span className="text-2xl font-black text-slate-800">
+              <span className="text-2xl font-black text-stone-800">
                 {customQuestions.length}
               </span>
             </div>
@@ -509,13 +509,13 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
       )}
 
       {/* Tabs Switcher */}
-      <div className="flex border-b border-[#E2E8F0] mb-8 gap-1.5">
+      <div className="flex border-b border-[#E3D9C4] mb-8 gap-1.5">
         <button
           onClick={() => setActiveTab("candidates")}
           className={`px-5 py-3 text-sm font-bold border-b-2 transition-all cursor-pointer flex items-center gap-2 ${
             activeTab === "candidates"
-              ? "border-[#1A365D] text-[#1A365D]"
-              : "border-transparent text-slate-500 hover:text-slate-800"
+              ? "border-[#12233F] text-[#12233F]"
+              : "border-transparent text-stone-500 hover:text-stone-800"
           }`}
         >
           <BarChart3 className="w-4 h-4" />
@@ -525,8 +525,8 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
           onClick={() => setActiveTab("questions")}
           className={`px-5 py-3 text-sm font-bold border-b-2 transition-all cursor-pointer flex items-center gap-2 ${
             activeTab === "questions"
-              ? "border-[#1A365D] text-[#1A365D]"
-              : "border-transparent text-slate-500 hover:text-slate-800"
+              ? "border-[#12233F] text-[#12233F]"
+              : "border-transparent text-stone-500 hover:text-stone-800"
           }`}
         >
           <Database className="w-4 h-4" />
@@ -536,8 +536,8 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
           onClick={() => setActiveTab("premium")}
           className={`px-5 py-3 text-sm font-bold border-b-2 transition-all cursor-pointer flex items-center gap-2 ${
             activeTab === "premium"
-              ? "border-[#1A365D] text-[#1A365D]"
-              : "border-transparent text-slate-500 hover:text-slate-800"
+              ? "border-[#12233F] text-[#12233F]"
+              : "border-transparent text-stone-500 hover:text-stone-800"
           }`}
         >
           <Wallet className="w-4 h-4" />
@@ -564,30 +564,30 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
 
       {/* Tab Contents */}
       {activeTab === "candidates" && (
-        <div className="bg-white border border-[#E2E8F0] rounded-2xl shadow-xs overflow-hidden">
+        <div className="bg-white border border-[#E3D9C4] rounded-2xl shadow-xs overflow-hidden">
           {/* Filters Area */}
-          <div className="p-5 border-b border-[#E2E8F0] bg-slate-50/50 flex flex-col md:flex-row gap-4 justify-between items-center">
+          <div className="p-5 border-b border-[#E3D9C4] bg-stone-50/50 flex flex-col md:flex-row gap-4 justify-between items-center">
             {/* Search */}
             <div className="relative w-full md:max-w-md">
-              <Search className="absolute left-3.5 top-3 w-4.5 h-4.5 text-slate-400" />
+              <Search className="absolute left-3.5 top-3 w-4.5 h-4.5 text-stone-400" />
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Pesquisar por nome ou email do candidato..."
-                className="w-full bg-white border border-[#CBD5E1] rounded-xl pl-10 pr-4 py-2 text-sm text-[#1C1E21] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1A365D]"
+                className="w-full bg-white border border-[#D8CBB0] rounded-xl pl-10 pr-4 py-2 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
               />
             </div>
 
             {/* Filter Buttons */}
             <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto">
-              <Filter className="w-4 h-4 text-slate-400 flex-shrink-0" />
+              <Filter className="w-4 h-4 text-stone-400 flex-shrink-0" />
               <button
                 onClick={() => setMinistryFilter("ALL")}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap cursor-pointer transition-colors ${
                   ministryFilter === "ALL"
-                    ? "bg-[#1A365D] text-white"
-                    : "bg-white border border-[#CBD5E1] text-slate-600 hover:bg-slate-100"
+                    ? "bg-[#12233F] text-white"
+                    : "bg-white border border-[#D8CBB0] text-stone-600 hover:bg-stone-100"
                 }`}
               >
                 Todos
@@ -596,8 +596,8 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                 onClick={() => setMinistryFilter("MININT")}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap cursor-pointer transition-colors ${
                   ministryFilter === "MININT"
-                    ? "bg-[#1A365D] text-white"
-                    : "bg-white border border-[#CBD5E1] text-slate-600 hover:bg-slate-100"
+                    ? "bg-[#12233F] text-white"
+                    : "bg-white border border-[#D8CBB0] text-stone-600 hover:bg-stone-100"
                 }`}
               >
                 MININT
@@ -606,8 +606,8 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                 onClick={() => setMinistryFilter("MINSA")}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap cursor-pointer transition-colors ${
                   ministryFilter === "MINSA"
-                    ? "bg-[#1A365D] text-white"
-                    : "bg-white border border-[#CBD5E1] text-slate-600 hover:bg-slate-100"
+                    ? "bg-[#12233F] text-white"
+                    : "bg-white border border-[#D8CBB0] text-stone-600 hover:bg-stone-100"
                 }`}
               >
                 MINSA
@@ -617,69 +617,69 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
 
           {/* Results Table */}
           {loadingResults ? (
-            <div className="py-16 text-center text-slate-500 text-sm">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1A365D] mx-auto mb-4"></div>
+            <div className="py-16 text-center text-stone-500 text-sm">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#12233F] mx-auto mb-4"></div>
               <span>A carregar classificações dos candidatos...</span>
             </div>
           ) : filteredResults.length === 0 ? (
             <div className="py-16 text-center">
-              <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-              <h3 className="text-base font-bold text-slate-700">Nenhum Exame Encontrado</h3>
-              <p className="text-xs text-slate-400 mt-1">
+              <Users className="w-12 h-12 text-stone-300 mx-auto mb-3" />
+              <h3 className="text-base font-bold text-stone-700">Nenhum Exame Encontrado</h3>
+              <p className="text-xs text-stone-400 mt-1">
                 Não existem tentativas gravadas que correspondam aos filtros de pesquisa.
               </p>
             </div>
           ) : (
             <div>
               {/* Mobile Card List (visible only on small screens) */}
-              <div className="md:hidden divide-y divide-slate-100">
+              <div className="md:hidden divide-y divide-stone-100">
                 {filteredResults.map((res) => {
                   const isPassed = res.score >= 50;
                   return (
                     <div key={res.id} className="p-4 flex flex-col gap-3">
                       <div className="flex items-start justify-between">
                         <div>
-                          <span className="font-bold text-slate-800 text-sm block">
+                          <span className="font-bold text-stone-800 text-sm block">
                             {res.candidateName}
                           </span>
-                          <span className="text-[10px] text-slate-400 block mt-0.5">
+                          <span className="text-[10px] text-stone-400 block mt-0.5">
                             {res.candidateEmail}
                           </span>
                         </div>
                         <span
                           className={`px-2.5 py-1 rounded text-[10px] font-bold ${
                             res.ministerio === "MININT"
-                              ? "bg-blue-50 text-[#1A365D] border border-blue-100"
-                              : "bg-red-50 text-[#C02424] border border-red-100"
+                              ? "bg-[#EAF0F7] text-[#12233F] border border-[#D9E4F0]"
+                              : "bg-red-50 text-[#A62639] border border-red-100"
                           }`}
                         >
                           {res.ministerio}
                         </span>
                       </div>
                       
-                      <div className="grid grid-cols-3 gap-2 bg-slate-50 p-2.5 rounded-lg text-center text-[10px]">
+                      <div className="grid grid-cols-3 gap-2 bg-stone-50 p-2.5 rounded-lg text-center text-[10px]">
                         <div>
-                          <span className="text-slate-400 block uppercase font-semibold">Nota</span>
-                          <span className="font-black text-slate-800 text-xs">{res.score}%</span>
+                          <span className="text-stone-400 block uppercase font-semibold">Nota</span>
+                          <span className="font-black text-stone-800 text-xs">{res.score}%</span>
                         </div>
                         <div>
-                          <span className="text-slate-400 block uppercase font-semibold">Respostas</span>
-                          <span className="font-bold text-slate-700 text-xs">
+                          <span className="text-stone-400 block uppercase font-semibold">Respostas</span>
+                          <span className="font-bold text-stone-700 text-xs">
                             {res.respostasCorretas}/{res.totalPerguntas}
                           </span>
                         </div>
                         <div>
-                          <span className="text-slate-400 block uppercase font-semibold">Tempo</span>
-                          <span className="font-bold text-slate-700 text-xs flex items-center justify-center gap-0.5">
-                            <Clock className="w-3 h-3 text-slate-400" />
+                          <span className="text-stone-400 block uppercase font-semibold">Tempo</span>
+                          <span className="font-bold text-stone-700 text-xs flex items-center justify-center gap-0.5">
+                            <Clock className="w-3 h-3 text-stone-400" />
                             {formatTempo(res.tempoGasto)}
                           </span>
                         </div>
                       </div>
 
                       <div className="flex items-center justify-between text-[10px]">
-                        <span className="text-slate-400 flex items-center gap-1">
-                          <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                        <span className="text-stone-400 flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5 text-stone-400" />
                           {new Date(res.createdAt).toLocaleDateString("pt-AO", {
                             day: "2-digit",
                             month: "2-digit",
@@ -712,7 +712,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
               <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-slate-50 border-b border-[#E2E8F0] text-slate-500 text-[10px] uppercase font-bold tracking-wider">
+                    <tr className="bg-stone-50 border-b border-[#E3D9C4] text-stone-500 text-[10px] uppercase font-bold tracking-wider">
                       <th className="py-3 px-5">Candidato</th>
                       <th className="py-3 px-5">Concurso</th>
                       <th className="py-3 px-5 text-center">Pontuação</th>
@@ -722,16 +722,16 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                       <th className="py-3 px-5 text-center">Estado</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 text-xs text-slate-700">
+                  <tbody className="divide-y divide-stone-100 text-xs text-stone-700">
                     {filteredResults.map((res) => {
                       const isPassed = res.score >= 50;
                       return (
-                        <tr key={res.id} className="hover:bg-slate-50/50 transition-colors">
+                        <tr key={res.id} className="hover:bg-stone-50/50 transition-colors">
                           <td className="py-4 px-5">
-                            <span className="font-bold text-slate-800 block text-sm">
+                            <span className="font-bold text-stone-800 block text-sm">
                               {res.candidateName}
                             </span>
-                            <span className="text-[10px] text-slate-400 block mt-0.5">
+                            <span className="text-[10px] text-stone-400 block mt-0.5">
                               {res.candidateEmail}
                             </span>
                           </td>
@@ -739,28 +739,28 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                             <span
                               className={`px-2.5 py-1 rounded text-[10px] font-bold ${
                                 res.ministerio === "MININT"
-                                  ? "bg-blue-50 text-[#1A365D] border border-blue-100"
-                                  : "bg-red-50 text-[#C02424] border border-red-100"
+                                  ? "bg-[#EAF0F7] text-[#12233F] border border-[#D9E4F0]"
+                                  : "bg-red-50 text-[#A62639] border border-red-100"
                               }`}
                             >
                               {res.ministerio}
                             </span>
                           </td>
-                          <td className="py-4 px-5 text-center font-black text-sm text-slate-800">
+                          <td className="py-4 px-5 text-center font-black text-sm text-stone-800">
                             {res.score}%
                           </td>
-                          <td className="py-4 px-5 text-center text-slate-500 font-semibold">
+                          <td className="py-4 px-5 text-center text-stone-500 font-semibold">
                             {res.respostasCorretas} / {res.totalPerguntas}
                           </td>
-                          <td className="py-4 px-5 text-center text-slate-500 font-medium">
+                          <td className="py-4 px-5 text-center text-stone-500 font-medium">
                             <div className="flex items-center justify-center gap-1">
-                              <Clock className="w-3.5 h-3.5 text-slate-400" />
+                              <Clock className="w-3.5 h-3.5 text-stone-400" />
                               <span>{formatTempo(res.tempoGasto)}</span>
                             </div>
                           </td>
-                          <td className="py-4 px-5 text-slate-500">
+                          <td className="py-4 px-5 text-stone-500">
                             <div className="flex items-center gap-1.5">
-                              <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                              <Calendar className="w-3.5 h-3.5 text-stone-400" />
                               <span>
                                 {new Date(res.createdAt).toLocaleDateString("pt-AO", {
                                   day: "2-digit",
@@ -802,9 +802,9 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
       {activeTab === "questions" && (
         <div className="grid lg:grid-cols-5 gap-8">
           {/* Form to add question */}
-          <div className="lg:col-span-3 bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs h-fit">
-            <h2 className="text-lg font-bold text-[#1C1E21] mb-5 border-b border-[#E2E8F0] pb-3 flex items-center gap-2">
-              <Plus className="w-5 h-5 text-[#1A365D]" />
+          <div className="lg:col-span-3 bg-white border border-[#E3D9C4] rounded-2xl p-6 shadow-xs h-fit">
+            <h2 className="text-lg font-bold text-[#201C16] mb-5 border-b border-[#E3D9C4] pb-3 flex items-center gap-2">
+              <Plus className="w-5 h-5 text-[#12233F]" />
               Formulário de Nova Questão
             </h2>
 
@@ -831,13 +831,13 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
               {/* Row 1: Ministério & Categoria */}
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold text-[#5C5346] uppercase tracking-wider mb-1.5">
                     Ministério / Concurso *
                   </label>
                   <select
                     value={ministerio}
                     onChange={(e) => setMinisterio(e.target.value as ConcursoType)}
-                    className="w-full bg-slate-50 border border-[#CBD5E1] rounded-lg px-3 py-2 text-sm text-[#1C1E21] font-semibold focus:outline-none focus:ring-2 focus:ring-[#1A365D]"
+                    className="w-full bg-stone-50 border border-[#D8CBB0] rounded-lg px-3 py-2 text-sm text-[#201C16] font-semibold focus:outline-none focus:ring-2 focus:ring-[#12233F]"
                   >
                     <option value="MININT">MININT (Interior)</option>
                     <option value="MINSA">MINSA (Saúde)</option>
@@ -845,7 +845,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold text-[#5C5346] uppercase tracking-wider mb-1.5">
                     Categoria da Pergunta *
                   </label>
                   <input
@@ -853,14 +853,14 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                     value={categoria}
                     onChange={(e) => setCategoria(e.target.value)}
                     placeholder="Ex: Constituição (CRA), Deontologia"
-                    className="w-full bg-slate-50 border border-[#CBD5E1] rounded-lg px-3 py-2 text-sm text-[#1C1E21] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1A365D]"
+                    className="w-full bg-stone-50 border border-[#D8CBB0] rounded-lg px-3 py-2 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
                   />
                 </div>
               </div>
 
               {/* Enunciado */}
               <div>
-                <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-bold text-[#5C5346] uppercase tracking-wider mb-1.5">
                   Enunciado da Pergunta *
                 </label>
                 <textarea
@@ -868,19 +868,19 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                   value={enunciado}
                   onChange={(e) => setEnunciado(e.target.value)}
                   placeholder="Introduza o enunciado completo ou caso clínico da pergunta..."
-                  className="w-full bg-slate-50 border border-[#CBD5E1] rounded-lg p-3 text-sm text-[#1C1E21] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1A365D]"
+                  className="w-full bg-stone-50 border border-[#D8CBB0] rounded-lg p-3 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
                 />
               </div>
 
               {/* Opções de Resposta */}
               <div className="space-y-3">
-                <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider">
+                <label className="block text-xs font-bold text-[#5C5346] uppercase tracking-wider">
                   Opções de Resposta *
                 </label>
 
                 {["A", "B", "C", "D"].map((letra, index) => (
                   <div key={letra} className="flex items-center space-x-2">
-                    <span className="w-8 h-8 flex-shrink-0 bg-slate-100 text-slate-600 font-bold text-xs rounded-lg flex items-center justify-center border border-slate-200">
+                    <span className="w-8 h-8 flex-shrink-0 bg-stone-100 text-stone-600 font-bold text-xs rounded-lg flex items-center justify-center border border-stone-200">
                       {letra}
                     </span>
                     <input
@@ -888,7 +888,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                       value={opcoes[index]}
                       onChange={(e) => handleOpcaoChange(index, e.target.value)}
                       placeholder={`Texto para a opção ${letra}`}
-                      className="flex-grow bg-slate-50 border border-[#CBD5E1] rounded-lg px-3 py-2 text-sm text-[#1C1E21] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1A365D]"
+                      className="flex-grow bg-stone-50 border border-[#D8CBB0] rounded-lg px-3 py-2 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
                     />
                   </div>
                 ))}
@@ -896,13 +896,13 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
 
               {/* Opção Correta */}
               <div>
-                <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-bold text-[#5C5346] uppercase tracking-wider mb-1.5">
                   Gabarito (Opção Correta) *
                 </label>
                 <select
                   value={resposta}
                   onChange={(e) => setResposta(parseInt(e.target.value))}
-                  className="w-full bg-slate-50 border border-[#CBD5E1] rounded-lg px-3 py-2 text-sm text-[#1C1E21] font-semibold focus:outline-none focus:ring-2 focus:ring-[#1A365D]"
+                  className="w-full bg-stone-50 border border-[#D8CBB0] rounded-lg px-3 py-2 text-sm text-[#201C16] font-semibold focus:outline-none focus:ring-2 focus:ring-[#12233F]"
                 >
                   <option value={0}>Opção A é a correta</option>
                   <option value={1}>Opção B é a correta</option>
@@ -913,7 +913,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
 
               {/* Explicação */}
               <div>
-                <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-bold text-[#5C5346] uppercase tracking-wider mb-1.5">
                   Explicação / Gabarito Comentado *
                 </label>
                 <textarea
@@ -921,14 +921,14 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                   value={explicacao}
                   onChange={(e) => setExplicacao(e.target.value)}
                   placeholder="Forneça a fundamentação pedagógica ou jurídica..."
-                  className="w-full bg-slate-50 border border-[#CBD5E1] rounded-lg p-3 text-sm text-[#1C1E21] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1A365D]"
+                  className="w-full bg-stone-50 border border-[#D8CBB0] rounded-lg p-3 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
                 />
               </div>
 
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-[#1A365D] hover:bg-[#122744] text-white font-semibold py-3 px-4 rounded-xl text-sm transition-all shadow-xs flex items-center justify-center space-x-2 cursor-pointer"
+                className="w-full bg-[#12233F] hover:bg-[#0C1A2E] text-white font-semibold py-3 px-4 rounded-xl text-sm transition-all shadow-xs flex items-center justify-center space-x-2 cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Gravar Pergunta no Firestore</span>
@@ -938,29 +938,29 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
 
           {/* Right Side: List of custom added questions */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs h-full flex flex-col">
-              <h2 className="text-lg font-bold text-[#1C1E21] border-b border-[#E2E8F0] pb-3 flex items-center justify-between">
+            <div className="bg-white border border-[#E3D9C4] rounded-2xl p-6 shadow-xs h-full flex flex-col">
+              <h2 className="text-lg font-bold text-[#201C16] border-b border-[#E3D9C4] pb-3 flex items-center justify-between">
                 <span className="flex items-center gap-2">
-                  <HelpCircle className="w-5 h-5 text-slate-500" />
+                  <HelpCircle className="w-5 h-5 text-stone-500" />
                   Perguntas Criadas
                 </span>
-                <span className="bg-[#1A365D] text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                <span className="bg-[#12233F] text-white text-xs font-bold px-2 py-0.5 rounded-full">
                   {customQuestions.length}
                 </span>
               </h2>
 
               {loadingQuestions ? (
-                <div className="py-12 text-center text-slate-400 text-xs">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-slate-500 mx-auto mb-2"></div>
+                <div className="py-12 text-center text-stone-400 text-xs">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-stone-500 mx-auto mb-2"></div>
                   <span>A carregar banco customizado...</span>
                 </div>
               ) : customQuestions.length === 0 ? (
                 <div className="flex-grow flex flex-col items-center justify-center text-center py-12 px-4">
-                  <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mb-3">
+                  <div className="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center text-stone-400 mb-3">
                     <HelpCircle className="w-6 h-6" />
                   </div>
-                  <h3 className="text-sm font-semibold text-[#1C1E21] mb-1">Nenhuma Pergunta Adicionada</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
+                  <h3 className="text-sm font-semibold text-[#201C16] mb-1">Nenhuma Pergunta Adicionada</h3>
+                  <p className="text-xs text-stone-400 leading-relaxed">
                     Perguntas que adicionar ao Firestore aparecerão listadas aqui para eliminação rápida.
                   </p>
                 </div>
@@ -969,11 +969,11 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                   {customQuestions.map((q) => (
                     <div
                       key={q.id}
-                      className="border border-[#E2E8F0] rounded-lg p-3.5 bg-slate-50 relative group transition-colors hover:border-[#1A365D]"
+                      className="border border-[#E3D9C4] rounded-lg p-3.5 bg-stone-50 relative group transition-colors hover:border-[#12233F]"
                     >
                       <button
                         onClick={() => handleDeleteQuestion(q.id)}
-                        className="absolute top-3 right-3 p-1.5 rounded-md hover:bg-red-50 text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
+                        className="absolute top-3 right-3 p-1.5 rounded-md hover:bg-red-50 text-stone-400 hover:text-red-600 transition-colors cursor-pointer"
                         title="Eliminar Pergunta"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -983,18 +983,18 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                         <span
                           className={`text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider ${
                             q.ministerio === "MININT"
-                              ? "bg-blue-100 text-[#1A365D]"
-                              : "bg-red-100 text-[#C02424]"
+                              ? "bg-[#D9E4F0] text-[#12233F]"
+                              : "bg-red-100 text-[#A62639]"
                           }`}
                         >
                           {q.ministerio}
                         </span>
-                        <span className="text-[10px] font-semibold text-slate-500 max-w-[120px] truncate">
+                        <span className="text-[10px] font-semibold text-stone-500 max-w-[120px] truncate">
                           {q.categoria}
                         </span>
                       </div>
 
-                      <h4 className="text-xs font-bold text-slate-800 line-clamp-2 mb-2 pr-4 leading-normal">
+                      <h4 className="text-xs font-bold text-stone-800 line-clamp-2 mb-2 pr-4 leading-normal">
                         {q.enunciado}
                       </h4>
 
@@ -1002,7 +1002,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                         <span className="bg-emerald-100 px-1.5 py-0.5 rounded text-[9px] font-bold text-emerald-800">
                           R: {["A", "B", "C", "D"][q.resposta]}
                         </span>
-                        <span className="truncate max-w-[140px] text-slate-500">
+                        <span className="truncate max-w-[140px] text-stone-500">
                           {q.opcoes[q.resposta]}
                         </span>
                       </div>
@@ -1019,39 +1019,39 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
         <div>
           {/* Revenue Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
-            <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
+            <div className="bg-white border border-[#E3D9C4] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
               <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
                 <Sparkles className="w-6 h-6" />
               </div>
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">
                   Candidatos Premium
                 </span>
-                <span className="text-2xl font-black text-slate-800">{premiumCount}</span>
+                <span className="text-2xl font-black text-stone-800">{premiumCount}</span>
               </div>
             </div>
-            <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
-              <div className="w-12 h-12 bg-blue-50 text-[#1A365D] rounded-xl flex items-center justify-center">
+            <div className="bg-white border border-[#E3D9C4] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
+              <div className="w-12 h-12 bg-[#EAF0F7] text-[#12233F] rounded-xl flex items-center justify-center">
                 <Wallet className="w-6 h-6" />
               </div>
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">
                   Receita Estimada
                 </span>
-                <span className="text-2xl font-black text-slate-800">
+                <span className="text-2xl font-black text-stone-800">
                   {estimatedRevenue.toLocaleString("pt-AO")} Kz
                 </span>
               </div>
             </div>
-            <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
+            <div className="bg-white border border-[#E3D9C4] p-5 rounded-2xl flex items-center gap-4 shadow-xs">
               <div className="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
                 <Users className="w-6 h-6" />
               </div>
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">
                   Total de Candidatos
                 </span>
-                <span className="text-2xl font-black text-slate-800">{candidateUsers.length}</span>
+                <span className="text-2xl font-black text-stone-800">{candidateUsers.length}</span>
               </div>
             </div>
           </div>
@@ -1062,29 +1062,29 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
             candidato abaixo pelo email e clique em "Ativar Premium". O acesso completo é liberado de imediato.
           </div>
 
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl shadow-xs overflow-hidden">
+          <div className="bg-white border border-[#E3D9C4] rounded-2xl shadow-xs overflow-hidden">
             {/* Filters */}
-            <div className="p-5 border-b border-[#E2E8F0] bg-slate-50/50 flex flex-col md:flex-row gap-4 justify-between items-center">
+            <div className="p-5 border-b border-[#E3D9C4] bg-stone-50/50 flex flex-col md:flex-row gap-4 justify-between items-center">
               <div className="relative w-full md:max-w-md">
-                <Search className="absolute left-3.5 top-3 w-4.5 h-4.5 text-slate-400" />
+                <Search className="absolute left-3.5 top-3 w-4.5 h-4.5 text-stone-400" />
                 <input
                   type="text"
                   value={userSearch}
                   onChange={(e) => setUserSearch(e.target.value)}
                   placeholder="Pesquisar por nome ou email do candidato..."
-                  className="w-full bg-white border border-[#CBD5E1] rounded-xl pl-10 pr-4 py-2 text-sm text-[#1C1E21] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1A365D]"
+                  className="w-full bg-white border border-[#D8CBB0] rounded-xl pl-10 pr-4 py-2 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
                 />
               </div>
               <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto">
-                <Filter className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                <Filter className="w-4 h-4 text-stone-400 flex-shrink-0" />
                 {(["ALL", "PREMIUM", "FREE"] as const).map((f) => (
                   <button
                     key={f}
                     onClick={() => setPremiumFilter(f)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap cursor-pointer transition-colors ${
                       premiumFilter === f
-                        ? "bg-[#1A365D] text-white"
-                        : "bg-white border border-[#CBD5E1] text-slate-600 hover:bg-slate-100"
+                        ? "bg-[#12233F] text-white"
+                        : "bg-white border border-[#D8CBB0] text-stone-600 hover:bg-stone-100"
                     }`}
                   >
                     {f === "ALL" ? "Todos" : f === "PREMIUM" ? "Premium" : "Gratuito"}
@@ -1094,20 +1094,20 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
             </div>
 
             {loadingUsers ? (
-              <div className="py-16 text-center text-slate-500 text-sm">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1A365D] mx-auto mb-4"></div>
+              <div className="py-16 text-center text-stone-500 text-sm">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#12233F] mx-auto mb-4"></div>
                 <span>A carregar candidatos...</span>
               </div>
             ) : filteredUsers.length === 0 ? (
               <div className="py-16 text-center">
-                <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                <h3 className="text-base font-bold text-slate-700">Nenhum Candidato Encontrado</h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <Users className="w-12 h-12 text-stone-300 mx-auto mb-3" />
+                <h3 className="text-base font-bold text-stone-700">Nenhum Candidato Encontrado</h3>
+                <p className="text-xs text-stone-400 mt-1">
                   Ajuste a pesquisa ou o filtro acima.
                 </p>
               </div>
             ) : (
-              <div className="divide-y divide-slate-100">
+              <div className="divide-y divide-stone-100">
                 {filteredUsers.map((u) => (
                   <div
                     key={u.uid}
@@ -1116,14 +1116,14 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                     <div className="flex items-center gap-3">
                       <div
                         className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${
-                          u.isPremium ? "bg-emerald-50 text-emerald-600" : "bg-slate-100 text-slate-400"
+                          u.isPremium ? "bg-emerald-50 text-emerald-600" : "bg-stone-100 text-stone-400"
                         }`}
                       >
                         {u.isPremium ? <ShieldCheck className="w-4.5 h-4.5" /> : <ShieldOff className="w-4.5 h-4.5" />}
                       </div>
                       <div>
-                        <span className="font-bold text-slate-800 text-sm block">{u.name}</span>
-                        <span className="text-[10px] text-slate-400 block mt-0.5">{u.email}</span>
+                        <span className="font-bold text-stone-800 text-sm block">{u.name}</span>
+                        <span className="text-[10px] text-stone-400 block mt-0.5">{u.email}</span>
                       </div>
                     </div>
 
@@ -1132,7 +1132,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                         className={`text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
                           u.isPremium
                             ? "bg-emerald-100 text-emerald-700"
-                            : "bg-slate-100 text-slate-500"
+                            : "bg-stone-100 text-stone-500"
                         }`}
                       >
                         {u.isPremium ? "Premium ativo" : "Acesso gratuito"}
@@ -1143,7 +1143,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                         className={`text-xs font-bold px-4 py-2 rounded-xl transition-all cursor-pointer disabled:opacity-50 ${
                           u.isPremium
                             ? "border border-red-200 text-red-600 hover:bg-red-50"
-                            : "bg-[#1A365D] hover:bg-[#122744] text-white"
+                            : "bg-[#12233F] hover:bg-[#0C1A2E] text-white"
                         }`}
                       >
                         {updatingUid === u.uid

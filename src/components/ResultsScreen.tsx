@@ -32,36 +32,36 @@ export default function ResultsScreen({
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Result Card Summary */}
-      <div className="bg-white border border-[#E2E8F0] rounded-xl p-6 md:p-8 shadow-sm mb-8 relative overflow-hidden">
+      <div className="bg-white border border-[#E3D9C4] rounded-xl p-6 md:p-8 shadow-sm mb-8 relative overflow-hidden">
         {/* Colorful top border representing status */}
-        <div className={`absolute top-0 left-0 w-full h-2 ${isApto ? "bg-[#22C55E]" : "bg-[#C02424]"}`} />
+        <div className={`absolute top-0 left-0 w-full h-2 ${isApto ? "bg-[#2F9E5E]" : "bg-[#A62639]"}`} />
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="text-center md:text-left">
-            <span className="text-xs font-bold text-[#64748B] uppercase tracking-widest block mb-2">
+            <span className="text-xs font-bold text-[#7A7060] uppercase tracking-widest block mb-2">
               Resultado Oficial • Simulação {ministerio}
             </span>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-[#1A365D] mb-4">
+            <h2 className="font-display text-2xl md:text-3xl font-semibold text-[#12233F] mb-4">
               Folha de Avaliação Individual
             </h2>
 
             {/* Quick stats */}
             <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-              <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-center">
-                <span className="text-xs text-[#64748B] block font-medium uppercase">Respostas</span>
-                <span className="text-base font-bold text-[#1C1E21]">
+              <div className="bg-[#FBF7EE] border border-[#E3D9C4] rounded-xl px-4 py-2.5 text-center">
+                <span className="text-xs text-[#7A7060] block font-medium uppercase">Respostas</span>
+                <span className="text-base font-bold text-[#201C16]">
                   {Object.keys(respostas).length} de {totalPerguntas}
                 </span>
               </div>
-              <div className="bg-[#F0FDF4] border border-[#DCFCE7] rounded-xl px-4 py-2.5 text-center">
-                <span className="text-xs text-[#166534] block font-medium uppercase">Acertos</span>
-                <span className="text-base font-bold text-[#166534]">
+              <div className="bg-[#F2F8F1] border border-[#DCEEDF] rounded-xl px-4 py-2.5 text-center">
+                <span className="text-xs text-[#1F5C3B] block font-medium uppercase">Acertos</span>
+                <span className="text-base font-bold text-[#1F5C3B]">
                   {acertosCount} de {totalPerguntas}
                 </span>
               </div>
-              <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-center">
-                <span className="text-xs text-[#64748B] block font-medium uppercase">Aproveitamento</span>
-                <span className="text-base font-bold text-[#1C1E21]">
+              <div className="bg-[#FBF7EE] border border-[#E3D9C4] rounded-xl px-4 py-2.5 text-center">
+                <span className="text-xs text-[#7A7060] block font-medium uppercase">Aproveitamento</span>
+                <span className="text-base font-bold text-[#201C16]">
                   {Math.round((acertosCount / totalPerguntas) * 100)}%
                 </span>
               </div>
@@ -69,27 +69,27 @@ export default function ResultsScreen({
           </div>
 
           {/* Large Badge Area */}
-          <div className="flex flex-col items-center bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-6 w-full md:w-56 text-center">
-            <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider mb-2">Nota Final</span>
+          <div className="flex flex-col items-center bg-[#FBF7EE] border border-[#E3D9C4] rounded-xl p-6 w-full md:w-56 text-center">
+            <span className="text-xs font-bold text-[#7A7060] uppercase tracking-wider mb-2">Nota Final</span>
             
-            <div className={`text-4xl md:text-5xl font-extrabold font-mono mb-3 ${isApto ? "text-[#166534]" : "text-[#991B1B]"}`}>
-              {notaFinal % 1 === 0 ? notaFinal : notaFinal.toFixed(1)} <span className="text-sm font-semibold text-[#64748B]">/ 20</span>
+            <div className={`text-4xl md:text-5xl font-extrabold font-mono mb-3 ${isApto ? "text-[#1F5C3B]" : "text-[#7A1E2B]"}`}>
+              {notaFinal % 1 === 0 ? notaFinal : notaFinal.toFixed(1)} <span className="text-sm font-semibold text-[#7A7060]">/ 20</span>
             </div>
 
-            <div className={`inline-flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider ${
-              isApto 
-                ? "bg-[#DCFCE7] text-[#166534]" 
-                : "bg-[#FEE2E2] text-[#991B1B]"
-            }`}>
+            <div
+              className={`stamp text-sm ${
+                isApto ? "text-[#1F5C3B]" : "text-[#7A1E2B]"
+              }`}
+            >
               {isApto ? (
                 <>
-                  <CheckCircle2 className="w-4 h-4 text-[#166534]" />
-                  <span>APTO</span>
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>Apto</span>
                 </>
               ) : (
                 <>
-                  <XCircle className="w-4 h-4 text-[#991B1B]" />
-                  <span>EXCLUÍDO</span>
+                  <XCircle className="w-4 h-4" />
+                  <span>Excluído</span>
                 </>
               )}
             </div>
@@ -102,7 +102,7 @@ export default function ResultsScreen({
         <button
           id="btn-voltar-inicio"
           onClick={onRestart}
-          className="inline-flex items-center space-x-2 bg-[#1A365D] hover:bg-[#152c4a] text-white px-6 py-3.5 rounded-xl font-semibold shadow-md transition-all group"
+          className="inline-flex items-center space-x-2 bg-[#12233F] hover:bg-[#16294A] text-white px-6 py-3.5 rounded-xl font-semibold shadow-md transition-all group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span>Voltar ao Menu Principal</span>
@@ -111,8 +111,8 @@ export default function ResultsScreen({
 
       {/* Detailed Correction Section */}
       <div className="space-y-6">
-        <h3 className="text-xl font-bold text-[#1A365D] flex items-center mb-4">
-          <BookOpen className="w-5 h-5 mr-2 text-[#1A365D]" />
+        <h3 className="font-display text-xl font-semibold text-[#12233F] flex items-center mb-4">
+          <BookOpen className="w-5 h-5 mr-2 text-[#12233F]" />
           Correção Comentada das Perguntas
         </h3>
 
@@ -124,31 +124,31 @@ export default function ResultsScreen({
             <div
               key={p.id}
               id={`correcao-questao-${index + 1}`}
-              className="bg-white border border-[#E2E8F0] rounded-xl p-5 md:p-6 shadow-xs relative overflow-hidden"
+              className="bg-white border border-[#E3D9C4] rounded-xl p-5 md:p-6 shadow-xs relative overflow-hidden"
             >
               {/* Vertical side indicator strip */}
               <div className={`absolute top-0 left-0 w-1.5 h-full ${
                 userChoice === undefined 
-                  ? "bg-[#CBD5E1]" 
+                  ? "bg-[#D8CBB0]" 
                   : isCorrect 
-                    ? "bg-[#22C55E]" 
-                    : "bg-[#C02424]"
+                    ? "bg-[#2F9E5E]" 
+                    : "bg-[#A62639]"
               }`} />
 
               <div className="pl-2">
                 {/* Meta details */}
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-xs font-bold text-[#475569] uppercase tracking-wider bg-[#E2E8F0] px-2.5 py-1 rounded border border-[#CBD5E1]">
+                  <span className="text-xs font-bold text-[#5C5346] uppercase tracking-wider bg-[#E3D9C4] px-2.5 py-1 rounded border border-[#D8CBB0]">
                     {p.categoria}
                   </span>
                   <div className="flex items-center space-x-2">
-                    <span className="text-xs font-semibold text-[#64748B]">Questão {index + 1}</span>
+                    <span className="text-xs font-semibold text-[#7A7060]">Questão {index + 1}</span>
                     <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-bold ${
                       userChoice === undefined
-                        ? "bg-[#E2E8F0] text-[#475569]"
+                        ? "bg-[#E3D9C4] text-[#5C5346]"
                         : isCorrect
-                          ? "bg-[#DCFCE7] text-[#166534]"
-                          : "bg-[#FEE2E2] text-[#991B1B]"
+                          ? "bg-[#DCEEDF] text-[#1F5C3B]"
+                          : "bg-[#F5DCD9] text-[#7A1E2B]"
                     }`}>
                       {userChoice === undefined 
                         ? "Não Respondida" 
@@ -161,7 +161,7 @@ export default function ResultsScreen({
                 </div>
 
                 {/* Question enunciado */}
-                <h4 className="text-base font-semibold text-[#1C1E21] mb-4 leading-relaxed">
+                <h4 className="text-base font-semibold text-[#201C16] mb-4 leading-relaxed">
                   {p.enunciado}
                 </h4>
 
@@ -171,35 +171,35 @@ export default function ResultsScreen({
                     const isSelected = userChoice === optIdx;
                     const isCorrectAnswer = p.resposta === optIdx;
 
-                    let optionBorder = "border-[#E2E8F0]";
+                    let optionBorder = "border-[#E3D9C4]";
                     let optionBg = "bg-white";
-                    let textStyle = "text-[#1C1E21]";
+                    let textStyle = "text-[#201C16]";
                     let badgeNode = null;
 
                     if (isCorrectAnswer) {
                       // Correct option is highlighted green
-                      optionBorder = "border-[#22C55E] ring-1 ring-[#22C55E]";
-                      optionBg = "bg-[#F0FDF4]";
-                      textStyle = "text-[#166534] font-semibold";
+                      optionBorder = "border-[#2F9E5E] ring-1 ring-[#2F9E5E]";
+                      optionBg = "bg-[#F2F8F1]";
+                      textStyle = "text-[#1F5C3B] font-semibold";
                       badgeNode = (
-                        <span className="text-xs font-bold text-[#166534] bg-[#DCFCE7] px-2 py-0.5 rounded uppercase">
+                        <span className="text-xs font-bold text-[#1F5C3B] bg-[#DCEEDF] px-2 py-0.5 rounded uppercase">
                           Gabarito Oficial
                         </span>
                       );
                     } else if (isSelected && !isCorrect) {
                       // Wrong user selection is highlighted red
-                      optionBorder = "border-[#C02424] ring-1 ring-[#C02424]";
-                      optionBg = "bg-[#FEF2F2]";
-                      textStyle = "text-[#991B1B] font-semibold";
+                      optionBorder = "border-[#A62639] ring-1 ring-[#A62639]";
+                      optionBg = "bg-[#FBF1EE]";
+                      textStyle = "text-[#7A1E2B] font-semibold";
                       badgeNode = (
-                        <span className="text-xs font-bold text-[#991B1B] bg-[#FEE2E2] px-2 py-0.5 rounded uppercase">
+                        <span className="text-xs font-bold text-[#7A1E2B] bg-[#F5DCD9] px-2 py-0.5 rounded uppercase">
                           A sua escolha
                         </span>
                       );
                     } else if (isSelected && isCorrect) {
                       // Correct user selection
                       badgeNode = (
-                        <span className="text-xs font-bold text-[#166534] bg-[#DCFCE7] px-2 py-0.5 rounded uppercase">
+                        <span className="text-xs font-bold text-[#1F5C3B] bg-[#DCEEDF] px-2 py-0.5 rounded uppercase">
                           A sua escolha (Correta)
                         </span>
                       );
@@ -213,10 +213,10 @@ export default function ResultsScreen({
                         <div className="flex items-start space-x-3">
                           <span className={`w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center font-bold text-[10px] uppercase ${
                             isCorrectAnswer
-                              ? "bg-[#22C55E] text-white"
+                              ? "bg-[#2F9E5E] text-white"
                               : isSelected
-                                ? "bg-[#C02424] text-white"
-                                : "bg-[#E2E8F0] text-[#475569]"
+                                ? "bg-[#A62639] text-white"
+                                : "bg-[#E3D9C4] text-[#5C5346]"
                           }`}>
                             {["A", "B", "C", "D"][optIdx]}
                           </span>
@@ -229,12 +229,12 @@ export default function ResultsScreen({
                 </div>
 
                 {/* Explanation block */}
-                <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-4 text-xs md:text-sm text-[#1C1E21] leading-relaxed">
-                  <div className="font-bold flex items-center mb-1.5 text-[#1A365D] text-xs uppercase tracking-wider">
-                    <AlertCircle className="w-4 h-4 mr-1 text-[#1A365D] flex-shrink-0" />
+                <div className="bg-[#FBF7EE] border border-[#E3D9C4] rounded-xl p-4 text-xs md:text-sm text-[#201C16] leading-relaxed">
+                  <div className="font-bold flex items-center mb-1.5 text-[#12233F] text-xs uppercase tracking-wider">
+                    <AlertCircle className="w-4 h-4 mr-1 text-[#12233F] flex-shrink-0" />
                     Enquadramento Legal e Pedagógico
                   </div>
-                  <p className="font-light text-[#475569]">{p.explicacao}</p>
+                  <p className="font-light text-[#5C5346]">{p.explicacao}</p>
                 </div>
               </div>
             </div>
@@ -242,7 +242,7 @@ export default function ResultsScreen({
         })}
       </div>
 
-      <div className="text-center mt-12 mb-6 text-xs text-gray-400">
+      <div className="text-center mt-12 mb-6 text-xs text-stone-400">
         Simulador de Concurso Público em Angola • MININT & MINSA • Todos os direitos reservados.
       </div>
     </div>

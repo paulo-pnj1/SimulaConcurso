@@ -78,23 +78,23 @@ export default function SelectionScreen({
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Profile Header Bar */}
       {currentUser && (
-        <div className="bg-white border border-[#E2E8F0] rounded-2xl p-4 mb-10 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-xs">
+        <div className="bg-white border border-[#E3D9C4] rounded-2xl p-4 mb-10 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-xs">
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-              isAdmin ? "bg-red-50 text-[#C02424]" : "bg-blue-50 text-[#1A365D]"
+              isAdmin ? "bg-red-50 text-[#A62639]" : "bg-[#EAF0F7] text-[#12233F]"
             }`}>
               {isAdmin ? <Shield className="w-5 h-5" /> : <User className="w-5 h-5" />}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-bold text-slate-800 text-sm">{currentUser.name}</span>
+                <span className="font-bold text-stone-800 text-sm">{currentUser.name}</span>
                 <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
-                  isAdmin ? "bg-red-100 text-[#C02424]" : "bg-blue-100 text-[#1A365D]"
+                  isAdmin ? "bg-red-100 text-[#A62639]" : "bg-[#D9E4F0] text-[#12233F]"
                 }`}>
                   {isAdmin ? "Administrador" : "Candidato"}
                 </span>
               </div>
-              <span className="text-[10px] text-slate-400 block mt-0.5">{currentUser.email}</span>
+              <span className="text-[10px] text-stone-400 block mt-0.5">{currentUser.email}</span>
             </div>
           </div>
 
@@ -102,7 +102,7 @@ export default function SelectionScreen({
             {isAdmin && (
               <button
                 onClick={onOpenManage}
-                className="bg-[#1A365D] hover:bg-[#122744] text-white text-xs font-bold px-4 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
+                className="bg-[#12233F] hover:bg-[#0C1A2E] text-white text-xs font-bold px-4 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
               >
                 <Lock className="w-3.5 h-3.5" />
                 <span>Painel Administrativo</span>
@@ -111,7 +111,7 @@ export default function SelectionScreen({
 
             <button
               onClick={onSignOut}
-              className="text-slate-500 hover:text-red-600 text-xs font-bold px-3 py-2 rounded-xl border border-[#CBD5E1] hover:border-red-100 hover:bg-red-50 transition-all cursor-pointer flex items-center gap-1"
+              className="text-stone-500 hover:text-red-600 text-xs font-bold px-3 py-2 rounded-xl border border-[#D8CBB0] hover:border-red-100 hover:bg-red-50 transition-all cursor-pointer flex items-center gap-1"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Sair</span>
@@ -122,14 +122,14 @@ export default function SelectionScreen({
 
       {/* Institutional Header */}
       <div className="text-center mb-10 md:mb-12">
-        <div className="inline-flex items-center justify-center space-x-2 bg-[#E2E8F0] text-[#475569] px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 border border-[#CBD5E1]">
+        <div className="inline-flex items-center justify-center space-x-2 bg-[#E3D9C4] text-[#5C5346] px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 border border-[#D8CBB0]">
           <GraduationCap className="w-4 h-4" />
           <span>Portal de Preparação Oficial</span>
         </div>
-        <h1 className="text-3xl md:text-5xl font-sans font-extrabold tracking-tight text-[#1A365D] mb-4">
+        <h1 className="font-display text-3xl md:text-5xl font-semibold tracking-tight text-[#12233F] mb-4">
           Selecione o Ministério do Concurso
         </h1>
-        <p className="text-sm md:text-base text-[#64748B] max-w-2xl mx-auto leading-relaxed">
+        <p className="text-sm md:text-base text-[#7A7060] max-w-2xl mx-auto leading-relaxed">
           Prepare-se para os concursos públicos de ingresso na Função Pública de Angola. Teste os seus conhecimentos com a nossa simulação de exames oficiais de admissão.
         </p>
       </div>
@@ -147,9 +147,14 @@ export default function SelectionScreen({
       {!isAdmin && currentUser && (
         <div className="max-w-3xl mx-auto mb-10">
           {isPremium ? (
-            <div className="flex items-center justify-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl px-4 py-3 text-xs font-bold">
-              <Sparkles className="w-4 h-4" />
-              <span>Acesso Premium ativo — banco completo de perguntas e simulações ilimitadas.</span>
+            <div className="flex items-center justify-center gap-3 text-[#1F5C3B] px-4 py-3">
+              <div className="stamp text-xs">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Premium</span>
+              </div>
+              <span className="text-xs font-semibold text-[#1F5C3B]">
+                Acesso ativo — banco completo de perguntas e simulações ilimitadas.
+              </span>
             </div>
           ) : (
             <div className="bg-white border border-amber-200 rounded-2xl p-6 shadow-xs">
@@ -159,15 +164,15 @@ export default function SelectionScreen({
                     <Sparkles className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-slate-800 text-sm">Desbloqueie o Acesso Premium</h3>
-                    <p className="text-xs text-slate-500 mt-0.5">
+                    <h3 className="font-bold text-stone-800 text-sm">Desbloqueie o Acesso Premium</h3>
+                    <p className="text-xs text-stone-500 mt-0.5">
                       Neste momento só tem acesso a uma amostra gratuita de perguntas por ministério.
                     </p>
                   </div>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <span className="text-2xl font-extrabold text-[#1A365D]">{PREMIUM_CONFIG.priceLabel}</span>
-                  <p className="text-[10px] text-slate-400 -mt-0.5">pagamento único • acesso vitalício</p>
+                  <span className="text-2xl font-extrabold text-[#12233F]">{PREMIUM_CONFIG.priceLabel}</span>
+                  <p className="text-[10px] text-stone-400 -mt-0.5">pagamento único • acesso vitalício</p>
                 </div>
               </div>
 
@@ -178,7 +183,7 @@ export default function SelectionScreen({
                   "Histórico completo de classificações",
                   "Explicações detalhadas de cada resposta",
                 ].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-xs text-slate-600">
+                  <li key={item} className="flex items-center gap-2 text-xs text-stone-600">
                     <CheckCircle className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
                     <span>{item}</span>
                   </li>
@@ -188,40 +193,40 @@ export default function SelectionScreen({
               {!showPayInfo ? (
                 <button
                   onClick={() => setShowPayInfo(true)}
-                  className="w-full bg-[#1A365D] hover:bg-[#122744] text-white text-xs font-bold py-3 rounded-xl transition-all cursor-pointer"
+                  className="w-full bg-[#12233F] hover:bg-[#0C1A2E] text-white text-xs font-bold py-3 rounded-xl transition-all cursor-pointer"
                 >
                   Ver Instruções de Pagamento
                 </button>
               ) : (
-                <div className="bg-slate-50 border border-[#E2E8F0] rounded-xl p-4 space-y-3">
-                  <p className="text-xs text-slate-600 leading-relaxed">
+                <div className="bg-stone-50 border border-[#E3D9C4] rounded-xl p-4 space-y-3">
+                  <p className="text-xs text-stone-600 leading-relaxed">
                     Efetue o pagamento de <strong>{PREMIUM_CONFIG.priceLabel}</strong> por{" "}
                     <strong>Multicaixa Express</strong> ou transferência bancária, depois envie o comprovativo
                     pelo WhatsApp para ativarmos o seu acesso.
                   </p>
 
-                  <div className="flex items-center justify-between bg-white border border-[#E2E8F0] rounded-lg px-3 py-2">
+                  <div className="flex items-center justify-between bg-white border border-[#E3D9C4] rounded-lg px-3 py-2">
                     <div>
-                      <span className="text-[9px] font-bold text-slate-400 uppercase block">Multicaixa Express</span>
-                      <span className="text-sm font-bold text-slate-800">{PREMIUM_CONFIG.multicaixaExpressNumber}</span>
+                      <span className="text-[9px] font-bold text-stone-400 uppercase block">Multicaixa Express</span>
+                      <span className="text-sm font-bold text-stone-800">{PREMIUM_CONFIG.multicaixaExpressNumber}</span>
                     </div>
                     <button
                       onClick={() => handleCopy(PREMIUM_CONFIG.multicaixaExpressNumber, "mcx")}
-                      className="text-[10px] font-bold text-[#1A365D] flex items-center gap-1 cursor-pointer"
+                      className="text-[10px] font-bold text-[#12233F] flex items-center gap-1 cursor-pointer"
                     >
                       <Copy className="w-3 h-3" /> {copiedField === "mcx" ? "Copiado!" : "Copiar"}
                     </button>
                   </div>
 
-                  <div className="flex items-center justify-between bg-white border border-[#E2E8F0] rounded-lg px-3 py-2">
+                  <div className="flex items-center justify-between bg-white border border-[#E3D9C4] rounded-lg px-3 py-2">
                     <div>
-                      <span className="text-[9px] font-bold text-slate-400 uppercase block">IBAN / Titular</span>
-                      <span className="text-xs font-bold text-slate-800">{PREMIUM_CONFIG.ibanTransferencia}</span>
-                      <span className="text-[10px] text-slate-500 block">{PREMIUM_CONFIG.nomeTitular}</span>
+                      <span className="text-[9px] font-bold text-stone-400 uppercase block">IBAN / Titular</span>
+                      <span className="text-xs font-bold text-stone-800">{PREMIUM_CONFIG.ibanTransferencia}</span>
+                      <span className="text-[10px] text-stone-500 block">{PREMIUM_CONFIG.nomeTitular}</span>
                     </div>
                     <button
                       onClick={() => handleCopy(PREMIUM_CONFIG.ibanTransferencia, "iban")}
-                      className="text-[10px] font-bold text-[#1A365D] flex items-center gap-1 cursor-pointer"
+                      className="text-[10px] font-bold text-[#12233F] flex items-center gap-1 cursor-pointer"
                     >
                       <Copy className="w-3 h-3" /> {copiedField === "iban" ? "Copiado!" : "Copiar"}
                     </button>
@@ -240,7 +245,7 @@ export default function SelectionScreen({
                   <button
                     onClick={handleCheckStatus}
                     disabled={checkingStatus}
-                    className="w-full text-[#1A365D] text-xs font-bold py-2 rounded-xl border border-[#CBD5E1] hover:bg-slate-50 transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="w-full text-[#12233F] text-xs font-bold py-2 rounded-xl border border-[#D8CBB0] hover:bg-stone-50 transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     <RefreshCw className={`w-3.5 h-3.5 ${checkingStatus ? "animate-spin" : ""}`} />
                     {checkingStatus ? "A verificar..." : "Já fui aprovado, verificar acesso"}
@@ -261,24 +266,24 @@ export default function SelectionScreen({
           transition={{ duration: 0.2 }}
           onClick={() => onSelect("MININT")}
           disabled={isLoading}
-          className="group flex flex-col text-left bg-white border border-[#E2E8F0] hover:border-[#1A365D] rounded-xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden cursor-pointer"
+          className="group flex flex-col text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] rounded-xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden cursor-pointer"
         >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-[#1A365D]" />
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-[#12233F]" />
           <div className="flex items-center justify-between mb-6">
-            <div className="p-4 bg-slate-100 text-[#1A365D] rounded-xl group-hover:bg-[#1A365D] group-hover:text-white transition-colors duration-300">
+            <div className="p-4 bg-stone-100 text-[#12233F] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300">
               <Shield className="w-8 h-8" />
             </div>
-            <span className="text-xs font-bold text-[#1A365D] tracking-wider bg-slate-100 px-3 py-1 rounded-full uppercase">
+            <span className="text-xs font-bold text-[#12233F] tracking-wider bg-stone-100 px-3 py-1 rounded-full uppercase">
               MININT
             </span>
           </div>
-          <h2 className="text-xl md:text-2xl font-bold text-[#1A365D] mb-2">
+          <h2 className="font-display text-xl md:text-2xl font-semibold text-[#12233F] mb-2">
             Ministério do Interior
           </h2>
-          <p className="text-sm text-[#64748B] leading-relaxed mb-6 flex-grow">
+          <p className="text-sm text-[#7A7060] leading-relaxed mb-6 flex-grow">
             Exames para a Polícia Nacional, Serviço de Investigação Criminal (SIC), Migração e Estrangeiros (SME) e Proteção Civil. Incide sobre a Constituição da República, Legislação Policial e Deontologia.
           </p>
-          <div className="flex items-center text-sm font-semibold text-[#1A365D] mt-auto">
+          <div className="flex items-center text-sm font-semibold text-[#12233F] mt-auto">
             <span>Iniciar Simulação</span>
             <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
           </div>
@@ -291,24 +296,24 @@ export default function SelectionScreen({
           transition={{ duration: 0.2 }}
           onClick={() => onSelect("MINSA")}
           disabled={isLoading}
-          className="group flex flex-col text-left bg-white border border-[#E2E8F0] hover:border-[#1A365D] rounded-xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden cursor-pointer"
+          className="group flex flex-col text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] rounded-xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden cursor-pointer"
         >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-[#C02424]" />
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-[#A62639]" />
           <div className="flex items-center justify-between mb-6">
-            <div className="p-4 bg-slate-100 text-[#C02424] rounded-xl group-hover:bg-[#1A365D] group-hover:text-white transition-colors duration-300">
+            <div className="p-4 bg-stone-100 text-[#A62639] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300">
               <HeartPulse className="w-8 h-8" />
             </div>
-            <span className="text-xs font-bold text-[#C02424] tracking-wider bg-red-50 px-3 py-1 rounded-full uppercase">
+            <span className="text-xs font-bold text-[#A62639] tracking-wider bg-red-50 px-3 py-1 rounded-full uppercase">
               MINSA
             </span>
           </div>
-          <h2 className="text-xl md:text-2xl font-bold text-[#1A365D] mb-2">
+          <h2 className="font-display text-xl md:text-2xl font-semibold text-[#12233F] mb-2">
             Ministério da Saúde
           </h2>
-          <p className="text-sm text-[#64748B] leading-relaxed mb-6 flex-grow">
+          <p className="text-sm text-[#7A7060] leading-relaxed mb-6 flex-grow">
             Exames para Médicos, Enfermeiros, Técnicos de Diagnóstico e Terapeutas. Incide sobre o Serviço Nacional de Saúde (SNS), Saúde Pública de Angola, Epidemiologia, Ética e Cuidados de Saúde Primários.
           </p>
-          <div className="flex items-center text-sm font-semibold text-[#1A365D] mt-auto">
+          <div className="flex items-center text-sm font-semibold text-[#12233F] mt-auto">
             <span>Iniciar Simulação</span>
             <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
           </div>
@@ -316,28 +321,28 @@ export default function SelectionScreen({
       </div>
 
       {isLoading && (
-        <div className="mt-8 text-center text-gray-500 animate-pulse text-sm">
+        <div className="mt-8 text-center text-stone-500 animate-pulse text-sm">
           A carregar caderno de perguntas oficiais...
         </div>
       )}
 
       {/* Candidate History Section */}
       {!isAdmin && currentUser && (
-        <div className="mt-12 max-w-3xl mx-auto bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs">
-          <h2 className="text-lg font-bold text-[#1A365D] mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
-            <Award className="w-5 h-5 text-slate-500" />
+        <div className="mt-12 max-w-3xl mx-auto bg-white border border-[#E3D9C4] rounded-2xl p-6 shadow-xs">
+          <h2 className="font-display text-lg font-semibold text-[#12233F] mb-4 flex items-center gap-2 border-b border-[#E3D9C4] pb-3">
+            <Award className="w-5 h-5 text-stone-500" />
             As Minhas Simulações Recentes (Base de Dados)
           </h2>
 
           {loadingResults ? (
-            <div className="py-8 text-center text-slate-400 text-xs">
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-slate-500 mx-auto mb-2"></div>
+            <div className="py-8 text-center text-stone-400 text-xs">
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-stone-500 mx-auto mb-2"></div>
               <span>A ler histórico de classificações...</span>
             </div>
           ) : userResults.length === 0 ? (
             <div className="py-10 text-center">
-              <BookOpen className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-              <p className="text-xs text-slate-400 leading-normal">
+              <BookOpen className="w-10 h-10 text-stone-300 mx-auto mb-2" />
+              <p className="text-xs text-stone-400 leading-normal">
                 Ainda não completou nenhuma simulação de concurso. As suas notas aparecerão gravadas permanentemente aqui assim que terminar um exame.
               </p>
             </div>
@@ -348,7 +353,7 @@ export default function SelectionScreen({
                 return (
                   <div
                     key={res.id}
-                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 border border-[#E2E8F0] rounded-xl hover:border-slate-300 transition-colors bg-slate-50/50 gap-3"
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 border border-[#E3D9C4] rounded-xl hover:border-stone-300 transition-colors bg-stone-50/50 gap-3"
                   >
                     <div className="flex items-center gap-3">
                       <div className={`w-9 h-9 rounded-lg flex items-center justify-center font-black text-xs ${
@@ -359,16 +364,16 @@ export default function SelectionScreen({
                       <div>
                         <div className="flex items-center gap-2">
                           <span className={`px-1.5 py-0.5 rounded text-[9px] font-extrabold ${
-                            res.ministerio === "MININT" ? "bg-blue-100 text-[#1A365D]" : "bg-red-100 text-[#C02424]"
+                            res.ministerio === "MININT" ? "bg-[#D9E4F0] text-[#12233F]" : "bg-red-100 text-[#A62639]"
                           }`}>
                             {res.ministerio}
                           </span>
-                          <span className="text-xs text-slate-500 flex items-center gap-1 font-medium">
+                          <span className="text-xs text-stone-500 flex items-center gap-1 font-medium">
                             <Clock className="w-3.5 h-3.5" />
                             {formatTempo(res.tempoGasto)}
                           </span>
                         </div>
-                        <span className="text-[10px] text-slate-400 block mt-1 flex items-center gap-1 font-medium">
+                        <span className="text-[10px] text-stone-400 block mt-1 flex items-center gap-1 font-medium">
                           <Calendar className="w-3.5 h-3.5" />
                           {new Date(res.createdAt).toLocaleDateString("pt-AO", {
                             day: "2-digit",
@@ -407,8 +412,8 @@ export default function SelectionScreen({
       )}
 
       {/* Secondary info / Footer decor */}
-      <div className="mt-16 md:mt-20 text-center border-t border-gray-100 pt-8 max-w-lg mx-auto">
-        <p className="text-xs text-gray-400">
+      <div className="mt-16 md:mt-20 text-center border-t border-stone-100 pt-8 max-w-lg mx-auto">
+        <p className="text-xs text-stone-400">
           República de Angola • Ministério da Administração do Território • Escola de Formação de Quadros
         </p>
       </div>

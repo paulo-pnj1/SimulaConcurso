@@ -251,32 +251,34 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F0F2F5] flex flex-col justify-between text-[#1C1E21]">
+    <div className="min-h-screen bg-[var(--color-paper)] flex flex-col justify-between text-[var(--color-ink)]">
       {/* Top Main Navbar */}
-      <header className="bg-[#1A365D] text-white border-b-4 border-[#C02424] sticky top-0 z-40 shadow-md">
+      <header className="bg-[var(--color-navy)] text-white border-b-2 border-[var(--color-gold)] sticky top-0 z-40 shadow-[0_2px_10px_rgba(12,26,46,0.25)]">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-2.5 cursor-pointer" onClick={handleRestart}>
-            <div className="w-9 h-9 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center text-white shadow-md transition-colors">
-              <GraduationCap className="w-5 h-5 text-white" />
+          <div className="flex items-center space-x-3 cursor-pointer group" onClick={handleRestart}>
+            <div className="w-9 h-9 border border-white/25 rounded-full flex items-center justify-center text-[var(--color-gold)] group-hover:border-[var(--color-gold)] transition-colors">
+              <GraduationCap className="w-4.5 h-4.5" />
             </div>
             <div>
-              <span className="font-extrabold text-sm md:text-base text-white tracking-tight block leading-none">
-                SIMULADOR DE EXAMES ANGOLA
+              <span className="font-display font-semibold text-base md:text-lg text-white tracking-tight block leading-none">
+                Simulador de Exames Angola
               </span>
-              <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest block mt-0.5">
+              <span className="text-[10px] font-semibold text-white/60 uppercase tracking-[0.2em] block mt-1">
                 Função Pública de Angola
               </span>
             </div>
           </div>
 
-          <div className="flex items-center space-x-2.5">
+          <div className="flex items-center space-x-3">
             {/* Angola Colors Ribbon representation */}
             <div className="flex space-x-1">
-              <span className="w-2.5 h-4 bg-red-600 rounded-sm shadow-xs" />
-              <span className="w-2.5 h-4 bg-yellow-500 rounded-sm shadow-xs" />
-              <span className="w-2.5 h-4 bg-black rounded-sm shadow-xs" />
+              <span className="w-2 h-4 bg-[var(--color-red)] rounded-sm" />
+              <span className="w-2 h-4 bg-[var(--color-gold)] rounded-sm" />
+              <span className="w-2 h-4 bg-black rounded-sm" />
             </div>
-            <span className="text-xs font-bold text-slate-200 hidden sm:inline-block">MININT / MINSA</span>
+            <span className="text-xs font-semibold text-white/70 hidden sm:inline-block tracking-wide">
+              MININT / MINSA
+            </span>
           </div>
         </div>
       </header>
@@ -325,13 +327,13 @@ export default function App() {
       </main>
 
       {/* Institutional Footer */}
-      <footer className="bg-white border-t border-gray-150 py-6 text-center text-xs text-gray-400">
+      <footer className="bg-[var(--color-paper-light)] border-t border-[var(--color-line)] py-6 text-center text-xs text-[var(--color-ink-faint)]">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
           <p>© {new Date().getFullYear()} Simulador de Exames Angola. Todos os direitos reservados.</p>
           <div className="flex space-x-4">
-            <span className="hover:text-gray-600 cursor-help transition-colors">Termos de Utilização</span>
+            <span className="hover:text-[var(--color-navy)] cursor-help transition-colors">Termos de Utilização</span>
             <span>•</span>
-            <span className="hover:text-gray-600 cursor-help transition-colors">Política de Privacidade</span>
+            <span className="hover:text-[var(--color-navy)] cursor-help transition-colors">Política de Privacidade</span>
           </div>
         </div>
       </footer>

@@ -1,1 +1,84 @@
 @import "tailwindcss";
+
+@theme {
+  /* Palette — civic paper-and-seal, grounded in the Angolan flag without
+     leaning on its literal red/black/yellow triad everywhere. */
+  --color-paper: #f3ecda;
+  --color-paper-light: #fbf7ee;
+  --color-navy: #12233f;
+  --color-navy-deep: #0c1a2e;
+  --color-navy-soft: #3d6fa3;
+  --color-red: #a62639;
+  --color-red-deep: #7a1e2b;
+  --color-gold: #c89b3c;
+  --color-gold-deep: #96721f;
+  --color-ink: #201c16;
+  --color-ink-muted: #5c5346;
+  --color-ink-faint: #7a7060;
+  --color-line: #e3d9c4;
+
+  --font-display: "Fraunces", "Iowan Old Style", ui-serif, Georgia, serif;
+  --font-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+}
+
+html {
+  font-family: var(--font-sans);
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  /* Faint fibrous paper texture instead of a flat corporate grey field. */
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(32, 28, 22, 0.05) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-navy-deep);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-navy-soft);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Signature element: a rotated wax/rubber-stamp mark used sparingly for
+   official-feeling status — Premium access, Apto/Não Apto, etc. It's the
+   one recurring device that ties the "official exam bureau" concept
+   together instead of a generic gradient badge. */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 2px solid currentColor;
+  border-radius: 9999px;
+  padding: 0.35em 0.9em;
+  transform: rotate(-3deg);
+  position: relative;
+}
+
+.stamp::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid currentColor;
+  border-radius: 9999px;
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
