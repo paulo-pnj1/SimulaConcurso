@@ -42,7 +42,7 @@ export default function PaymentGateScreen({
   };
 
   const whatsappMessage = encodeURIComponent(
-    `Olá! Fiz o pagamento de ${PREMIUM_CONFIG.priceLabel} para ativar o acesso ao Simulador de Exames Angola.\nNome: ${currentUser.name}\nEmail: ${currentUser.email}\nNúmero registado: ${currentUser.telefone || ""}\nEnvio o comprovativo em anexo.`
+    `Olá! Fiz o pagamento de ${PREMIUM_CONFIG.priceLabel} para ativar o acesso ao Simulador de Exames Angola.\nNome: ${currentUser.name}\nNúmero registado: ${currentUser.telefone || ""}\nEnvio o comprovativo em anexo.`
   );
   const whatsappLink = `https://wa.me/${PREMIUM_CONFIG.whatsappAdmin}?text=${whatsappMessage}`;
 
@@ -71,7 +71,7 @@ export default function PaymentGateScreen({
         <div className="flex items-center justify-between mb-8">
           <div>
             <span className="font-bold text-stone-800 text-sm block">{currentUser.name}</span>
-            <span className="text-[10px] text-stone-400">{currentUser.email}</span>
+            <span className="text-[10px] text-stone-400">{currentUser.telefone || currentUser.email}</span>
           </div>
           <button
             onClick={onSignOut}

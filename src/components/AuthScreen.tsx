@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../firebase";
-import { Shield, User, GraduationCap, LogIn, AlertCircle, Phone } from "lucide-react";
+import { Shield, User, GraduationCap, AlertCircle, Phone, Lock, UserCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { UserProfile } from "../types";
 import { isAdminEmail } from "../config/admin";
@@ -11,218 +14,214 @@ interface AuthScreenProps {
   onAuthSuccess: (user: UserProfile) => void;
 }
 
-// Utilizador Google autenticado mas ainda sem número de telemóvel gravado —
-// falta um último passo antes de entrar na aplicação.
-interface PendingPhoneUser {
-  uid: string;
-  name: string;
-  email: string;
-  role: "admin" | "candidate";
+type AccountMode = "candidate" | "admin";
+type CandidateAction = "login" | "register";
+
+// O Firebase Auth exige um "email" internamente. Para o candidato entrar só
+// com o número de telemóvel, transformamos o número num email sintético
+// (nunca mostrado ao candidato) que serve apenas de identificador técnico.
+function telefoneParaEmailInterno(telefone: string): string {
+  const digitos = telefone.replace(/\D/g, "");
+  return `${digitos}@candidatos.simulador-angola.local`;
 }
 
 export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
+  const [accountMode, setAccountMode] = useState<AccountMode>("candidate");
+  const [candidateAction, setCandidateAction] = useState<CandidateAction>("login");
+
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [pendingPhoneUser, setPendingPhoneUser] = useState<PendingPhoneUser | null>(null);
-  const [telefoneInput, setTelefoneInput] = useState("");
 
-  // Helper to handle user document in Firestore
-  const handleUserDocument = async (uid: string, email: string, displayName: string) => {
-    const userRef = doc(db, "users", uid);
-    const userSnap = await getDoc(userRef);
+  // Campos do candidato
+  const [telefone, setTelefone] = useState("");
+  const [nome, setNome] = useState("");
+  const [senha, setSenha] = useState("");
 
-    const role = isAdminEmail(email) ? "admin" : "candidate";
+  // Campos do administrador (conta estática, gerida diretamente no Firebase Auth)
+  const [adminEmail, setAdminEmail] = useState("");
+  const [adminSenha, setAdminSenha] = useState("");
 
-    if (!userSnap.exists()) {
-      // Novo utilizador: ainda não temos o número de telemóvel dele —
-      // pedimos antes de o deixar entrar (é o que o admin usa para
-      // confirmar o pagamento Multicaixa Express).
-      return { needsPhone: true as const, uid, name: displayName || email.split("@")[0], email, role: role as "admin" | "candidate" };
+  const friendlyAuthError = (err: any): string => {
+    switch (err?.code) {
+      case "auth/email-already-in-use":
+        return "Já existe uma conta registada com este número de telemóvel. Tente entrar em vez de registar.";
+      case "auth/weak-password":
+        return "A senha deve ter pelo menos 6 caracteres.";
+      case "auth/invalid-credential":
+      case "auth/wrong-password":
+      case "auth/user-not-found":
+        return "Número/email ou senha incorretos.";
+      case "auth/invalid-email":
+        return "Número de telemóvel inválido.";
+      case "auth/too-many-requests":
+        return "Demasiadas tentativas. Aguarde um pouco antes de tentar novamente.";
+      default:
+        return err?.message || "Ocorreu um erro. Tente novamente.";
     }
-
-    const existingData = userSnap.data();
-    if (!existingData.telefone) {
-      return { needsPhone: true as const, uid, name: existingData.name || displayName || email.split("@")[0], email, role: (existingData.role || role) as "admin" | "candidate" };
-    }
-
-    return {
-      needsPhone: false as const,
-      profile: {
-        uid,
-        name: existingData.name || displayName || email.split("@")[0],
-        email: existingData.email || email,
-        telefone: existingData.telefone,
-        role: existingData.role || role,
-        isPremium: existingData.isPremium === true,
-        premiumActivatedAt: existingData.premiumActivatedAt,
-        paymentStatus: existingData.paymentStatus || "none",
-        pendingSince: existingData.pendingSince,
-      } as UserProfile,
-    };
   };
 
-  const handleGoogleSignIn = async () => {
-    setIsLoading(true);
+  // Registo de um novo candidato: telefone (obrigatório) + senha
+  // (obrigatória) + nome (opcional). Cria a conta no Firebase Auth (usando
+  // um email técnico derivado do telefone) e o respetivo documento em
+  // Firestore, já pronto para o fluxo de ativação Premium manual.
+  const handleCandidateRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
     setError(null);
+
+    const telefoneLimpo = telefone.trim();
+    if (telefoneLimpo.replace(/\D/g, "").length < 9) {
+      setError("Introduza um número de telemóvel válido (com pelo menos 9 dígitos).");
+      return;
+    }
+    if (senha.length < 6) {
+      setError("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
+
+    setIsLoading(true);
     try {
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      if (result.user && result.user.email) {
-        const outcome = await handleUserDocument(
-          result.user.uid,
-          result.user.email,
-          result.user.displayName || ""
-        );
-        if (outcome.needsPhone) {
-          setPendingPhoneUser({ uid: outcome.uid, name: outcome.name, email: outcome.email, role: outcome.role });
-        } else {
-          onAuthSuccess(outcome.profile!);
-        }
-      } else {
-        throw new Error("Não foi possível obter o email da conta Google.");
-      }
+      const emailInterno = telefoneParaEmailInterno(telefoneLimpo);
+      const result = await createUserWithEmailAndPassword(auth, emailInterno, senha);
+
+      const profile: UserProfile = {
+        uid: result.user.uid,
+        name: nome.trim() || "Candidato",
+        email: emailInterno,
+        telefone: telefoneLimpo,
+        role: "candidate",
+        isPremium: false,
+        paymentStatus: "none",
+      };
+
+      await setDoc(doc(db, "users", result.user.uid), {
+        uid: profile.uid,
+        name: profile.name,
+        email: profile.email,
+        telefone: telefoneLimpo,
+        role: "candidate",
+        isPremium: false,
+        paymentStatus: "none",
+        createdAt: serverTimestamp(),
+      });
+
+      onAuthSuccess(profile);
     } catch (err: any) {
-      console.error("Erro no Login Google:", err);
-      if (err.code === "auth/popup-blocked") {
-        setError(
-          "O popup de autenticação foi bloqueado pelo navegador. Por favor, permita popups para este site ou abra a aplicação num novo separador."
-        );
-      } else if (err.code === "auth/iframe-auth-html-error") {
-        setError(
-          "Erro de iframe detetado. Devido às restrições de segurança do iframe do AI Studio, utilize os botões de simulação/teste abaixo para navegar na aplicação."
-        );
-      } else {
-        setError(err.message || "Erro desconhecido ao autenticar com a Google.");
-      }
+      console.error("Erro no registo do candidato:", err);
+      setError(friendlyAuthError(err));
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Safe Demo Logins for previewing and testing inside sandboxed environment
-  const handleDemoLogin = async (role: "admin" | "candidate") => {
+  // Login de um candidato já registado, usando telefone + senha.
+  const handleCandidateLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    const telefoneLimpo = telefone.trim();
+    if (!telefoneLimpo || !senha) {
+      setError("Introduza o número de telemóvel e a senha.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const emailInterno = telefoneParaEmailInterno(telefoneLimpo);
+      const result = await signInWithEmailAndPassword(auth, emailInterno, senha);
+
+      const userSnap = await getDoc(doc(db, "users", result.user.uid));
+      if (!userSnap.exists()) {
+        setError("Não encontrámos os dados desta conta. Contacte o administrador.");
+        return;
+      }
+      const data = userSnap.data();
+      onAuthSuccess({
+        uid: result.user.uid,
+        name: data.name || "Candidato",
+        email: data.email,
+        telefone: data.telefone,
+        role: data.role || "candidate",
+        isPremium: data.isPremium === true,
+        premiumActivatedAt: data.premiumActivatedAt,
+        paymentStatus: data.paymentStatus || "none",
+        pendingSince: data.pendingSince,
+      });
+    } catch (err: any) {
+      console.error("Erro no login do candidato:", err);
+      setError(friendlyAuthError(err));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Login do administrador: conta estática (email + senha) gerida
+  // diretamente no Firebase Authentication. Não há registo público de admin.
+  const handleAdminLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!adminEmail.trim() || !adminSenha) {
+      setError("Introduza o email e a senha do administrador.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const result = await signInWithEmailAndPassword(auth, adminEmail.trim(), adminSenha);
+
+      if (!isAdminEmail(result.user.email)) {
+        setError("Esta conta não tem permissões de administrador.");
+        setIsLoading(false);
+        return;
+      }
+
+      const userSnap = await getDoc(doc(db, "users", result.user.uid));
+      const profile: UserProfile = userSnap.exists()
+        ? {
+            uid: result.user.uid,
+            name: userSnap.data().name || "Administrador",
+            email: result.user.email || adminEmail,
+            role: "admin",
+            isPremium: true,
+            paymentStatus: "none",
+          }
+        : {
+            uid: result.user.uid,
+            name: "Administrador",
+            email: result.user.email || adminEmail,
+            role: "admin",
+            isPremium: true,
+            paymentStatus: "none",
+          };
+
+      onAuthSuccess(profile);
+    } catch (err: any) {
+      console.error("Erro no login do administrador:", err);
+      setError(friendlyAuthError(err));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Acessos rápidos de demonstração (não passam pelo Firebase, só para testar a app)
+  const handleDemoLogin = (role: "admin" | "candidate") => {
     setIsLoading(true);
     setError(null);
-    // Mimic standard profile delay
-    setTimeout(async () => {
+    setTimeout(() => {
       const isCandidate = role === "candidate";
       const demoUser: UserProfile = {
         uid: isCandidate ? "demo-candidate-123" : "demo-admin-456",
         name: isCandidate ? "Candidato de Teste" : "Administrador (Paulo)",
-        email: isCandidate ? "candidato@concurso.ao" : "pnjpaulo175@gmail.com",
+        email: isCandidate ? "923000000@candidatos.simulador-angola.local" : "pnjpaulo175@gmail.com",
         telefone: isCandidate ? "923 000 000" : undefined,
-        role: role,
+        role,
         isPremium: !isCandidate,
         paymentStatus: "none",
       };
       setIsLoading(false);
       onAuthSuccess(demoUser);
-    }, 600);
+    }, 500);
   };
-
-  // Passo final do registo: grava o número de telemóvel do candidato antes
-  // de o deixar entrar. É este número que o admin compara com o número do
-  // ordenante da transferência Multicaixa Express para ativar o acesso.
-  const handleConfirmPhone = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!pendingPhoneUser) return;
-    const telefone = telefoneInput.trim();
-    if (telefone.length < 9) {
-      setError("Introduza um número de telemóvel válido (com pelo menos 9 dígitos).");
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-    try {
-      const userRef = doc(db, "users", pendingPhoneUser.uid);
-      const userSnap = await getDoc(userRef);
-      const profile: UserProfile = {
-        uid: pendingPhoneUser.uid,
-        name: pendingPhoneUser.name,
-        email: pendingPhoneUser.email,
-        telefone,
-        role: pendingPhoneUser.role,
-        isPremium: userSnap.exists() ? userSnap.data().isPremium === true : false,
-        paymentStatus: userSnap.exists() ? userSnap.data().paymentStatus || "none" : "none",
-      };
-
-      await setDoc(
-        userRef,
-        {
-          uid: profile.uid,
-          name: profile.name,
-          email: profile.email,
-          telefone,
-          role: profile.role,
-          isPremium: profile.isPremium,
-          paymentStatus: profile.paymentStatus,
-          createdAt: userSnap.exists() ? userSnap.data().createdAt : serverTimestamp(),
-        },
-        { merge: true }
-      );
-
-      onAuthSuccess(profile);
-    } catch (err: any) {
-      console.error("Erro ao gravar número de telemóvel:", err);
-      setError("Não foi possível gravar o número de telemóvel. Tente novamente.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  if (pendingPhoneUser) {
-    return (
-      <div className="max-w-md mx-auto px-4 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white border border-[#E3D9C4] border-t-4 border-t-[#C89B3C] rounded-2xl p-8 shadow-md"
-        >
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-[#12233F] border-2 border-[#12233F] mb-4">
-              <Phone className="w-8 h-8" />
-            </div>
-            <h2 className="font-display text-2xl font-semibold tracking-tight text-[#12233F]">
-              Falta só um passo, {pendingPhoneUser.name.split(" ")[0]}
-            </h2>
-            <p className="text-xs text-[#7A7060] mt-1.5 leading-relaxed">
-              Introduza o número de telemóvel que vai usar para pagar por Multicaixa Express. É esse número que o
-              administrador vai confirmar para ativar o seu acesso.
-            </p>
-          </div>
-
-          {error && (
-            <div className="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2.5 leading-relaxed">
-              <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-              <span>{error}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleConfirmPhone} className="space-y-4">
-            <div>
-              <label className="text-xs font-bold text-stone-600 block mb-1.5">Número de Telemóvel</label>
-              <input
-                type="tel"
-                value={telefoneInput}
-                onChange={(e) => setTelefoneInput(e.target.value)}
-                placeholder="Ex: 923 000 000"
-                autoFocus
-                className="w-full bg-white border border-[#D8CBB0] rounded-xl px-4 py-3 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-[#12233F] hover:bg-[#0C1A2E] text-white text-sm font-bold py-3 rounded-xl transition-all cursor-pointer disabled:opacity-50"
-            >
-              {isLoading ? "A gravar..." : "Continuar"}
-            </button>
-          </form>
-        </motion.div>
-      </div>
-    );
-  }
 
   return (
     <div className="max-w-md mx-auto px-4 py-12">
@@ -232,92 +231,209 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
         className="bg-white border border-[#E3D9C4] border-t-4 border-t-[#C89B3C] rounded-2xl p-8 shadow-md"
       >
         {/* Header Icon / Branding */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-[#12233F] border-2 border-[#12233F] mb-4">
             <GraduationCap className="w-8 h-8" />
           </div>
           <h2 className="font-display text-2xl font-semibold tracking-tight text-[#12233F]">
             Aceder ao Simulador
           </h2>
-          <p className="text-xs text-[#7A7060] mt-1.5 leading-relaxed">
-            Entre na sua conta para registar as suas classificações, consultar o seu histórico de exames e aceder ao painel administrativo.
-          </p>
+        </div>
+
+        {/* Mode toggle: Candidato / Administrador */}
+        <div className="grid grid-cols-2 gap-2 mb-6 bg-stone-100 p-1 rounded-xl">
+          <button
+            onClick={() => {
+              setAccountMode("candidate");
+              setError(null);
+            }}
+            className={`flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              accountMode === "candidate" ? "bg-white text-[#12233F] shadow-xs" : "text-stone-500"
+            }`}
+          >
+            <User className="w-3.5 h-3.5" />
+            Candidato
+          </button>
+          <button
+            onClick={() => {
+              setAccountMode("admin");
+              setError(null);
+            }}
+            className={`flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              accountMode === "admin" ? "bg-white text-[#A62639] shadow-xs" : "text-stone-500"
+            }`}
+          >
+            <Shield className="w-3.5 h-3.5" />
+            Administrador
+          </button>
         </div>
 
         {error && (
           <div className="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2.5 leading-relaxed">
             <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-            <div>
-              <span className="font-semibold block mb-0.5">Nota de Autenticação</span>
-              {error}
-            </div>
+            <span>{error}</span>
           </div>
         )}
 
-        <div className="space-y-4">
-          {/* Main Google Sign In */}
+        {accountMode === "candidate" ? (
+          <div>
+            {/* Login / Registar sub-toggle */}
+            <div className="flex text-xs font-bold mb-5 border-b border-[#E3D9C4]">
+              <button
+                onClick={() => {
+                  setCandidateAction("login");
+                  setError(null);
+                }}
+                className={`flex-1 pb-2.5 cursor-pointer transition-colors ${
+                  candidateAction === "login"
+                    ? "text-[#12233F] border-b-2 border-[#12233F]"
+                    : "text-stone-400"
+                }`}
+              >
+                Entrar
+              </button>
+              <button
+                onClick={() => {
+                  setCandidateAction("register");
+                  setError(null);
+                }}
+                className={`flex-1 pb-2.5 cursor-pointer transition-colors ${
+                  candidateAction === "register"
+                    ? "text-[#12233F] border-b-2 border-[#12233F]"
+                    : "text-stone-400"
+                }`}
+              >
+                Criar Conta
+              </button>
+            </div>
+
+            <form
+              onSubmit={candidateAction === "login" ? handleCandidateLogin : handleCandidateRegister}
+              className="space-y-4"
+            >
+              <div>
+                <label className="text-xs font-bold text-stone-600 block mb-1.5">Número de Telemóvel</label>
+                <div className="relative">
+                  <Phone className="absolute left-3.5 top-3.5 w-4 h-4 text-stone-400" />
+                  <input
+                    type="tel"
+                    value={telefone}
+                    onChange={(e) => setTelefone(e.target.value)}
+                    placeholder="Ex: 923 000 000"
+                    className="w-full bg-white border border-[#D8CBB0] rounded-xl pl-10 pr-4 py-3 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
+                  />
+                </div>
+              </div>
+
+              {candidateAction === "register" && (
+                <div>
+                  <label className="text-xs font-bold text-stone-600 block mb-1.5">
+                    Nome <span className="text-stone-400 font-normal normal-case">(opcional)</span>
+                  </label>
+                  <div className="relative">
+                    <UserCircle className="absolute left-3.5 top-3.5 w-4 h-4 text-stone-400" />
+                    <input
+                      type="text"
+                      value={nome}
+                      onChange={(e) => setNome(e.target.value)}
+                      placeholder="O seu nome"
+                      className="w-full bg-white border border-[#D8CBB0] rounded-xl pl-10 pr-4 py-3 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <label className="text-xs font-bold text-stone-600 block mb-1.5">Senha</label>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-3.5 w-4 h-4 text-stone-400" />
+                  <input
+                    type="password"
+                    value={senha}
+                    onChange={(e) => setSenha(e.target.value)}
+                    placeholder="••••••"
+                    className="w-full bg-white border border-[#D8CBB0] rounded-xl pl-10 pr-4 py-3 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-[#12233F] hover:bg-[#0C1A2E] text-white text-sm font-bold py-3 rounded-xl transition-all cursor-pointer disabled:opacity-50"
+              >
+                {isLoading
+                  ? "A processar..."
+                  : candidateAction === "login"
+                  ? "Entrar"
+                  : "Criar Conta"}
+              </button>
+            </form>
+          </div>
+        ) : (
+          <form onSubmit={handleAdminLogin} className="space-y-4">
+            <div>
+              <label className="text-xs font-bold text-stone-600 block mb-1.5">Email do Administrador</label>
+              <input
+                type="email"
+                value={adminEmail}
+                onChange={(e) => setAdminEmail(e.target.value)}
+                placeholder="admin@exemplo.com"
+                className="w-full bg-white border border-[#D8CBB0] rounded-xl px-4 py-3 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#A62639]"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-bold text-stone-600 block mb-1.5">Senha</label>
+              <input
+                type="password"
+                value={adminSenha}
+                onChange={(e) => setAdminSenha(e.target.value)}
+                placeholder="••••••"
+                className="w-full bg-white border border-[#D8CBB0] rounded-xl px-4 py-3 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#A62639]"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-[#A62639] hover:bg-[#8A1F2F] text-white text-sm font-bold py-3 rounded-xl transition-all cursor-pointer disabled:opacity-50"
+            >
+              {isLoading ? "A entrar..." : "Entrar como Administrador"}
+            </button>
+          </form>
+        )}
+
+        {/* Quick Demo Access */}
+        <div className="relative my-6 flex items-center justify-center">
+          <span className="absolute inset-x-0 h-px bg-[#E3D9C4]" />
+          <span className="relative bg-white px-3 text-[10px] font-bold text-stone-400 uppercase tracking-widest">
+            Ambiente de Teste
+          </span>
+        </div>
+        <div className="grid grid-cols-2 gap-3.5">
           <button
-            onClick={handleGoogleSignIn}
+            onClick={() => handleDemoLogin("candidate")}
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-3 bg-white hover:bg-stone-50 text-stone-700 font-semibold border border-[#D8CBB0] py-3 px-4 rounded-xl text-sm transition-all shadow-xs cursor-pointer disabled:opacity-50"
+            className="flex flex-col items-center justify-center p-3 border border-[#E3D9C4] hover:border-[#12233F] bg-stone-50 hover:bg-stone-50/50 rounded-xl transition-all cursor-pointer group text-center"
           >
-            <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
-              <path
-                fill="#4285F4"
-                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-              />
-              <path
-                fill="#34A853"
-                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-              />
-              <path
-                fill="#FBBC05"
-                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22-.19-.63z"
-              />
-              <path
-                fill="#EA4335"
-                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
-              />
-            </svg>
-            <span>{isLoading ? "A carregar..." : "Entrar com a Conta Google"}</span>
+            <User className="w-5 h-5 text-stone-500 group-hover:text-[#12233F] mb-1.5" />
+            <span className="text-xs font-bold text-stone-800">Modo Candidato</span>
+            <span className="text-[9px] text-stone-400 mt-0.5">Testar como aluno</span>
           </button>
 
-          {/* Separation line */}
-          <div className="relative my-6 flex items-center justify-center">
-            <span className="absolute inset-x-0 h-px bg-[#E3D9C4]" />
-            <span className="relative bg-white px-3 text-[10px] font-bold text-stone-400 uppercase tracking-widest">
-              Ambiente de Simulação
-            </span>
-          </div>
-
-          {/* Quick Demo Access (Admins & Candidates) */}
-          <div className="grid grid-cols-2 gap-3.5">
-            <button
-              onClick={() => handleDemoLogin("candidate")}
-              disabled={isLoading}
-              className="flex flex-col items-center justify-center p-3 border border-[#E3D9C4] hover:border-[#12233F] bg-stone-50 hover:bg-stone-50/50 rounded-xl transition-all cursor-pointer group text-center"
-            >
-              <User className="w-5 h-5 text-stone-500 group-hover:text-[#12233F] mb-1.5" />
-              <span className="text-xs font-bold text-stone-800">Modo Candidato</span>
-              <span className="text-[9px] text-stone-400 mt-0.5">Testar como aluno</span>
-            </button>
-
-            <button
-              onClick={() => handleDemoLogin("admin")}
-              disabled={isLoading}
-              className="flex flex-col items-center justify-center p-3 border border-[#E3D9C4] hover:border-[#A62639] bg-stone-50 hover:bg-stone-50/50 rounded-xl transition-all cursor-pointer group text-center"
-            >
-              <Shield className="w-5 h-5 text-stone-500 group-hover:text-[#A62639] mb-1.5" />
-              <span className="text-xs font-bold text-stone-800">Modo Admin</span>
-              <span className="text-[9px] text-stone-400 mt-0.5">Gerir perguntas</span>
-            </button>
-          </div>
+          <button
+            onClick={() => handleDemoLogin("admin")}
+            disabled={isLoading}
+            className="flex flex-col items-center justify-center p-3 border border-[#E3D9C4] hover:border-[#A62639] bg-stone-50 hover:bg-stone-50/50 rounded-xl transition-all cursor-pointer group text-center"
+          >
+            <Shield className="w-5 h-5 text-stone-500 group-hover:text-[#A62639] mb-1.5" />
+            <span className="text-xs font-bold text-stone-800">Modo Admin</span>
+            <span className="text-[9px] text-stone-400 mt-0.5">Gerir perguntas</span>
+          </button>
         </div>
 
-        {/* Informative Footer */}
-        <div className="mt-8 pt-4 border-t border-stone-100 text-center">
+        <div className="mt-6 pt-4 border-t border-stone-100 text-center">
           <p className="text-[10px] text-stone-400 leading-normal">
-            As contas de demonstração guardam dados locais ou de simulação para permitir testes ágeis sem necessidade de credenciais.
+            As contas de demonstração guardam dados locais para permitir testes ágeis sem necessidade de credenciais reais.
           </p>
         </div>
       </motion.div>

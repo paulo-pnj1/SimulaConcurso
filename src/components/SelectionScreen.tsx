@@ -66,7 +66,9 @@ export default function SelectionScreen({
                   {isAdmin ? "Administrador" : "Candidato"}
                 </span>
               </div>
-              <span className="text-[10px] text-stone-400 block mt-0.5">{currentUser.email}</span>
+              <span className="text-[10px] text-stone-400 block mt-0.5">
+                {isAdmin ? currentUser.email : currentUser.telefone || currentUser.email}
+              </span>
             </div>
           </div>
 

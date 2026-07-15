@@ -19,6 +19,11 @@ View your app in AI Studio: https://ai.studio/apps/138ed895-78ac-49cf-b117-eb5f8
 
 No `.env` secrets are required — the Firebase client config in `src/firebase-applet-config.json` is public by design, and all privileged logic (grading exams, reading the answer key) runs server-side in Cloud Functions.
 
+### Firebase Console setup (one-time)
+
+- Enable the **Email/Password** sign-in provider in Firebase Console → Authentication → Sign-in method. This is used for both candidate accounts (phone number → internal technical email) and the admin account — there is no Google Sign-In anymore.
+- Create the admin account manually in Firebase Console → Authentication → Users, using the real email set in `src/config/admin.ts` / `functions/src/config.ts` / `firestore.rules`, and a password of your choice. That's the "conta estática" the admin logs in with.
+
 ## Cloud Functions (exam grading)
 
 The correct answers to every question never reach the browser until *after*
@@ -26,8 +31,8 @@ an exam is submitted and graded. This is enforced by two callable Cloud
 Functions in `/functions`:
 
 - `getExamQuestions` — returns the question set for a ministry with
-  `resposta`/`explicacao` stripped out, applying the free-trial limit for
-  non-Premium candidates.
+  `resposta`/`explicacao` stripped out. Only candidates with `isPremium: true`
+  (or the admin) get the questions at all; there is no free-trial subset.
 - `submitExam` — grades the candidate's answers against the real answer key
   (which only this function can see) and writes the result to Firestore.
   The client can no longer write to the `resultados` collection directly.
@@ -55,8 +60,14 @@ to a different Firebase project, update that file first.
   instead.
 - Premium activation is manual (candidate pays via Multicaixa Express/bank
   transfer and sends proof over WhatsApp; the admin then toggles
-  `isPremium` in the dashboard). There's no automated payment verification
-  or audit trail of pending requests yet.
+  `isPremium` in the dashboard, matching the candidate's registered phone
+  number against the payer number on the transfer). There's no automated
+  payment verification yet.
+- Candidates log in with phone number + password (no Google Sign-In). There
+  is currently no "forgot password" flow — if a candidate loses their
+  password, the admin needs to reset it manually from Firebase Console →
+  Authentication → Users, or have them register again with the same phone
+  number after the old account is deleted.
 - `AdminDashboard.tsx` is a large single file (~1160 lines) covering
   question management, candidate/premium management, and results. It works
   and type-checks, but would benefit from being split into smaller
