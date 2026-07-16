@@ -1,12 +1,12 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { requireAuth } from "./_lib/auth";
-import { admin, getDb } from "./_lib/admin";
+import { requireAuth } from "./_lib/auth.js";
+import { admin, getDb } from "./_lib/admin.js";
 import {
   ACCESS_DENIED_MESSAGE,
   ConcursoType,
   hasFullAccess,
   loadFullQuestionBank,
-} from "./_lib/questions";
+} from "./_lib/questions.js";
 
 /**
  * POST /api/submitExam

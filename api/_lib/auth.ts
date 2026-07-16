@@ -1,5 +1,5 @@
 import type { VercelRequest } from "@vercel/node";
-import { getAuthAdmin } from "./admin";
+import { getAuthAdmin } from "./admin.js";
 
 export interface AuthResult {
   uid: string;

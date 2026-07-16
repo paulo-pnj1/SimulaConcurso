@@ -1,6 +1,6 @@
-import { getDb } from "./admin";
+import { getDb } from "./admin.js";
 import baseQuestions from "./data/perguntas.json";
-import { ADMIN_EMAIL } from "./config";
+import { ADMIN_EMAIL } from "./config.js";
 
 export type ConcursoType = "MININT" | "MINSA";
 
