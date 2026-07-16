@@ -1,4 +1,4 @@
-import * as admin from "firebase-admin";
+import admin from "firebase-admin";
 
 /**
  * Shared Firebase Admin bootstrap for Vercel Serverless Functions.
