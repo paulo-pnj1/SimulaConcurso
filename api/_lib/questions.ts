@@ -1,4 +1,4 @@
-import { db } from "./admin";
+import { getDb } from "./admin";
 import baseQuestions from "./data/perguntas.json";
 import { ADMIN_EMAIL } from "./config";
 
@@ -22,6 +22,7 @@ export interface Pergunta {
  * an exam is served or graded.
  */
 export async function loadFullQuestionBank(ministerio: ConcursoType): Promise<Pergunta[]> {
+  const db = getDb();
   const custom = await db.collection("perguntas").where("ministerio", "==", ministerio).get();
   const customQuestions = custom.docs.map((d) => d.data() as Pergunta);
   const base = (baseQuestions as Pergunta[]).filter((q) => q.ministerio === ministerio);
@@ -30,6 +31,7 @@ export async function loadFullQuestionBank(ministerio: ConcursoType): Promise<Pe
 
 export async function hasFullAccess(uid: string, email: string | undefined): Promise<boolean> {
   if (email && email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) return true;
+  const db = getDb();
   const snap = await db.collection("users").doc(uid).get();
   if (!snap.exists) return false;
   const data = snap.data() as { role?: string; isPremium?: boolean };

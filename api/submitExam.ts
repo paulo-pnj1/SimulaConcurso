@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { requireAuth } from "./_lib/auth";
-import { admin, db } from "./_lib/admin";
+import { admin, getDb } from "./_lib/admin";
 import {
   ACCESS_DENIED_MESSAGE,
   ConcursoType,
@@ -46,6 +46,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return;
     }
 
+    const db = getDb();
     const userSnap = await db.collection("users").doc(uid).get();
     const userData = userSnap.exists ? (userSnap.data() as { name?: string }) : undefined;
 

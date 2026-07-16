@@ -1,5 +1,5 @@
 import type { VercelRequest } from "@vercel/node";
-import { authAdmin } from "./admin";
+import { getAuthAdmin } from "./admin";
 
 export interface AuthResult {
   uid: string;
@@ -22,9 +22,12 @@ export async function requireAuth(req: VercelRequest): Promise<AuthResult> {
     throw err;
   }
   try {
-    const decoded = await authAdmin.verifyIdToken(match[1]);
+    const decoded = await getAuthAdmin().verifyIdToken(match[1]);
     return { uid: decoded.uid, email: decoded.email };
-  } catch {
+  } catch (e: any) {
+    // Re-throw credential/config errors as-is (they already carry a useful
+    // message); only mask genuine "bad token" failures.
+    if (e?.message?.includes("Variáveis de ambiente")) throw e;
     const err: any = new Error("Sessão inválida ou expirada.");
     err.status = 401;
     err.code = "unauthenticated";
