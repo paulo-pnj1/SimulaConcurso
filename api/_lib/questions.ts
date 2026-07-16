@@ -1,6 +1,21 @@
 import { getDb } from "./admin.js";
-import baseQuestions from "./data/perguntas.json";
 import { ADMIN_EMAIL } from "./config.js";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+/**
+ * Lê o perguntas.json em runtime via fs em vez de "import ... from '...json'".
+ * Em Node 20.10+/22+ com "type": "module" no package.json, importar JSON
+ * estaticamente exige o atributo `with { type: "json" }`, que o bundler da
+ * Vercel nem sempre preserva/injeta corretamente (causava
+ * ERR_IMPORT_ATTRIBUTE_MISSING em produção). Ler com fs evita essa
+ * dependência do loader ESM e funciona em qualquer versão do Node.
+ */
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const baseQuestions = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "data", "perguntas.json"), "utf-8")
+);
 
 export type ConcursoType = "MININT" | "MINSA";
 
