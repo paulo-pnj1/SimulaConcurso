@@ -1,0 +1,1346 @@
+[
+  {
+    "id": 1,
+    "ministerio": "MININT",
+    "categoria": "Constituição (CRA)",
+    "enunciado": "De acordo com a Constituição da República de Angola (CRA), a quem pertence a soberania do Estado angolano?",
+    "opcoes": [
+      "Ao Presidente da República",
+      "Ao Povo, que a exerce através do sufrágio universal",
+      "À Assembleia Nacional",
+      "Aos Órgãos de Soberania em conjunto"
+    ],
+    "resposta": 1,
+    "explicacao": "O Artigo 3.º da CRA determina que a soberania reside no povo, que a exerce nos termos da Constituição, através do sufrágio universal, livre, igual, direto, secreto e periódico."
+  },
+  {
+    "id": 2,
+    "ministerio": "MININT",
+    "categoria": "Legislação Orgânica",
+    "enunciado": "Qual é o órgão executivo central do MININT encarregue de garantir a segurança, ordem pública e tranquilidade no território nacional?",
+    "opcoes": [
+      "Serviço de Investigação Criminal (SIC)",
+      "Polícia Nacional de Angola (PNA)",
+      "Serviço de Migração e Estrangeiros (SME)",
+      "Serviço de Proteção Civil e Bombeiros (SPFCB)"
+    ],
+    "resposta": 1,
+    "explicacao": "A Polícia Nacional de Angola (PNA) é a força policial militarizada que tem por missão fundamental a manutenção da ordem, segurança e tranquilidade públicas."
+  },
+  {
+    "id": 3,
+    "ministerio": "MININT",
+    "categoria": "Proteção Civil",
+    "enunciado": "Em caso de calamidade pública ou catástrofe natural em Angola, que órgão é diretamente responsável por coordenar as ações de socorro e assistência às populações?",
+    "opcoes": [
+      "As Forças Armadas Angolanas",
+      "O Serviço de Proteção Civil e Bombeiros (SPFCB)",
+      "O Ministério da Administração do Território",
+      "O Governo Provincial local"
+    ],
+    "resposta": 1,
+    "explicacao": "O SPFCB é o órgão do MININT responsável por dirigir e executar as atividades de prevenção e socorro in situações de acidentes graves, catástrofes e calamidades."
+  },
+  {
+    "id": 4,
+    "ministerio": "MININT",
+    "categoria": "História de Angola",
+    "enunciado": "Em que data histórica foi proclamada a Independência Nacional da República de Angola?",
+    "opcoes": [
+      "4 de Fevereiro de 1961",
+      "17 de Setembro de 1922",
+      "11 de Novembro de 1975",
+      "4 de Abril de 2002"
+    ],
+    "resposta": 2,
+    "explicacao": "A Independência de Angola foi proclamada a 11 de Novembro de 1975 pelo Dr. António Agostinho Neto, em Luanda."
+  },
+  {
+    "id": 5,
+    "ministerio": "MININT",
+    "categoria": "Direito Administrativo",
+    "enunciado": "Na hierarquia da Administração Pública em Angola, o Ministério do Interior é classificado como um órgão de que tipo?",
+    "opcoes": [
+      "Órgão Auxiliar do Presidente da República",
+      "Órgão Legislativo Autónomo",
+      "Autarquia Local",
+      "Órgão de Soberania Judicial"
+    ],
+    "resposta": 0,
+    "explicacao": "Os Ministros são auxiliares do Presidente da República no exercício do Poder Executivo, de acordo com a estrutura da administração central do Estado."
+  },
+  {
+    "id": 6,
+    "ministerio": "MININT",
+    "categoria": "História de Angola",
+    "enunciado": "A data de 4 de Abril é celebrada em Angola como feriado nacional devido a que acontecimento?",
+    "opcoes": [
+      "Início da Luta Armada de Libertação Nacional",
+      "Dia da Paz e da Reconciliação Nacional",
+      "Dia do Herói Nacional",
+      "Proclamação da República"
+    ],
+    "resposta": 1,
+    "explicacao": "O dia 4 de Abril assinala a assinatura dos Acordos de Paz em 2002 (Memorando de Entendimento do Luena), pondo fim definitivo ao conflito armado interno."
+  },
+  {
+    "id": 7,
+    "ministerio": "MININT",
+    "categoria": "Legislação Orgânica",
+    "enunciado": "Qual das seguintes atribuições pertence exclusivamente ao Serviço de Migração e Estrangeiros (SME) do MININT?",
+    "opcoes": [
+      "Investigar crimes de colarinho branco",
+      "Controlar a entrada, permanência, saída e trânsito de cidadãos estrangeiros no território nacional",
+      "Prevenir o contrabando de mercadorias nas alfândegas",
+      "Combater incêndios florestais"
+    ],
+    "resposta": 1,
+    "explicacao": "O SME é o órgão de polícia especializada do MININT responsável pela execução das políticas de migração e controlo de fronteiras em Angola."
+  },
+  {
+    "id": 8,
+    "ministerio": "MININT",
+    "categoria": "Constituição (CRA)",
+    "enunciado": "Qual é a idade mínima constitucionalmente exigida para que um cidadão se possa candidatar ao cargo de Presidente da República de Angola?",
+    "opcoes": [
+      "25 anos",
+      "30 anos",
+      "35 anos",
+      "40 anos"
+    ],
+    "resposta": 2,
+    "explicacao": "Segundo o Artigo 110.º da CRA, são elegíveis ao cargo de Presidente da República os cidadãos angolanos de origem, com idade mínima de 35 anos."
+  },
+  {
+    "id": 9,
+    "ministerio": "MININT",
+    "categoria": "Símbolos Nacionais",
+    "enunciado": "O que representam, respetivamente, as cores Vermelha e Preta na Bandeira Nacional de Angola?",
+    "opcoes": [
+      "O sangue vertido pelos angolanos e o continente africano",
+      "A riqueza mineral e as florestas tropicais",
+      "A revolução socialista e as terras agrícolas",
+      "A paz social e a luta contra o colonialismo"
+    ],
+    "resposta": 0,
+    "explicacao": "De acordo com a CRA, o vermelho representa o sangue vertido pelos angolanos durante a opressão colonial, a luta de libertação e a defesa da pátria. O preto representa o continente africano."
+  },
+  {
+    "id": 10,
+    "ministerio": "MININT",
+    "categoria": "Constituição (CRA)",
+    "enunciado": "A República de Angola é constitucionalmente definida como um Estado unitário que respeita na sua organização alguns princípios. Qual dos seguintes princípios NÃO se aplica?",
+    "opcoes": [
+      "A autonomia local",
+      "A descentralização administrativa",
+      "O federalismo regional",
+      "A desconcentração de serviços públicos"
+    ],
+    "resposta": 2,
+    "explicacao": "Angola é um Estado unitário (Artigo 8.º da CRA). O federalismo não é adotado no ordenamento jurídico angolano."
+  },
+  {
+    "id": 11,
+    "ministerio": "MININT",
+    "categoria": "Direito Penal",
+    "enunciado": "No âmbito das competências do Serviço de Investigação Criminal (SIC), qual destas ações constitui uma fase inicial do processo penal?",
+    "opcoes": [
+      "O julgamento em tribunal",
+      "A instrução preparatória e investigação de crimes",
+      "A aplicação de penas de prisão definitivas",
+      "A amnistia de reclusos"
+    ],
+    "resposta": 1,
+    "explicacao": "O SIC atua na fase de instrução preparatória dos processos penais, sob a direção e coordenação do Ministério Público."
+  },
+  {
+    "id": 12,
+    "ministerio": "MININT",
+    "categoria": "Constituição (CRA)",
+    "enunciado": "Qual dos seguintes direitos é classificado pela CRA como um direito fundamental inviolável e que não pode ser suspenso mesmo em estado de sítio?",
+    "opcoes": [
+      "O direito à greve",
+      "O direito à vida e à integridade pessoal",
+      "A liberdade de reunião e manifestação",
+      "O direito à livre circulação de pessoas"
+    ],
+    "resposta": 1,
+    "explicacao": "De acordo com o Artigo 30.º da CRA, o direito à vida é inviolável. A integridade física e mental das pessoas é protegida e nenhum cidadão pode ser privado destes direitos."
+  },
+  {
+    "id": 13,
+    "ministerio": "MININT",
+    "categoria": "Segurança Nacional",
+    "enunciado": "Quem assume constitucionalmente a liderança e comando supremo das Forças Armadas e dos órgãos de segurança do Estado em Angola?",
+    "opcoes": [
+      "O Ministro da Defesa",
+      "O Chefe do Estado-Maior General das FAA",
+      "O Presidente da República",
+      "O Presidente da Assembleia Nacional"
+    ],
+    "resposta": 2,
+    "explicacao": "De acordo com as competências constitucionais, o Presidente da República é o Comandante-em-Chefe das Forças Armadas Angolanas e dos órgãos de segurança e ordem pública."
+  },
+  {
+    "id": 14,
+    "ministerio": "MININT",
+    "categoria": "Símbolos Nacionais",
+    "enunciado": "No brasão (insígnia) da República de Angola, a secção central é composta por três elementos principais cruzados. Quais são?",
+    "opcoes": [
+      "Uma lança, um escudo e um arco",
+      "Uma catana, uma enxada e um livro aberto",
+      "Uma espiga de milho, uma roda dentada e uma caneta",
+      "Um martelo, uma foice e uma estrela"
+    ],
+    "resposta": 1,
+    "explicacao": "A insígnia oficial de Angola exibe uma catana e uma enxada (representando a agricultura e o trabalho) sobrepostas a um livro aberto (símbolo da educação e cultura)."
+  },
+  {
+    "id": 15,
+    "ministerio": "MININT",
+    "categoria": "História de Angola",
+    "enunciado": "Que importante acordo de paz assinado em 1991 pretendia pôr fim à primeira fase da guerra civil angolana e conduzir o país às primeiras eleições multipartidárias?",
+    "opcoes": [
+      "Acordo de Alvor",
+      "Acordos de Bicesse",
+      "Protocolo de Lusaka",
+      "Memorando do Luena"
+    ],
+    "resposta": 1,
+    "explicacao": "Os Acordos de Bicesse foram assinados em Portugal a 31 de Maio de 1991, permitindo a transição para o multipartidarismo e as eleições de 1992."
+  },
+  {
+    "id": 16,
+    "ministerio": "MININT",
+    "categoria": "Legislação Orgânica",
+    "enunciado": "Qual é a tutela administrativa direta sob a qual opera o Serviço Prisional em Angola?",
+    "opcoes": [
+      "Ministério da Justiça e dos Direitos Humanos",
+      "Ministério do Interior (MININT)",
+      "Procuradoria Geral da República (PGR)",
+      "Conselho Superior da Magistratura Judicial"
+    ],
+    "resposta": 1,
+    "explicacao": "O Serviço Prisional é um órgão executivo central do Ministério do Interior (MININT), responsável pela custódia, reabilitação e reinserção social de reclusos."
+  },
+  {
+    "id": 17,
+    "ministerio": "MININT",
+    "categoria": "Direito Internacional",
+    "enunciado": "A qual das seguintes organizações internacionais de segurança e cooperação policial regional Angola está diretamente filiada?",
+    "opcoes": [
+      "SARPCCO (Organização de Cooperação dos Chefes de Polícia da África Austral)",
+      "OTAN (Organização do Tratado do Atlântico Norte)",
+      "Europol",
+      "ASEANpol"
+    ],
+    "resposta": 0,
+    "explicacao": "Angola integra ativamente a SARPCCO, o principal organismo de cooperação policial e combate ao crime transfronteiriço na região da SADC."
+  },
+  {
+    "id": 18,
+    "ministerio": "MININT",
+    "categoria": "Constituição (CRA)",
+    "enunciado": "Em Angola, as leis e resoluções aprovadas pela Assembleia Nacional só entram em vigor após que ato institucional do Presidente da República?",
+    "opcoes": [
+      "Aprovação em referendo",
+      "Promulgação e publicação em Diário da República",
+      "Visto prévio do Tribunal de Contas",
+      "Apresentação ao Tribunal Constitucional"
+    ],
+    "resposta": 1,
+    "explicacao": "Nenhum diploma legal entra em vigor sem que seja promulgado pelo Presidente da República e publicado na folha oficial do Estado (Diário da República)."
+  },
+  {
+    "id": 19,
+    "ministerio": "MININT",
+    "categoria": "Proteção Civil",
+    "enunciado": "No âmbito do sistema nacional de Proteção Civil em Angola, qual das seguintes cores é internacionalmente associada ao aviso de perigo e necessidade de evacuação imediata?",
+    "opcoes": [
+      "Amarelo",
+      "Azul",
+      "Vermelho",
+      "Verde"
+    ],
+    "resposta": 2,
+    "explicacao": "O alerta Vermelho indica uma situação de perigo extremo, iminente, exigindo medidas imediatas de autoproteção ou evacuação de zonas de risco."
+  },
+  {
+    "id": 20,
+    "ministerio": "MININT",
+    "categoria": "História de Angola",
+    "enunciado": "Quem foi o primeiro Presidente da República de Angola, governando de 1975 até à sua morte em 1979?",
+    "opcoes": [
+      "Dr. Jonas Savimbi",
+      "Dr. António Agostinho Neto",
+      "Eng.º José Eduardo dos Santos",
+      "Holden Roberto"
+    ],
+    "resposta": 1,
+    "explicacao": "O Dr. António Agostinho Neto, líder do MPLA e proclamador da independência, foi o primeiro Presidente de Angola, sendo também reconhecido como o Fundador da Nação."
+  },
+  {
+    "id": 21,
+    "ministerio": "MINSA",
+    "categoria": "Ética e Deontologia",
+    "enunciado": "De acordo com os princípios deontológicos dos profissionais de saúde, o dever de guardar segredo profissional sobre informações do paciente aplica-se em que circunstâncias?",
+    "opcoes": [
+      "Apenas enquanto o paciente estiver internado no hospital",
+      "Sempre, mesmo após a morte do paciente, salvo exceções previstas por lei",
+      "Apenas se o paciente solicitar expressamente por escrito",
+      "Apenas em hospitais privados"
+    ],
+    "resposta": 1,
+    "explicacao": "O segredo profissional na saúde é um direito do doente e um dever ético absoluto do profissional, sobrevivendo mesmo após a morte do paciente, exceto por ordem judicial ou imperativo de saúde pública."
+  },
+  {
+    "id": 22,
+    "ministerio": "MINSA",
+    "categoria": "Saúde Pública",
+    "enunciado": "Qual é a principal via de transmissão da Malária, a doença que constitui a principal causa de morbilidade e mortalidade em Angola?",
+    "opcoes": [
+      "Consumo de água contaminada",
+      "Inalação de gotículas respiratórias de uma pessoa infetada",
+      "Picada da fêmea do mosquito do género Anopheles infetada",
+      "Contacto direto com sangue de animais infetados"
+    ],
+    "resposta": 2,
+    "explicacao": "A malária (paludismo) é transmitida pela picada do mosquito fêmea Anopheles, que injeta o parasita do género Plasmodium na corrente sanguínea humana."
+  },
+  {
+    "id": 23,
+    "ministerio": "MINSA",
+    "categoria": "Função Pública",
+    "enunciado": "Na função pública angolana, qual é o período máximo legal de duração do período probatório para um funcionário recém-admitido?",
+    "opcoes": [
+      "6 meses",
+      "1 ano",
+      "2 anos",
+      "5 anos"
+    ],
+    "resposta": 1,
+    "explicacao": "Segundo a legislação que rege a Função Pública em Angola, o período probatório (de estágio) tem a duração de 1 ano, servindo para avaliar a aptidão e comportamento do funcionário."
+  },
+  {
+    "id": 24,
+    "ministerio": "MINSA",
+    "categoria": "Legislação de Saúde",
+    "enunciado": "Como se designa o conjunto de regras e procedimentos que visa evitar a contaminação, proteger os profissionais de saúde e garantir a segurança biológica nos hospitais?",
+    "opcoes": [
+      "Deontologia Médica",
+      "Biossegurança",
+      "Saneamento Ambiental",
+      "Profilaxia Química"
+    ],
+    "resposta": 1,
+    "explicacao": "A Biossegurança estuda e implementa medidas e normas para eliminar ou minimizar riscos de agentes biológicos nocivos para os profissionais, doentes e meio ambiente."
+  },
+  {
+    "id": 25,
+    "ministerio": "MINSA",
+    "categoria": "Saúde Pública",
+    "enunciado": "Qual das seguintes vacinas faz parte do Calendário Nacional de Vacinação em Angola (Programa Alargado de Vacinação - PAV) para recém-nascidos logo nas primeiras horas de vida?",
+    "opcoes": [
+      "Vacina contra a Raiva",
+      "BCG (contra a Tuberculose) e Pólio Oral",
+      "Vacina contra a Febre Amarela",
+      "Vacina contra o Tétano apenas"
+    ],
+    "resposta": 1,
+    "explicacao": "A vacina BCG (Bacilo Calmette-Guérin), que protege contra formas graves de Tuberculose, e a primeira dose da Pólio Oral são dadas ao recém-nascido logo após o nascimento."
+  },
+  {
+    "id": 26,
+    "ministerio": "MINSA",
+    "categoria": "Saúde Pública",
+    "enunciado": "Qual é o principal reservatório de transmissão da Raiva humana em Angola?",
+    "opcoes": [
+      "O mosquito transmissor",
+      "O cão doméstico ou vadio infetado",
+      "Aves migratórias de capoeira",
+      "Ratos e roedores urbanos"
+    ],
+    "resposta": 1,
+    "explicacao": "Em termos epidemiológicos, a raiva urbana em Angola é transmitida maioritariamente pela mordedura, arranhadura ou lambedura de cães infetados com o vírus rábico."
+  },
+  {
+    "id": 27,
+    "ministerio": "MINSA",
+    "categoria": "Biossegurança",
+    "enunciado": "Em ambiente hospitalar, em que balde/recipiente de lixo devem ser colocados os materiais perfurocortantes (como agulhas e lâminas de bisturi)?",
+    "opcoes": [
+      "No lixo comum (saco preto)",
+      "Num recipiente rígido, amarelo e resistente a perfurações",
+      "No balde de resíduos orgânicos biodegradáveis",
+      "Em qualquer caixa de cartão aberta"
+    ],
+    "resposta": 1,
+    "explicacao": "Para evitar acidentes de trabalho com contágio biológico (ex: HIV, Hepatite), todos os materiais cortantes ou perfurantes devem ser depositados em caixas rígidas específicas (geralmente amarelas) destinadas a resíduos perigosos."
+  },
+  {
+    "id": 28,
+    "ministerio": "MINSA",
+    "categoria": "Ética e Deontologia",
+    "enunciado": "O princípio da 'Não-Maleficência' na prestação de cuidados de saúde significa:",
+    "opcoes": [
+      "Fazer sempre o bem ao paciente, independentemente do custo",
+      "Não causar danos ou prejuízos intencionais ao paciente ('primeiro, não causar dano')",
+      "Garantir tratamento gratuito para toda a população de forma igualitária",
+      "Respeitar o direito de o doente decidir sobre o seu próprio corpo"
+    ],
+    "resposta": 1,
+    "explicacao": "A Não-Maleficência, baseada no preceito hipocrático primum non nocere, obriga o profissional a abster-se de praticar atos que possam prejudicar deliberadamente o doente."
+  },
+  {
+    "id": 29,
+    "ministerio": "MINSA",
+    "categoria": "Saúde Pública",
+    "enunciado": "Qual dos seguintes métodos é considerado o mais eficaz e de menor custo para a prevenção de infeções cruzadas nas unidades de saúde?",
+    "opcoes": [
+      "A higienização correta e frequente das mãos",
+      "O uso constante de antibióticos preventivos pelos médicos",
+      "A dedetização diária das salas de espera",
+      "O uso de duas máscaras cirúrgicas em simultâneo"
+    ],
+    "resposta": 0,
+    "explicacao": "A lavagem e desinfeção das mãos com água e sabão ou álcool em gel é reconhecida pela Organização Mundial da Saúde (OMS) como a medida mais simples e barata para conter a propagação de patógenos em hospitais."
+  },
+  {
+    "id": 30,
+    "ministerio": "MINSA",
+    "categoria": "Função Pública",
+    "enunciado": "De acordo com a Lei Geral do Trabalho (LGT) em vigor em Angola, qual é o limite máximo padrão de horas de trabalho semanal?",
+    "opcoes": [
+      "35 horas",
+      "40 horas",
+      "44 horas",
+      "48 horas"
+    ],
+    "resposta": 2,
+    "explicacao": "A LGT de Angola estabelece a duração normal de trabalho em 44 horas semanais, embora regimes excecionais na Função Pública ou escalas hospitalares possam variar."
+  },
+  {
+    "id": 31,
+    "ministerio": "MINSA",
+    "categoria": "Saúde Pública",
+    "enunciado": "A Tuberculose é uma infecção bacteriana crónica que afeta principalmente os pulmões. Qual é o agente etiológico desta patologia?",
+    "opcoes": [
+      "Plasmodium falciparum",
+      "Mycobacterium tuberculosis",
+      "Vibrio cholerae",
+      "Bacillus anthracis"
+    ],
+    "resposta": 1,
+    "explicacao": "A Tuberculose pulmonar é causada pelo Mycobacterium tuberculosis (também chamado de Bacilo de Koch)."
+  },
+  {
+    "id": 32,
+    "ministerio": "MINSA",
+    "categoria": "Administração de Medicamentos",
+    "enunciado": "Qual das seguintes vias de administração de fármacos apresenta uma biodisponibilidade de 100% imediata por contornar totalmente o efeito de primeira passagem hepática?",
+    "opcoes": [
+      "Via Oral (Entérica)",
+      "Via Sublingual",
+      "Via Endovenosa (Intravenosa)",
+      "Via Transdérmica"
+    ],
+    "resposta": 2,
+    "explicacao": "A via endovenosa introduz o fármaco diretamente na circulação sistémica, garantindo absorção e biodisponibilidade imediatas e completas (100%)."
+  },
+  {
+    "id": 33,
+    "ministerio": "MINSA",
+    "categoria": "Doenças Endémicas",
+    "enunciado": "A doença do sono (Tripanossomíase Humana Africana), endémica em algumas regiões agrícolas do norte de Angola, é transmitida através de que vetor?",
+    "opcoes": [
+      "Mosca Tsé-Tsé (Glossina)",
+      "Carraça Estrela",
+      "Pulga da peste",
+      "Mosquito Culex"
+    ],
+    "resposta": 0,
+    "explicacao": "A Tripanossomíase Humana Africana é provocada por parasitas do género Trypanosoma, transmitidos ao homem pela picada da mosca Tsé-Tsé."
+  },
+  {
+    "id": 34,
+    "ministerio": "MINSA",
+    "categoria": "Biossegurança",
+    "enunciado": "Ao realizar um procedimento invasivo com alta probabilidade de salpicos de sangue ou fluidos corporais, qual deve ser a ordem recomendada para a colocação de EPIs?",
+    "opcoes": [
+      "Luvas primeiro, depois máscara e por fim bata",
+      "Avental/bata, máscara protetora, óculos e luvas",
+      "Apenas luvas são necessárias",
+      "Máscara, luvas, óculos e sapatos protetores"
+    ],
+    "resposta": 1,
+    "explicacao": "A ordem correta de colocação de EPIs visa garantir a máxima assepsia: primeiro a bata, depois a proteção respiratória (máscara), a proteção ocular e, por fim, as luvas estéreis cobrindo o punho da bata."
+  },
+  {
+    "id": 35,
+    "ministerio": "MINSA",
+    "categoria": "Legislação de Saúde",
+    "enunciado": "O que preconiza a Lei de Bases do Serviço Nacional de Saúde em Angola sobre o acesso dos cidadãos aos cuidados primários de saúde?",
+    "opcoes": [
+      "Devem ser prestados apenas a quem possuir seguro de saúde privado",
+      "O acesso deve ser universal e tendencialmente gratuito no setor público",
+      "O Estado apenas financia tratamentos em clínicas privadas",
+      "Os hospitais públicos podem recusar pacientes por falta de documentos"
+    ],
+    "resposta": 1,
+    "explicacao": "O SNS angolano baseia-se nos princípios da universalidade e gratuitidade progressiva dos cuidados essenciais, visando garantir a equidade na saúde."
+  },
+  {
+    "id": 36,
+    "ministerio": "MINSA",
+    "categoria": "Ética e Deontologia",
+    "enunciado": "A autonomia do paciente, enquanto princípio bioético fundamental, traduz-se em ambiente clínico através de qual destes instrumentos práticos?",
+    "opcoes": [
+      "A receita médica eletrónica",
+      "O termo de Consentimento Informado, Livre e Esclarecido",
+      "A ficha de alta médica hospitalar",
+      "O registo de admissão de urgência"
+    ],
+    "resposta": 1,
+    "explicacao": "O Consentimento Informado garante que o doente recebeu toda a informação sobre os riscos e benefícios de um procedimento e aceitou-o de livre vontade, no exercício da sua autonomia."
+  },
+  {
+    "id": 37,
+    "ministerio": "MINSA",
+    "categoria": "Nutrição e Saúde Pública",
+    "enunciado": "Em termos de saúde materno-infantil em Angola, qual é a recomendação oficial do MINSA e da OMS sobre o aleitamento materno exclusivo?",
+    "opcoes": [
+      "Até aos 3 meses de vida",
+      "Até aos 6 meses de vida, sem necessidade de outros líquidos ou alimentos",
+      "Apenas no primeiro mês de vida",
+      "Sempre misturado com fórmulas lácteas industriais"
+    ],
+    "resposta": 1,
+    "explicacao": "O leite materno exclusivo deve ser promovido até aos 6 meses de vida do bebé, por fornecer todos os nutrientes e anticorpos cruciais para o desenvolvimento inicial."
+  },
+  {
+    "id": 38,
+    "ministerio": "MINSA",
+    "categoria": "Saúde Pública",
+    "enunciado": "Qual destas patologias de transmissão hídrica tem maior risco de propagação epidémica rápida após inundações urbanas ou roturas no sistema de esgotos?",
+    "opcoes": [
+      "Tétano neonatal",
+      "Cólera",
+      "Tuberculose ganglionar",
+      "Sarampo"
+    ],
+    "resposta": 1,
+    "explicacao": "A cólera propaga-se de forma explosiva em cenários de saneamento deficiente e misturas de águas residuais com fontes de água potável."
+  },
+  {
+    "id": 39,
+    "ministerio": "MINSA",
+    "categoria": "Primeiros Socorros",
+    "enunciado": "Durante o Suporte Básico de Vida (SBV) num adulto em paragem cardiorrespiratória, qual é o rácio correto recomendado de compressões torácicas para insuflações (respirações de resgate)?",
+    "opcoes": [
+      "15 compressões para 2 insuflações",
+      "30 compressões para 2 insuflações",
+      "5 compressões para 1 insuflação",
+      "50 compressões para 5 insuflações"
+    ],
+    "resposta": 1,
+    "explicacao": "As diretrizes internacionais de reanimação estabelecem a relação de 30 compressões torácicas alternadas com 2 insuflações artificiais para otimizar a perfusão coronária e cerebral."
+  },
+  {
+    "id": 40,
+    "ministerio": "MINSA",
+    "categoria": "Função Pública",
+    "enunciado": "Constitui um dever fundamental do funcionário público angolano previsto no Estatuto da Função Pública:",
+    "opcoes": [
+      "O dever de obediência aos superiores hierárquicos, salvo se a ordem implicar a prática de um crime",
+      "O dever de sigilo apenas sobre dados financeiros",
+      "O direito de ausentar-se do serviço sem aviso prévio caso as tarefas estejam em dia",
+      "Garantir atendimento preferencial a familiares e conhecidos"
+    ],
+    "resposta": 0,
+    "explicacao": "O dever de obediência exige que o funcionário cumpra as instruções dos seus superiores, cessando esse dever apenas se a ordem configurar uma óbvia ilegalidade criminal."
+  },
+  {
+    "id": 41,
+    "ministerio": "MININT",
+    "categoria": "Constituição (CRA)",
+    "enunciado": "Angola é, segundo a Constituição da República de Angola (CRA), um Estado democrático de direito organizado sob que forma?",
+    "opcoes": [
+      "Estado federal",
+      "Estado unitário",
+      "Confederação de províncias",
+      "Estado regional autónomo"
+    ],
+    "resposta": 1,
+    "explicacao": "O Artigo 2.º da CRA estabelece que Angola é um Estado democrático de direito, unitário, no qual são respeitados a dignidade da pessoa humana e o pluralismo de expressão e de organização política."
+  },
+  {
+    "id": 42,
+    "ministerio": "MININT",
+    "categoria": "Constituição (CRA)",
+    "enunciado": "Qual é a capital da República de Angola, nos termos da Constituição?",
+    "opcoes": [
+      "Benguela",
+      "Huambo",
+      "Luanda",
+      "Lubango"
+    ],
+    "resposta": 2,
+    "explicacao": "A Constituição estabelece Luanda como capital da República de Angola."
+  },
+  {
+    "id": 43,
+    "ministerio": "MININT",
+    "categoria": "Constituição (CRA)",
+    "enunciado": "Quem é o Comandante-em-Chefe das Forças Armadas Angolanas?",
+    "opcoes": [
+      "O Ministro da Defesa Nacional",
+      "O Chefe do Estado-Maior General",
+      "O Presidente da República",
+      "O Presidente da Assembleia Nacional"
+    ],
+    "resposta": 2,
+    "explicacao": "O Presidente da República acumula as funções de Chefe de Estado, Chefe do Executivo e Comandante-em-Chefe das Forças Armadas Angolanas."
+  },
+  {
+    "id": 44,
+    "ministerio": "MININT",
+    "categoria": "Constituição (CRA)",
+    "enunciado": "Segundo a CRA, qual é a língua oficial da República de Angola?",
+    "opcoes": [
+      "O inglês",
+      "O francês",
+      "O português",
+      "O quimbundo"
+    ],
+    "resposta": 2,
+    "explicacao": "O português é a língua oficial de Angola, sem prejuízo do papel das línguas nacionais de origem africana como património cultural."
+  },
+  {
+    "id": 45,
+    "ministerio": "MININT",
+    "categoria": "Constituição (CRA)",
+    "enunciado": "Quantos são, no mínimo, os órgãos de soberania previstos na Constituição da República de Angola?",
+    "opcoes": [
+      "Dois",
+      "Três",
+      "Quatro",
+      "Cinco"
+    ],
+    "resposta": 2,
+    "explicacao": "São órgãos de soberania o Presidente da República, a Assembleia Nacional e os Tribunais (o Ministério Público é também referido como órgão com funções próprias, mas os três clássicos são estes)."
+  },
+  {
+    "id": 46,
+    "ministerio": "MININT",
+    "categoria": "Legislação Orgânica",
+    "enunciado": "Qual destes órgãos NÃO integra a estrutura orgânica do Ministério do Interior de Angola?",
+    "opcoes": [
+      "Polícia Nacional (PN)",
+      "Serviço de Migração e Estrangeiros (SME)",
+      "Serviço de Investigação Criminal (SIC)",
+      "Serviço de Informações Militares (SIM)"
+    ],
+    "resposta": 3,
+    "explicacao": "O SIM pertence à área da Defesa Nacional. Os órgãos executivos diretos do MININT são a PN, o SIC, o SME, o Serviço Penitenciário (SP) e o Serviço de Protecção Civil e Bombeiros (SPCB)."
+  },
+  {
+    "id": 47,
+    "ministerio": "MININT",
+    "categoria": "Legislação Orgânica",
+    "enunciado": "Qual é a natureza jurídica da Polícia Nacional de Angola (PNA)?",
+    "opcoes": [
+      "Uma força militarizada, uniformizada e armada, de segurança pública",
+      "Uma organização não-governamental de voluntários",
+      "Um corpo civil sem poderes de autoridade",
+      "Uma milícia partidária"
+    ],
+    "resposta": 0,
+    "explicacao": "A PNA é uma força militarizada, uniformizada e armada, com natureza de força de segurança pública, dotada de autonomia operacional, administrativa, financeira e patrimonial."
+  },
+  {
+    "id": 48,
+    "ministerio": "MININT",
+    "categoria": "Legislação Orgânica",
+    "enunciado": "Qual órgão do MININT é responsável pela gestão dos estabelecimentos prisionais em Angola?",
+    "opcoes": [
+      "O Serviço de Investigação Criminal (SIC)",
+      "O Serviço Penitenciário (SP)",
+      "A Polícia Nacional (PN)",
+      "O Serviço de Migração e Estrangeiros (SME)"
+    ],
+    "resposta": 1,
+    "explicacao": "O Serviço Penitenciário (SP) é o órgão executivo direto do MININT responsável pela administração, segurança e reinserção social nos estabelecimentos prisionais."
+  },
+  {
+    "id": 49,
+    "ministerio": "MININT",
+    "categoria": "Legislação Orgânica",
+    "enunciado": "A quem cabe controlar a entrada, permanência e saída de cidadãos estrangeiros do território nacional angolano?",
+    "opcoes": [
+      "Ao Serviço de Migração e Estrangeiros (SME)",
+      "Ao Serviço Penitenciário (SP)",
+      "Ao Serviço de Protecção Civil e Bombeiros (SPCB)",
+      "À Polícia Nacional, exclusivamente"
+    ],
+    "resposta": 0,
+    "explicacao": "O Serviço de Migração e Estrangeiros (SME) é o órgão do MININT vocacionado para o controlo migratório e a gestão da situação de estrangeiros em Angola."
+  },
+  {
+    "id": 50,
+    "ministerio": "MININT",
+    "categoria": "Proteção Civil",
+    "enunciado": "Atualmente, qual é o número de telefone unificado de emergência em Angola, gerido pelo Centro Integrado de Segurança Pública (CISP)?",
+    "opcoes": [
+      "911",
+      "112",
+      "111",
+      "190"
+    ],
+    "resposta": 2,
+    "explicacao": "Desde a reforma dos terminais de emergência, o 111 passou a ser o contacto único recomendado para emergências policiais, de incêndio ou médicas, substituindo progressivamente os antigos números 113 e 115."
+  },
+  {
+    "id": 51,
+    "ministerio": "MININT",
+    "categoria": "Proteção Civil",
+    "enunciado": "Qual órgão do MININT tem por missão o combate a incêndios e o socorro em situações de calamidade pública?",
+    "opcoes": [
+      "O Serviço de Protecção Civil e Bombeiros (SPCB)",
+      "O Serviço de Investigação Criminal (SIC)",
+      "O Serviço de Migração e Estrangeiros (SME)",
+      "A Direção Nacional de Trânsito"
+    ],
+    "resposta": 0,
+    "explicacao": "O Serviço de Protecção Civil e Bombeiros (SPCB) é o órgão executivo direto do MININT vocacionado para a prevenção e socorro em incêndios, acidentes e catástrofes naturais."
+  },
+  {
+    "id": 52,
+    "ministerio": "MININT",
+    "categoria": "Proteção Civil",
+    "enunciado": "Em caso de sismo, qual é a atitude mais recomendada a adotar imediatamente por um cidadão que se encontre dentro de um edifício?",
+    "opcoes": [
+      "Correr para a rua o mais rápido possível pelas escadas",
+      "Proteger a cabeça e abrigar-se junto a uma estrutura sólida, afastado de janelas",
+      "Utilizar o elevador para descer rapidamente",
+      "Permanecer junto a janelas para observar a situação"
+    ],
+    "resposta": 1,
+    "explicacao": "Durante um sismo recomenda-se abrigar-se junto a estruturas sólidas (ex: sob uma mesa firme), proteger a cabeça e afastar-se de janelas e objetos que possam cair; usar as escadas e não o elevador, apenas depois do tremor parar."
+  },
+  {
+    "id": 53,
+    "ministerio": "MININT",
+    "categoria": "Direito Penal",
+    "enunciado": "Em Direito Penal, como se designa o princípio segundo o qual não há crime nem pena sem lei anterior que os defina?",
+    "opcoes": [
+      "Princípio da presunção de inocência",
+      "Princípio da legalidade (nullum crimen, nulla poena sine lege)",
+      "Princípio do contraditório",
+      "Princípio da proporcionalidade"
+    ],
+    "resposta": 1,
+    "explicacao": "O princípio da legalidade penal exige que a conduta seja previamente prevista na lei como crime, e a pena previamente cominada, antes da prática do facto."
+  },
+  {
+    "id": 54,
+    "ministerio": "MININT",
+    "categoria": "Direito Penal",
+    "enunciado": "Como se chama, em Direito Penal, o estado de espírito em que o agente prevê e quer o resultado da sua conduta ilícita?",
+    "opcoes": [
+      "Negligência",
+      "Dolo",
+      "Caso fortuito",
+      "Força maior"
+    ],
+    "resposta": 1,
+    "explicacao": "O dolo caracteriza-se pela intenção do agente em praticar o facto ilícito, prevendo e querendo (ou aceitando) o resultado."
+  },
+  {
+    "id": 55,
+    "ministerio": "MININT",
+    "categoria": "Direito Administrativo",
+    "enunciado": "O que se entende por 'função pública', no contexto da Administração do Estado angolano?",
+    "opcoes": [
+      "Apenas os cargos de nomeação política",
+      "O conjunto de agentes e serviços que exercem atividade administrativa ao serviço do Estado e do interesse público",
+      "Exclusivamente as forças armadas",
+      "Apenas as empresas públicas com fins lucrativos"
+    ],
+    "resposta": 1,
+    "explicacao": "A função pública compreende o conjunto de agentes, órgãos e serviços que, ao serviço do Estado e de outras entidades públicas, exercem atividade administrativa dirigida à prossecução do interesse público."
+  },
+  {
+    "id": 56,
+    "ministerio": "MININT",
+    "categoria": "Direito Administrativo",
+    "enunciado": "Qual destes é um dever geral de um funcionário ou agente da Administração Pública angolana?",
+    "opcoes": [
+      "Sigilo profissional e zelo no exercício das suas funções",
+      "Divulgar livremente informação confidencial de processos",
+      "Recusar cumprir ordens legítimas dos superiores hierárquicos",
+      "Usar bens públicos para fins pessoais"
+    ],
+    "resposta": 0,
+    "explicacao": "Entre os deveres gerais dos agentes públicos contam-se a legalidade, o zelo, a assiduidade, a lealdade e o sigilo profissional relativamente a informação confidencial."
+  },
+  {
+    "id": 57,
+    "ministerio": "MININT",
+    "categoria": "Direito Internacional",
+    "enunciado": "O que é uma convenção (ou tratado) internacional, em Direito Internacional Público?",
+    "opcoes": [
+      "Um acordo escrito celebrado entre Estados (ou outros sujeitos de Direito Internacional) regido pelo Direito Internacional",
+      "Uma lei interna de aplicação apenas num único país",
+      "Uma decisão exclusiva de um tribunal nacional",
+      "Um simples comunicado de imprensa entre governos"
+    ],
+    "resposta": 0,
+    "explicacao": "Um tratado internacional é um acordo internacional celebrado por escrito entre Estados e regido pelo Direito Internacional, seja qual for a sua denominação particular."
+  },
+  {
+    "id": 58,
+    "ministerio": "MININT",
+    "categoria": "Direito Internacional",
+    "enunciado": "Angola é Estado-Membro de qual organização regional africana vocacionada para a integração económica da África Austral?",
+    "opcoes": [
+      "ECOWAS",
+      "SADC (Comunidade de Desenvolvimento da África Austral)",
+      "COMESA apenas",
+      "União do Magrebe Árabe"
+    ],
+    "resposta": 1,
+    "explicacao": "Angola é membro da SADC (Southern African Development Community), organização regional que agrupa países da África Austral com vista à integração económica e cooperação política."
+  },
+  {
+    "id": 59,
+    "ministerio": "MININT",
+    "categoria": "História de Angola",
+    "enunciado": "Em que data se comemora o aniversário da Independência Nacional de Angola?",
+    "opcoes": [
+      "4 de Fevereiro",
+      "27 de Março",
+      "11 de Novembro",
+      "25 de Agosto"
+    ],
+    "resposta": 2,
+    "explicacao": "Angola tornou-se independente de Portugal a 11 de Novembro de 1975, data celebrada anualmente como Dia da Independência Nacional."
+  },
+  {
+    "id": 60,
+    "ministerio": "MININT",
+    "categoria": "História de Angola",
+    "enunciado": "Quem foi o primeiro Presidente da República Popular de Angola, após a independência?",
+    "opcoes": [
+      "José Eduardo dos Santos",
+      "António Agostinho Neto",
+      "Jonas Savimbi",
+      "Lúcio Lara"
+    ],
+    "resposta": 1,
+    "explicacao": "António Agostinho Neto, líder histórico do MPLA, foi proclamado o primeiro Presidente de Angola em 11 de Novembro de 1975."
+  },
+  {
+    "id": 61,
+    "ministerio": "MININT",
+    "categoria": "História de Angola",
+    "enunciado": "O Acordo de Paz que pôs fim à guerra civil angolana, na sequência da morte de Jonas Savimbi, ficou conhecido como?",
+    "opcoes": [
+      "Acordos de Bicesse",
+      "Memorando de Entendimento do Luena",
+      "Protocolo de Lusaka",
+      "Acordo de Alvor"
+    ],
+    "resposta": 1,
+    "explicacao": "O Memorando de Entendimento assinado no Luena, em Abril de 2002, selou o fim do conflito armado entre o Governo e a UNITA."
+  },
+  {
+    "id": 62,
+    "ministerio": "MININT",
+    "categoria": "História de Angola",
+    "enunciado": "Qual movimento de libertação foi fundado em 1956 e liderou o processo que culminou na proclamação da independência de Angola em 1975?",
+    "opcoes": [
+      "UNITA",
+      "FNLA",
+      "MPLA",
+      "FLEC"
+    ],
+    "resposta": 2,
+    "explicacao": "O MPLA (Movimento Popular de Libertação de Angola), fundado em 1956, foi o movimento que proclamou a independência e formou o primeiro Governo de Angola."
+  },
+  {
+    "id": 63,
+    "ministerio": "MININT",
+    "categoria": "Segurança Nacional",
+    "enunciado": "O que se entende por 'ordem pública', no âmbito da atuação das forças de segurança?",
+    "opcoes": [
+      "A situação de tranquilidade, segurança e salubridade que permite o normal exercício dos direitos dos cidadãos",
+      "Apenas a ausência de manifestações populares",
+      "A imposição de toque de recolher permanente",
+      "Um estado de exceção declarado pelo Governo"
+    ],
+    "resposta": 0,
+    "explicacao": "Ordem pública é o conjunto de condições de tranquilidade, segurança, salubridade e normalidade social que garantem o livre exercício dos direitos e liberdades dos cidadãos."
+  },
+  {
+    "id": 64,
+    "ministerio": "MININT",
+    "categoria": "Segurança Nacional",
+    "enunciado": "Qual destes é considerado um princípio fundamental de atuação de um agente das forças de segurança perante o cidadão?",
+    "opcoes": [
+      "Uso arbitrário e desproporcional da força",
+      "Respeito pelos direitos humanos e proporcionalidade no uso da força",
+      "Discriminação em função da condição social do cidadão",
+      "Recusa de identificação perante o cidadão"
+    ],
+    "resposta": 1,
+    "explicacao": "As forças de segurança devem pautar a sua atuação pelo respeito aos direitos humanos, à legalidade e à proporcionalidade, recorrendo à força apenas quando estritamente necessário e na medida indispensável."
+  },
+  {
+    "id": 65,
+    "ministerio": "MININT",
+    "categoria": "Símbolos Nacionais",
+    "enunciado": "Quais são as cores da Bandeira Nacional de Angola?",
+    "opcoes": [
+      "Verde, amarelo e vermelho",
+      "Vermelho e preto, com o emblema amarelo ao centro",
+      "Azul e branco",
+      "Verde e branco"
+    ],
+    "resposta": 1,
+    "explicacao": "A Bandeira Nacional é composta por duas faixas horizontais, vermelha (em cima) e preta (em baixo), com o emblema nacional em amarelo sobreposto ao centro."
+  },
+  {
+    "id": 66,
+    "ministerio": "MININT",
+    "categoria": "Símbolos Nacionais",
+    "enunciado": "O que representa a roda dentada presente no Emblema Nacional de Angola?",
+    "opcoes": [
+      "A agricultura",
+      "Os trabalhadores industriais",
+      "A pecuária",
+      "A pesca"
+    ],
+    "resposta": 1,
+    "explicacao": "No Emblema Nacional de Angola, a roda dentada simboliza os trabalhadores e a indústria, enquanto o ramo de milho e a enxada representam a agricultura e os camponeses."
+  },
+  {
+    "id": 67,
+    "ministerio": "MININT",
+    "categoria": "Símbolos Nacionais",
+    "enunciado": "Como se intitula o Hino Nacional da República de Angola?",
+    "opcoes": [
+      "Angola é Nossa",
+      "Angola Avante",
+      "Pátria Amada",
+      "Hino da Libertação"
+    ],
+    "resposta": 1,
+    "explicacao": "O Hino Nacional de Angola tem por título 'Angola Avante', com letra de Manuel Rui Alves Monteiro e música de Rui Alberto Vieira Dias Mingas."
+  },
+  {
+    "id": 68,
+    "ministerio": "MININT",
+    "categoria": "Constituição (CRA)",
+    "enunciado": "Qual órgão exerce a função legislativa em Angola?",
+    "opcoes": [
+      "O Presidente da República, isoladamente",
+      "A Assembleia Nacional",
+      "Os Governos Provinciais",
+      "O Tribunal Constitucional"
+    ],
+    "resposta": 1,
+    "explicacao": "A Assembleia Nacional é o parlamento angolano, órgão que representa todos os angolanos e exerce a função legislativa, embora o Presidente da República também possa legislar por decreto legislativo presidencial em matérias específicas."
+  },
+  {
+    "id": 69,
+    "ministerio": "MININT",
+    "categoria": "Constituição (CRA)",
+    "enunciado": "Segundo a CRA, qual é a duração normal do mandato do Presidente da República de Angola?",
+    "opcoes": [
+      "3 anos",
+      "4 anos",
+      "5 anos",
+      "7 anos"
+    ],
+    "resposta": 2,
+    "explicacao": "O mandato do Presidente da República tem a duração de cinco anos, coincidindo com a legislatura da Assembleia Nacional, sendo admitida uma reeleição."
+  },
+  {
+    "id": 70,
+    "ministerio": "MINSA",
+    "categoria": "Saúde Pública",
+    "enunciado": "O que é a Atenção Primária de Saúde (APS)?",
+    "opcoes": [
+      "O nível de cuidados prestado apenas em hospitais centrais",
+      "O primeiro nível de contacto dos indivíduos com o sistema de saúde, focado em prevenção e cuidados essenciais",
+      "Um programa exclusivo de vacinação infantil",
+      "Um serviço reservado a situações de emergência hospitalar"
+    ],
+    "resposta": 1,
+    "explicacao": "A Atenção Primária de Saúde é o primeiro nível de contacto dos indivíduos e famílias com o sistema nacional de saúde, orientado para a promoção, prevenção e cuidados essenciais e acessíveis à comunidade."
+  },
+  {
+    "id": 71,
+    "ministerio": "MINSA",
+    "categoria": "Saúde Pública",
+    "enunciado": "Qual é o principal objetivo da vigilância epidemiológica?",
+    "opcoes": [
+      "Tratar exclusivamente doentes já internados",
+      "Recolher e analisar dados de forma sistemática para detetar, prevenir e controlar surtos e doenças",
+      "Substituir a vacinação de rotina",
+      "Gerir apenas o stock de medicamentos hospitalares"
+    ],
+    "resposta": 1,
+    "explicacao": "A vigilância epidemiológica consiste na recolha, análise e interpretação contínua de dados de saúde, permitindo detetar precocemente surtos, monitorizar tendências e orientar a resposta de saúde pública."
+  },
+  {
+    "id": 72,
+    "ministerio": "MINSA",
+    "categoria": "Saúde Pública",
+    "enunciado": "O que significa a sigla PAV, no contexto do sistema de saúde angolano?",
+    "opcoes": [
+      "Programa de Assistência a Vulneráveis",
+      "Programa Alargado de Vacinação",
+      "Plano Anual de Vigilância",
+      "Plano de Apoio ao Voluntariado"
+    ],
+    "resposta": 1,
+    "explicacao": "O Programa Alargado de Vacinação (PAV) é a estratégia nacional que visa garantir a imunização das crianças e outros grupos contra doenças preveníveis por vacinação."
+  },
+  {
+    "id": 73,
+    "ministerio": "MINSA",
+    "categoria": "Saúde Pública",
+    "enunciado": "Qual destes indicadores é habitualmente utilizado para avaliar a saúde materna de um país?",
+    "opcoes": [
+      "Taxa de mortalidade materna",
+      "Taxa de alfabetização",
+      "Índice de desenvolvimento industrial",
+      "Taxa de urbanização"
+    ],
+    "resposta": 0,
+    "explicacao": "A taxa de mortalidade materna, que mede o número de óbitos de mulheres por causas relacionadas com a gravidez e o parto por cada 100.000 nados-vivos, é um indicador central da saúde materna e da qualidade dos serviços de saúde."
+  },
+  {
+    "id": 74,
+    "ministerio": "MINSA",
+    "categoria": "Doenças Endémicas",
+    "enunciado": "Qual é o principal vetor de transmissão da malária (paludismo)?",
+    "opcoes": [
+      "A mosca tsé-tsé",
+      "O mosquito Anopheles fêmea",
+      "O rato",
+      "O carrapato"
+    ],
+    "resposta": 1,
+    "explicacao": "A malária é transmitida pela picada do mosquito Anopheles fêmea infetado, que transmite o parasita Plasmodium ao ser humano."
+  },
+  {
+    "id": 75,
+    "ministerio": "MINSA",
+    "categoria": "Doenças Endémicas",
+    "enunciado": "Qual destas medidas é uma forma eficaz de prevenção da malária a nível comunitário?",
+    "opcoes": [
+      "Uso de mosquiteiros tratados com inseticida e eliminação de água parada",
+      "Consumo diário de antibióticos, mesmo sem prescrição",
+      "Isolamento social prolongado",
+      "Uso exclusivo de repelente sem outras medidas"
+    ],
+    "resposta": 0,
+    "explicacao": "O uso de mosquiteiros tratados com inseticida, a pulverização intradomiciliária e a eliminação de criadouros (água parada) são medidas fundamentais na prevenção comunitária da malária."
+  },
+  {
+    "id": 76,
+    "ministerio": "MINSA",
+    "categoria": "Doenças Endémicas",
+    "enunciado": "A cólera é uma doença transmitida principalmente através de?",
+    "opcoes": [
+      "Contacto com água ou alimentos contaminados por Vibrio cholerae",
+      "Picada de inseto",
+      "Contacto direto com a pele de outra pessoa",
+      "Inalação de pólen"
+    ],
+    "resposta": 0,
+    "explicacao": "A cólera é uma doença diarreica aguda causada pela bactéria Vibrio cholerae, transmitida principalmente pela ingestão de água ou alimentos contaminados."
+  },
+  {
+    "id": 77,
+    "ministerio": "MINSA",
+    "categoria": "Biossegurança",
+    "enunciado": "O que significam as chamadas 'Precauções Básicas' (ou Universais) em biossegurança hospitalar?",
+    "opcoes": [
+      "Medidas a aplicar apenas a doentes já diagnosticados com doença infeciosa",
+      "Conjunto de práticas aplicadas a todos os doentes, independentemente do diagnóstico, para reduzir o risco de transmissão de infeções",
+      "Regras exclusivas para a limpeza de blocos operatórios",
+      "Procedimentos apenas para profissionais administrativos"
+    ],
+    "resposta": 1,
+    "explicacao": "As Precauções Básicas (ou Universais) devem ser aplicadas no cuidado a todos os doentes, independentemente do seu estado infecioso conhecido, reduzindo o risco de transmissão de agentes patogénicos entre doentes e profissionais."
+  },
+  {
+    "id": 78,
+    "ministerio": "MINSA",
+    "categoria": "Biossegurança",
+    "enunciado": "Qual é a ordem correta recomendada para a higienização das mãos com água e sabão, num contexto de cuidados de saúde?",
+    "opcoes": [
+      "Apenas molhar as mãos, sem esfregar",
+      "Molhar, aplicar sabão, esfregar bem todas as superfícies das mãos, enxaguar e secar",
+      "Secar antes de molhar",
+      "Usar apenas álcool-gel, dispensando água e sabão em qualquer situação"
+    ],
+    "resposta": 1,
+    "explicacao": "A técnica correta inclui molhar as mãos, aplicar sabão, esfregar todas as superfícies (palmas, dorso, entre dedos, unhas) durante pelo menos 20 segundos, enxaguar bem e secar com toalha limpa ou descartável."
+  },
+  {
+    "id": 79,
+    "ministerio": "MINSA",
+    "categoria": "Biossegurança",
+    "enunciado": "Qual é a finalidade principal do uso de Equipamentos de Proteção Individual (EPI) por um profissional de saúde?",
+    "opcoes": [
+      "Melhorar a aparência profissional",
+      "Criar uma barreira de proteção contra a exposição a agentes biológicos, químicos ou físicos",
+      "Substituir a necessidade de lavagem das mãos",
+      "Servir apenas como identificação da função"
+    ],
+    "resposta": 1,
+    "explicacao": "Os EPI (luvas, máscaras, aventais, óculos de proteção, entre outros) têm como finalidade criar uma barreira física entre o profissional e agentes biológicos ou outros riscos, reduzindo o risco de contaminação e transmissão de infeções."
+  },
+  {
+    "id": 80,
+    "ministerio": "MINSA",
+    "categoria": "Ética e Deontologia",
+    "enunciado": "O sigilo profissional na área da saúde tem como principal objetivo?",
+    "opcoes": [
+      "Impedir o doente de conhecer o seu próprio diagnóstico",
+      "Proteger a privacidade e a confidencialidade da informação de saúde do utente",
+      "Facilitar a partilha de dados clínicos com terceiros sem autorização",
+      "Reduzir a carga administrativa dos serviços"
+    ],
+    "resposta": 1,
+    "explicacao": "O sigilo profissional protege a confidencialidade da informação clínica e pessoal do utente, sendo um dever ético e legal dos profissionais de saúde, só podendo ser quebrado em situações excecionais previstas na lei."
+  },
+  {
+    "id": 81,
+    "ministerio": "MINSA",
+    "categoria": "Ética e Deontologia",
+    "enunciado": "O que é o consentimento informado, em contexto de cuidados de saúde?",
+    "opcoes": [
+      "Uma autorização verbal dada por qualquer familiar, independente do doente",
+      "A concordância do doente, devidamente esclarecido sobre riscos, benefícios e alternativas, para a realização de um ato clínico",
+      "Um documento apenas exigido em cirurgias estéticas",
+      "Uma formalidade dispensável em qualquer procedimento"
+    ],
+    "resposta": 1,
+    "explicacao": "O consentimento informado pressupõe que o doente, devidamente esclarecido sobre a natureza, riscos, benefícios e alternativas de um procedimento, concorda de forma livre e esclarecida com a sua realização."
+  },
+  {
+    "id": 82,
+    "ministerio": "MINSA",
+    "categoria": "Ética e Deontologia",
+    "enunciado": "Qual destes princípios NÃO é habitualmente considerado um princípio fundamental da bioética?",
+    "opcoes": [
+      "Autonomia",
+      "Beneficência",
+      "Não maleficência",
+      "Lucro máximo do prestador de serviços"
+    ],
+    "resposta": 3,
+    "explicacao": "Os quatro princípios clássicos da bioética são a autonomia, a beneficência, a não maleficência e a justiça; o lucro do prestador não integra estes princípios éticos fundamentais."
+  },
+  {
+    "id": 83,
+    "ministerio": "MINSA",
+    "categoria": "Primeiros Socorros",
+    "enunciado": "Perante uma pessoa que sofreu um desmaio (síncope) e está a recuperar a consciência, qual é a posição mais indicada, se não houver suspeita de trauma?",
+    "opcoes": [
+      "Sentada e a andar imediatamente",
+      "Deitada, com as pernas ligeiramente elevadas",
+      "De pé, encostada a uma parede",
+      "De bruços, sem qualquer supervisão"
+    ],
+    "resposta": 1,
+    "explicacao": "Colocar a pessoa deitada com as pernas ligeiramente elevadas ajuda a melhorar o retorno de sangue ao cérebro, favorecendo a recuperação após um desmaio, desde que não haja suspeita de lesão que contraindique esta posição."
+  },
+  {
+    "id": 84,
+    "ministerio": "MINSA",
+    "categoria": "Primeiros Socorros",
+    "enunciado": "Qual é o primeiro passo recomendado perante uma queimadura térmica ligeira?",
+    "opcoes": [
+      "Aplicar pasta de dentes ou manteiga sobre a queimadura",
+      "Arrefecer a área com água corrente fresca (não gelada) durante alguns minutos",
+      "Rebentar imediatamente qualquer bolha que se forme",
+      "Aplicar gelo diretamente sobre a pele queimada"
+    ],
+    "resposta": 1,
+    "explicacao": "Recomenda-se arrefecer a queimadura com água corrente à temperatura ambiente durante cerca de 10 a 20 minutos, evitando remédios caseiros como pasta de dentes, manteiga ou gelo direto, que podem agravar a lesão."
+  },
+  {
+    "id": 85,
+    "ministerio": "MINSA",
+    "categoria": "Primeiros Socorros",
+    "enunciado": "Perante uma hemorragia externa moderada num membro, qual é a medida inicial mais indicada?",
+    "opcoes": [
+      "Aplicar pressão direta e firme sobre o local do ferimento",
+      "Aplicar um torniquete de imediato, mesmo antes de tentar outras medidas",
+      "Ignorar e aguardar para ver se para sozinha",
+      "Aplicar álcool diretamente sobre o ferimento aberto"
+    ],
+    "resposta": 0,
+    "explicacao": "A pressão direta e firme sobre o ferimento, preferencialmente com um pano limpo, é geralmente a primeira medida para controlar uma hemorragia externa; o torniquete é reservado para hemorragias graves não controláveis por outros meios."
+  },
+  {
+    "id": 86,
+    "ministerio": "MINSA",
+    "categoria": "Primeiros Socorros",
+    "enunciado": "O que significa a sigla PCR, frequentemente usada em contextos de emergência médica?",
+    "opcoes": [
+      "Paragem Cárdio-Respiratória",
+      "Pressão Craniana Reduzida",
+      "Prontidão de Cuidados Regulares",
+      "Programa de Contingência Rápida"
+    ],
+    "resposta": 0,
+    "explicacao": "PCR (Paragem Cárdio-Respiratória) refere-se à interrupção súbita da atividade cardíaca e respiratória eficazes, sendo uma emergência que exige reanimação imediata."
+  },
+  {
+    "id": 87,
+    "ministerio": "MINSA",
+    "categoria": "Nutrição e Saúde Pública",
+    "enunciado": "O que é a desnutrição aguda grave em crianças?",
+    "opcoes": [
+      "Um excesso de peso acentuado para a idade",
+      "Uma forma severa de malnutrição, caracterizada por perda de peso acentuada, que exige tratamento urgente",
+      "Uma alergia alimentar comum",
+      "Uma preferência alimentar seletiva sem impacto clínico"
+    ],
+    "resposta": 1,
+    "explicacao": "A desnutrição aguda grave é uma forma severa de malnutrição, caracterizada por perda acentuada de peso e/ou edema nutricional, associada a elevado risco de mortalidade, exigindo intervenção nutricional e clínica urgente."
+  },
+  {
+    "id": 88,
+    "ministerio": "MINSA",
+    "categoria": "Nutrição e Saúde Pública",
+    "enunciado": "Qual é o principal benefício do aleitamento materno exclusivo até aos 6 meses de idade?",
+    "opcoes": [
+      "Não traz qualquer benefício comprovado",
+      "Fornece todos os nutrientes e anticorpos necessários ao desenvolvimento saudável do bebé",
+      "Substitui a necessidade de vacinação",
+      "É recomendado apenas em situações de pobreza extrema"
+    ],
+    "resposta": 1,
+    "explicacao": "O aleitamento materno exclusivo até aos 6 meses fornece todos os nutrientes, água e anticorpos necessários ao crescimento e desenvolvimento saudável do lactente, reduzindo o risco de infeções e desnutrição."
+  },
+  {
+    "id": 89,
+    "ministerio": "MINSA",
+    "categoria": "Administração de Medicamentos",
+    "enunciado": "O que é a via de administração 'intramuscular' de um medicamento?",
+    "opcoes": [
+      "Administração através da pele por absorção passiva",
+      "Introdução do medicamento diretamente no tecido muscular através de uma injeção",
+      "Administração exclusivamente por via oral",
+      "Aplicação apenas sobre mucosas"
+    ],
+    "resposta": 1,
+    "explicacao": "A via intramuscular consiste na administração do medicamento diretamente no tecido muscular através de uma injeção, permitindo uma absorção geralmente mais rápida do que a via oral."
+  },
+  {
+    "id": 90,
+    "ministerio": "MINSA",
+    "categoria": "Administração de Medicamentos",
+    "enunciado": "Qual é a importância de respeitar a cadeia de frio na conservação de vacinas?",
+    "opcoes": [
+      "Não tem qualquer influência na eficácia da vacina",
+      "Garantir que a vacina se mantém dentro da temperatura adequada, preservando a sua eficácia e segurança",
+      "Apenas facilita o transporte, sem efeito na eficácia",
+      "É relevante apenas para medicamentos orais"
+    ],
+    "resposta": 1,
+    "explicacao": "A cadeia de frio garante que as vacinas sejam mantidas dentro da faixa de temperatura recomendada desde o fabrico até à administração, preservando a sua potência e eficácia imunológica."
+  },
+  {
+    "id": 91,
+    "ministerio": "MINSA",
+    "categoria": "Legislação de Saúde",
+    "enunciado": "Qual é a finalidade principal do Sistema Nacional de Saúde de Angola?",
+    "opcoes": [
+      "Garantir o acesso da população aos cuidados de saúde, promovendo a prevenção, tratamento e reabilitação",
+      "Gerir exclusivamente hospitais privados",
+      "Regular apenas a importação de medicamentos",
+      "Substituir a Segurança Social"
+    ],
+    "resposta": 0,
+    "explicacao": "O Sistema Nacional de Saúde tem como finalidade assegurar o acesso da população angolana a cuidados de saúde de qualidade, articulando ações de promoção, prevenção, tratamento e reabilitação."
+  },
+  {
+    "id": 92,
+    "ministerio": "MINSA",
+    "categoria": "Legislação de Saúde",
+    "enunciado": "O que caracteriza, de forma geral, os cuidados de saúde primários no modelo angolano de organização sanitária?",
+    "opcoes": [
+      "São o nível mais especializado e de maior complexidade tecnológica",
+      "Constituem a porta de entrada do utente no sistema, mais próxima da comunidade",
+      "Só existem em meio hospitalar",
+      "Não incluem ações de prevenção"
+    ],
+    "resposta": 1,
+    "explicacao": "Os cuidados de saúde primários constituem geralmente a porta de entrada do utente no sistema de saúde, mais próxima da comunidade, com enfoque na promoção da saúde e prevenção da doença."
+  },
+  {
+    "id": 93,
+    "ministerio": "MINSA",
+    "categoria": "Função Pública",
+    "enunciado": "Qual é um dos deveres gerais de um funcionário público na área da saúde no exercício das suas funções?",
+    "opcoes": [
+      "Assiduidade, zelo e correção no atendimento ao utente",
+      "Recusar atender utentes sem justificação",
+      "Divulgar livremente dados clínicos de utentes a terceiros",
+      "Priorizar interesses pessoais sobre o interesse público"
+    ],
+    "resposta": 0,
+    "explicacao": "Entre os deveres gerais dos funcionários públicos, incluindo os da área da saúde, destacam-se a assiduidade, o zelo, a correção no trato com o público e o respeito pela confidencialidade da informação."
+  },
+  {
+    "id": 94,
+    "ministerio": "MINSA",
+    "categoria": "Função Pública",
+    "enunciado": "O que se entende por 'interesse público', no contexto da atuação de um funcionário da Administração Pública?",
+    "opcoes": [
+      "O interesse exclusivo do próprio funcionário",
+      "O bem-estar coletivo e os fins que a Administração deve prosseguir em benefício da sociedade",
+      "O interesse de uma empresa privada específica",
+      "Um conceito sem qualquer relevância jurídica"
+    ],
+    "resposta": 1,
+    "explicacao": "O interesse público refere-se aos fins e ao bem-estar coletivo que a Administração Pública deve prosseguir, orientando a atuação dos seus agentes acima de interesses particulares."
+  },
+  {
+    "id": 95,
+    "ministerio": "MINSA",
+    "categoria": "Saúde Pública",
+    "enunciado": "O que é uma 'epidemia', em epidemiologia?",
+    "opcoes": [
+      "A presença habitual de uma doença numa determinada área geográfica, no seu nível esperado",
+      "O aumento inesperado do número de casos de uma doença numa região, acima do esperado",
+      "Uma doença que afeta simultaneamente vários continentes",
+      "Um sintoma isolado numa única pessoa"
+    ],
+    "resposta": 1,
+    "explicacao": "Uma epidemia caracteriza-se pelo aumento inesperado do número de casos de uma doença numa determinada área ou população, acima do que seria normalmente esperado."
+  },
+  {
+    "id": 96,
+    "ministerio": "MINSA",
+    "categoria": "Saúde Pública",
+    "enunciado": "Em que se diferencia uma 'pandemia' de uma 'epidemia'?",
+    "opcoes": [
+      "Não há qualquer diferença entre os dois termos",
+      "A pandemia é uma epidemia que se propaga por vários países ou continentes",
+      "A pandemia afeta apenas animais",
+      "A epidemia é sempre mais grave que a pandemia"
+    ],
+    "resposta": 1,
+    "explicacao": "A pandemia corresponde à propagação de uma epidemia por uma área geográfica muito ampla, atingindo vários países ou continentes, ao contrário da epidemia, geralmente circunscrita a uma região."
+  }
+]
