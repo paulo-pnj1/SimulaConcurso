@@ -1356,7 +1356,7 @@
       "Controlar exclusivamente a entrada e saída de estrangeiros no território nacional"
     ],
     "resposta": 1,
-    "explicacao": "A PNA é a força policial de natureza civil e carácter armado que tem como missão fundamental garantir a lei e a ordem, a segurança pública e a proteção dos direitos e liberdades dos cidadãos."
+    "explicacao": "Nos termos do Artigo 2.º do Estatuto Orgânico da PNA (Decreto Presidencial n.º 152/19, de 15 de maio) e da Lei n.º 6/20, de 24 de março (Lei de Bases sobre a Organização e Funcionamento da Polícia Nacional), a PNA tem por missão assegurar e defender a legalidade democrática, garantir a segurança pública e os direitos e liberdades fundamentais, e manter a ordem e tranquilidade públicas."
   },
   {
     "id": 98,
@@ -1371,22 +1371,22 @@
       "Decisão exclusiva do superior hierárquico mais próximo, independentemente da situação"
     ],
     "resposta": 1,
-    "explicacao": "O Código Deontológico do Agente Policial estabelece que o uso da força deve ser proporcional à ameaça, necessário e usado apenas quando outros meios se mostrarem ineficazes."
+    "explicacao": "A actuação do Agente da PNA rege-se pelos princípios constantes da Constituição, da Lei de Bases da PNA e da Lei n.º 10/25 (Regime Disciplinar do Agente da Polícia Nacional), que exige verticalidade, imparcialidade e proporcionalidade no exercício da função policial, reservando o uso da força para quando outros meios se mostrem ineficazes."
   },
   {
     "id": 99,
     "ministerio": "MININT",
     "corpo": "Polícia Nacional",
     "categoria": "Organização Policial",
-    "enunciado": "Como se designa a unidade da Polícia Nacional vocacionada para o patrulhamento de proximidade e prevenção da criminalidade nos bairros?",
+    "enunciado": "De acordo com o Estatuto Orgânico da PNA (Decreto Presidencial n.º 152/19), qual destas estruturas assegura, ao nível local, as atribuições da Polícia Nacional, incluindo o patrulhamento de proximidade?",
     "opcoes": [
-      "Polícia de Ordem e Segurança Pública (Polícia de Giro/Patrulhamento)",
-      "Serviço de Investigação Criminal",
-      "Polícia de Migração e Estrangeiros",
-      "Corpo de Bombeiros"
+      "Os Comandos Provinciais e as unidades policiais locais deles dependentes",
+      "O Serviço de Investigação Criminal",
+      "O Serviço de Migração e Estrangeiros",
+      "O Serviço Penitenciário"
     ],
     "resposta": 0,
-    "explicacao": "O patrulhamento de proximidade e a prevenção criminal nos bairros são funções nucleares da Polícia de Ordem Pública, através do policiamento de giro e comunitário."
+    "explicacao": "Segundo o Estatuto Orgânico da PNA, os Comandos Provinciais exercem as atribuições da PNA ao nível local — incluindo o patrulhamento e a prevenção criminal de proximidade — e dependem hierárquica e funcionalmente do Comando Geral da PNA."
   },
   {
     "id": 100,
@@ -1401,22 +1401,22 @@
       "Da proibição de contactar um advogado"
     ],
     "resposta": 0,
-    "explicacao": "É garantia constitucional que todo o detido seja informado imediatamente dos motivos da detenção e dos seus direitos, incluindo o direito ao silêncio e à assistência de defensor."
+    "explicacao": "É garantia constitucional (Constituição da República de Angola) que todo o detido seja informado imediatamente dos motivos da detenção e dos seus direitos, incluindo o direito ao silêncio e à assistência de defensor — princípio que a PNA está obrigada a observar em qualquer detenção."
   },
   {
     "id": 101,
     "ministerio": "MININT",
     "corpo": "Polícia Nacional",
     "categoria": "Hierarquia Policial",
-    "enunciado": "Na estrutura de patentes da Polícia Nacional de Angola, qual destas carreiras corresponde ao corpo de Oficiais?",
+    "enunciado": "Segundo a legislação sobre carreiras da Polícia Nacional (Lei n.º 9/08, dos postos e distintivos da PNA, e Decreto n.º 117/08, sobre carreiras profissionais), em que classes se estrutura o pessoal com funções policiais da PNA?",
     "opcoes": [
-      "Guarda Principal",
-      "Subcomissário",
-      "Cabo",
-      "Soldado"
+      "Oficiais, Subchefes e Agentes",
+      "Generais, Coronéis e Capitães",
+      "Diretores, Chefes e Técnicos",
+      "Comandantes, Inspetores e Fiscais"
     ],
-    "resposta": 1,
-    "explicacao": "O corpo de Oficiais da PNA inclui patentes como Subcomissário, Comissário e Superintendente, distintas das carreiras de Sargentos e Guardas."
+    "resposta": 0,
+    "explicacao": "O pessoal com funções policiais da PNA está organizado nas classes de Oficiais, Subchefes e Agentes, nos termos da Lei n.º 9/08 (postos e distintivos) e do Decreto n.º 117/08 (regulamento de carreiras profissionais da Polícia Nacional)."
   },
   {
     "id": 102,
@@ -1431,7 +1431,7 @@
       "Deter todos os participantes de imediato, independentemente do comportamento"
     ],
     "resposta": 1,
-    "explicacao": "A doutrina de manutenção de ordem pública privilegia a mediação e o diálogo, reservando a coação física para situações de violência efetiva ou risco iminente para pessoas e bens."
+    "explicacao": "A doutrina de manutenção de ordem pública privilegia a mediação e o diálogo diante do exercício do direito constitucional de reunião e manifestação, reservando a coação física para situações de violência efetiva ou risco iminente para pessoas e bens, em linha com os princípios de proporcionalidade da Lei de Bases da PNA (Lei n.º 6/20)."
   },
   {
     "id": 103,
@@ -1446,7 +1446,7 @@
       "De organizações internacionais de polícia"
     ],
     "resposta": 1,
-    "explicacao": "O SIC funciona como órgão auxiliar da administração da justiça, coadjuvando o Ministério Público na investigação criminal e recolha de prova, sob direção funcional deste."
+    "explicacao": "Nos termos do Regulamento Orgânico do SIC (Decreto Presidencial n.º 179/17, de 9 de agosto), o SIC é o órgão central do MININT com funções de polícia judiciária e criminal, actuando como autoridade de polícia criminal em coadjuvação do Ministério Público na fase de inquérito."
   },
   {
     "id": 104,
@@ -1461,7 +1461,7 @@
       "Para escolher o defensor oficioso do arguido"
     ],
     "resposta": 1,
-    "explicacao": "A cadeia de custódia garante que uma prova recolhida na cena do crime chega a tribunal sem contaminação, adulteração ou dúvidas sobre a sua origem e manuseamento."
+    "explicacao": "A cadeia de custódia garante que uma prova recolhida na cena do crime chega a tribunal sem contaminação, adulteração ou dúvidas sobre a sua origem e manuseamento — um princípio processual-penal universal aplicado pelo SIC enquanto órgão de polícia criminal."
   },
   {
     "id": 105,
@@ -1476,7 +1476,7 @@
       "Recurso"
     ],
     "resposta": 1,
-    "explicacao": "O inquérito é a fase processual, sob direção do Ministério Público e coadjuvação do SIC, em que se investigam os factos e se recolhem os indícios sobre a existência do crime e a identidade dos seus autores."
+    "explicacao": "O inquérito é a fase processual em que se investigam os factos e se recolhem os indícios sobre a existência do crime e a identidade dos seus autores, sob direcção do Ministério Público e coadjuvação das autoridades de polícia criminal, entre as quais o SIC."
   },
   {
     "id": 106,
@@ -1491,7 +1491,7 @@
       "A PN só investiga crimes económicos"
     ],
     "resposta": 1,
-    "explicacao": "Enquanto a Polícia Nacional se dedica sobretudo à prevenção criminal e manutenção da ordem pública, o SIC especializa-se na investigação criminal, perícia e recolha de prova."
+    "explicacao": "Historicamente, a investigação criminal em Angola competia sobretudo ao SIC (Decreto Presidencial n.º 179/17). Note-se, porém, que o Estatuto Orgânico da PNA (Decreto Presidencial n.º 152/19, Artigo 5.º, n.º 6, alínea f), e Artigo 47.º) criou também, dentro da Polícia Nacional, a Direcção de Investigação de Ilícitos Penais (DIIP), pelo que a repartição exacta de competências entre os dois órgãos tem vindo a ser clarificada por legislação mais recente."
   },
   {
     "id": 107,
@@ -1506,7 +1506,7 @@
       "A reputação da vítima na comunidade"
     ],
     "resposta": 1,
-    "explicacao": "A preservação imediata dos vestígios físicos, biológicos e balísticos na cena do crime é essencial, pois são facilmente alteráveis ou destruíveis e fundamentais para a investigação."
+    "explicacao": "A preservação imediata dos vestígios físicos, biológicos e balísticos na cena do crime é essencial, pois são facilmente alteráveis ou destruíveis e fundamentais para a investigação conduzida pelo SIC enquanto órgão de polícia criminal."
   },
   {
     "id": 108,
@@ -1521,7 +1521,7 @@
       "Permitir a presença de um advogado"
     ],
     "resposta": 1,
-    "explicacao": "A Constituição da República de Angola proíbe expressamente a obtenção de prova ou declarações através de tortura, coação, ofensa à integridade física ou moral, ou qualquer forma de tratamento desumano."
+    "explicacao": "A Constituição da República de Angola proíbe expressamente a obtenção de prova ou declarações através de tortura, coação, ofensa à integridade física ou moral, ou qualquer forma de tratamento desumano — princípio que vincula qualquer autoridade de polícia criminal, incluindo o SIC."
   },
   {
     "id": 109,
@@ -1536,7 +1536,7 @@
       "Combater incêndios em zonas fronteiriças"
     ],
     "resposta": 1,
-    "explicacao": "O SME é o órgão do MININT responsável pelo controlo migratório, incluindo a fiscalização de fronteiras e a gestão da permanência de estrangeiros em Angola."
+    "explicacao": "Nos termos do Regulamento Orgânico do SME (Decreto Presidencial n.º 189/17, de 18 de agosto), o SME é o órgão executivo central do Ministério do Interior ao qual compete executar as políticas e medidas legislativas e regulamentares em matéria de migração e estrangeiros."
   },
   {
     "id": 110,
@@ -1551,7 +1551,7 @@
       "Nenhum documento é necessário para entrada"
     ],
     "resposta": 1,
-    "explicacao": "A entrada de estrangeiros em Angola exige, regra geral, passaporte válido acompanhado do visto correspondente ao motivo da viagem (turismo, trabalho, estudo, etc.)."
+    "explicacao": "Nos termos do Artigo 21.º da Lei n.º 13/19, de 23 de maio (Regime Jurídico dos Cidadãos Estrangeiros na República de Angola), a entrada em território nacional exige, regra geral, passaporte válido e visto adequado à finalidade da viagem; a entrada é recusada a quem não preencha essas condições."
   },
   {
     "id": 111,
@@ -1566,7 +1566,7 @@
       "Ser funcionário de uma embaixada"
     ],
     "resposta": 0,
-    "explicacao": "A permanência irregular ocorre, entre outras situações, quando o estrangeiro ultrapassa o período de validade do visto ou da autorização de permanência sem regularizar a sua situação junto do SME."
+    "explicacao": "A Lei n.º 13/19, de 23 de maio (Regime Jurídico dos Cidadãos Estrangeiros), regulamentada pelo Decreto Presidencial n.º 163/20, define as condições de entrada e permanência de estrangeiros em Angola; a permanência para além do prazo do visto ou autorização, sem regularização, configura permanência irregular, fiscalizada pelo SME."
   },
   {
     "id": 112,
@@ -1581,7 +1581,7 @@
       "Investigar crimes económicos internacionais"
     ],
     "resposta": 0,
-    "explicacao": "O controlo documental e o registo de entradas e saídas nos postos de fronteira são funções centrais do SME, prevenindo a entrada irregular e a falsificação documental."
+    "explicacao": "O controlo documental e o registo de entradas e saídas nos postos de fronteira, incluindo a verificação da autenticidade dos documentos de viagem, são funções centrais do SME nos termos do seu Regulamento Orgânico (Decreto Presidencial n.º 189/17) e da regulamentação da Lei n.º 13/19."
   },
   {
     "id": 113,
@@ -1596,7 +1596,7 @@
       "Nenhum visto, apenas o passaporte"
     ],
     "resposta": 1,
-    "explicacao": "O exercício de atividade laboral remunerada em Angola por um estrangeiro exige, regra geral, a obtenção prévia de visto de trabalho junto das autoridades competentes."
+    "explicacao": "A Lei n.º 13/19 (Regime Jurídico dos Cidadãos Estrangeiros) prevê diferentes tipos de visto consoante a finalidade da estadia; o exercício de actividade laboral remunerada por um estrangeiro exige, regra geral, visto de trabalho, emitido e fiscalizado com intervenção do SME."
   },
   {
     "id": 114,
@@ -1611,7 +1611,7 @@
       "Para gerir hospitais em zonas fronteiriças"
     ],
     "resposta": 1,
-    "explicacao": "A cooperação com a Interpol e serviços congéneres permite ao SME identificar documentos de viagem falsificados e pessoas com mandados de captura internacional, reforçando a segurança das fronteiras."
+    "explicacao": "A cooperação internacional do SME com a Interpol e serviços congéneres, prevista no seu Regulamento Orgânico (Decreto Presidencial n.º 189/17), permite identificar documentos de viagem falsificados e pessoas com mandados de captura internacional, reforçando a segurança das fronteiras angolanas."
   },
   {
     "id": 115,
@@ -1626,7 +1626,7 @@
       "Substituir as funções dos tribunais na determinação da pena"
     ],
     "resposta": 1,
-    "explicacao": "O sistema penitenciário angolano visa não só a custódia segura dos reclusos, mas também a sua reeducação, formação e reinserção social, preparando o regresso à vida em liberdade."
+    "explicacao": "Nos termos do Regulamento Orgânico da Direcção-Geral do Serviço Penitenciário (Decreto Presidencial n.º 184/17, de 11 de agosto) e da Lei n.º 8/08, de 29 de agosto (Lei Penitenciária), o Serviço Penitenciário executa as medidas privativas de liberdade determinadas pelos tribunais e aplica políticas de reabilitação e reintegração social do recluso."
   },
   {
     "id": 116,
@@ -1641,7 +1641,7 @@
       "Direito de ausência total de vigilância"
     ],
     "resposta": 0,
-    "explicacao": "A Constituição da República de Angola garante que nenhuma pessoa, incluindo o recluso, pode ser submetida a tortura, tratamento cruel, degradante ou desumano."
+    "explicacao": "A Lei n.º 8/08 (Lei Penitenciária) incorpora expressamente princípios da Declaração Universal dos Direitos Humanos e das Regras Mínimas da ONU para o Tratamento dos Reclusos (1955), e a Constituição da República de Angola garante que ninguém, incluindo o recluso, pode ser submetido a tortura ou tratamento cruel, degradante ou desumano."
   },
   {
     "id": 117,
@@ -1656,7 +1656,7 @@
       "O regime fechado é usado apenas para visitas familiares"
     ],
     "resposta": 0,
-    "explicacao": "O regime fechado implica maior vigilância e restrição de movimentos, enquanto o regime aberto permite maior autonomia e proximidade com o exterior, normalmente associado a boa conduta e fase avançada da pena."
+    "explicacao": "A distinção entre regimes prisionais mais e menos restritivos (frequentemente designados 'fechado' e 'aberto') é comum em sistemas penitenciários modernos, incluindo o angolano, e visa graduar a vigilância e a autonomia do recluso em função da avaliação de risco e do comportamento, nos princípios gerais da Lei n.º 8/08."
   },
   {
     "id": 118,
@@ -1671,7 +1671,7 @@
       "Ignorar objetos suspeitos encontrados"
     ],
     "resposta": 1,
-    "explicacao": "As revistas em estabelecimentos prisionais devem seguir procedimentos formais de segurança, realizadas preferencialmente em equipa, com registo detalhado de qualquer ocorrência."
+    "explicacao": "As revistas em estabelecimentos prisionais devem seguir procedimentos formais de segurança, realizadas preferencialmente em equipa, com registo detalhado de qualquer ocorrência — boas práticas alinhadas com os deveres gerais previstos no regime disciplinar do pessoal do Serviço Penitenciário (Decreto Presidencial n.º 44/14)."
   },
   {
     "id": 119,
@@ -1686,7 +1686,7 @@
       "Ausência de qualquer acompanhamento psicológico"
     ],
     "resposta": 1,
-    "explicacao": "A formação profissional, a educação e o trabalho durante o cumprimento da pena são instrumentos centrais na preparação do recluso para o regresso à vida em sociedade."
+    "explicacao": "A Lei n.º 8/08 (Lei Penitenciária) prevê expressamente a organização de cursos de formação e aperfeiçoamento profissional do recluso e a possibilidade de trabalho prisional, como instrumentos centrais de reeducação e reinserção social."
   },
   {
     "id": 120,
@@ -1701,7 +1701,7 @@
       "Negociar sem qualquer coordenação com a chefia"
     ],
     "resposta": 0,
-    "explicacao": "A prioridade máxima em qualquer incidente prisional grave é a preservação da vida e integridade física de todos os envolvidos, seguindo protocolos de gestão de crise coordenados pela chefia."
+    "explicacao": "A prioridade máxima em qualquer incidente prisional grave é a preservação da vida e integridade física de todos os envolvidos, seguindo protocolos de gestão de crise coordenados pela chefia, em conformidade com os deveres gerais de actuação previstos no regime disciplinar do Serviço Penitenciário."
   },
   {
     "id": 121,
@@ -1716,7 +1716,7 @@
       "Administrar estabelecimentos prisionais"
     ],
     "resposta": 1,
-    "explicacao": "A Proteção Civil e Bombeiros tem como missão a prevenção de riscos coletivos e a organização do socorro a pessoas e bens em situações de acidente grave, catástrofe ou calamidade."
+    "explicacao": "Nos termos do Regulamento Orgânico do SPCB (Decreto Presidencial n.º 185/17, de 11 de agosto) e da Lei n.º 28/03, de 7 de novembro (Lei de Bases da Protecção Civil), compete ao SPCB orientar, coordenar e fiscalizar a actividade de prevenção e extinção de incêndios e assegurar o socorro em situações de acidente grave, catástrofe ou calamidade."
   },
   {
     "id": 122,
@@ -1731,22 +1731,22 @@
       "Concentrar-se apenas em salvar bens materiais"
     ],
     "resposta": 0,
-    "explicacao": "O procedimento operacional padrão exige uma avaliação inicial rápida da cena, isolamento do perímetro e priorização do salvamento de vidas humanas, sempre com segurança da equipa."
+    "explicacao": "O procedimento operacional padrão de combate a incêndios exige avaliação inicial rápida da cena, isolamento do perímetro e priorização do salvamento de vidas humanas, sempre com segurança da equipa — princípios gerais de actuação do Serviço de Protecção Civil e Bombeiros."
   },
   {
     "id": 123,
     "ministerio": "MININT",
     "corpo": "Proteção Civil e Bombeiros",
     "categoria": "Especialidade de Mergulhador",
-    "enunciado": "Para exercer funções na especialidade de mergulhador dentro do Corpo de Bombeiros, que competência básica é geralmente exigida ao candidato?",
+    "enunciado": "Segundo o Regulamento da Carreira Específica do Serviço Nacional de Proteção Civil e Bombeiros (Decreto Presidencial n.º 36/14), quais são requisitos de ingresso relevantes para a especialidade de bombeiro mergulhador?",
     "opcoes": [
-      "Saber nadar e ter aptidão física para operações aquáticas",
-      "Ter formação em direito penal",
-      "Ser fluente em várias línguas estrangeiras",
-      "Ter experiência em investigação criminal"
+      "Idade entre 18 e 30 anos, altura mínima de 1,65m (M) / 1,60m (F), e domínio da natação",
+      "Apenas ter mais de 18 anos, sem qualquer outro requisito físico",
+      "Ter formação superior em Direito",
+      "Não existem requisitos específicos para esta especialidade"
     ],
     "resposta": 0,
-    "explicacao": "As especialidades de mergulho e salvamento aquático exigem que o candidato saiba nadar e possua aptidão física e psicológica para operar em ambiente aquático, muitas vezes em condições adversas."
+    "explicacao": "O Artigo sobre condições de ingresso do Decreto Presidencial n.º 36/14 exige, entre outros requisitos gerais (idade entre 18 e 30 anos, altura mínima de 1,65m para candidatos do sexo masculino e 1,60m para o sexo feminino), o domínio da natação especificamente para os candidatos à especialidade de bombeiro mergulhador."
   },
   {
     "id": 124,
@@ -1761,7 +1761,7 @@
       "De bruços, com a cabeça virada para baixo"
     ],
     "resposta": 0,
-    "explicacao": "A posição lateral de segurança (PLS) mantém as vias aéreas desobstruídas e reduz o risco de aspiração de vómito em vítimas inconscientes que respiram normalmente."
+    "explicacao": "A posição lateral de segurança (PLS) mantém as vias aéreas desobstruídas e reduz o risco de aspiração de vómito em vítimas inconscientes que respiram normalmente — procedimento-padrão de primeiros socorros ensinado na formação de bombeiros."
   },
   {
     "id": 125,
@@ -1776,7 +1776,7 @@
       "Um manual exclusivamente sobre construção civil"
     ],
     "resposta": 0,
-    "explicacao": "O plano de contingência estabelece, de forma prévia e organizada, as ações, meios e responsabilidades necessários para responder eficazmente a um risco ou emergência identificada."
+    "explicacao": "No quadro do Sistema Nacional de Proteção Civil estabelecido pela Lei n.º 28/03 (Lei de Bases da Protecção Civil), os planos de contingência organizam previamente as acções, meios e responsabilidades necessários para responder a um risco específico identificado, sendo elaborados e articulados pelos organismos de protecção civil, entre eles o SPCB."
   },
   {
     "id": 126,
@@ -1791,6 +1791,6 @@
       "Catástrofe refere-se apenas a fenómenos meteorológicos"
     ],
     "resposta": 0,
-    "explicacao": "Uma catástrofe distingue-se do acidente grave pela dimensão do impacto, exigindo geralmente a mobilização de meios excecionais e afetando de forma significativa pessoas, bens ou o ambiente."
+    "explicacao": "A Lei n.º 28/03 (Lei de Bases da Protecção Civil) distingue os conceitos de acidente grave, catástrofe e calamidade sobretudo pela dimensão do impacto e dos meios necessários à resposta; a catástrofe implica geralmente a mobilização de meios excecionais perante um número elevado de vítimas ou danos."
   }
 ]
