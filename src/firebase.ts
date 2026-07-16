@@ -38,11 +38,12 @@ async function callApi<TResponse>(path: string, body: unknown): Promise<{ data: 
   return { data: json as TResponse };
 }
 
-export const getExamQuestionsFn = (data: { ministerio: string }) =>
+export const getExamQuestionsFn = (data: { ministerio: string; corpo?: string }) =>
   callApi("/api/getExamQuestions", data);
 
 export const submitExamFn = (data: {
   ministerio: string;
+  corpo?: string;
   respostas: Record<number, number>;
   secondsElapsed: number;
 }) => callApi("/api/submitExam", data);

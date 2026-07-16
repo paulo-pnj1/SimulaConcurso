@@ -19,9 +19,27 @@ const baseQuestions = JSON.parse(
 
 export type ConcursoType = "MININT" | "MINSA";
 
+export type CorpoMinint =
+  | "Polícia Nacional"
+  | "Serviço de Investigação Criminal (SIC)"
+  | "Serviço de Migração e Estrangeiros (SME)"
+  | "Serviço Penitenciário"
+  | "Proteção Civil e Bombeiros";
+
+export const CORPOS_MININT: CorpoMinint[] = [
+  "Polícia Nacional",
+  "Serviço de Investigação Criminal (SIC)",
+  "Serviço de Migração e Estrangeiros (SME)",
+  "Serviço Penitenciário",
+  "Proteção Civil e Bombeiros",
+];
+
 export interface Pergunta {
   id: number;
   ministerio: ConcursoType;
+  // Só se aplica a MININT. Sem "corpo" = pergunta geral, entra no exame de
+  // qualquer corpo. Com "corpo" = só entra no exame desse corpo específico.
+  corpo?: CorpoMinint;
   categoria: string;
   enunciado: string;
   opcoes: string[];
@@ -31,17 +49,31 @@ export interface Pergunta {
 
 /**
  * Loads the full question bank (bundled base questions + admin-created
- * custom questions from Firestore) for a given ministry. Runs with Admin
- * SDK privileges, so it bypasses firestore.rules. This is the only place
- * that assembles a full `Pergunta` (including resposta/explicacao) before
- * an exam is served or graded.
+ * custom questions from Firestore) for a given ministry, optionally scoped
+ * to a specific MININT "corpo" (Polícia Nacional, SIC, SME, Serviço
+ * Penitenciário, Proteção Civil e Bombeiros).
+ *
+ * For MININT with a corpo: includes general questions (no `corpo` set) +
+ * questions tagged with that exact corpo. Questions tagged with a
+ * *different* corpo are excluded.
+ *
+ * Runs with Admin SDK privileges, so it bypasses firestore.rules. This is
+ * the only place that assembles a full `Pergunta` (including
+ * resposta/explicacao) before an exam is served or graded.
  */
-export async function loadFullQuestionBank(ministerio: ConcursoType): Promise<Pergunta[]> {
+export async function loadFullQuestionBank(
+  ministerio: ConcursoType,
+  corpo?: CorpoMinint
+): Promise<Pergunta[]> {
   const db = getDb();
   const custom = await db.collection("perguntas").where("ministerio", "==", ministerio).get();
   const customQuestions = custom.docs.map((d) => d.data() as Pergunta);
   const base = (baseQuestions as Pergunta[]).filter((q) => q.ministerio === ministerio);
-  return [...base, ...customQuestions];
+  const all = [...base, ...customQuestions];
+
+  if (ministerio !== "MININT" || !corpo) return all;
+
+  return all.filter((q) => !q.corpo || q.corpo === corpo);
 }
 
 export async function hasFullAccess(uid: string, email: string | undefined): Promise<boolean> {

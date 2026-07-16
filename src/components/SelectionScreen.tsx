@@ -228,6 +228,11 @@ export default function SelectionScreen({
                           }`}>
                             {res.ministerio}
                           </span>
+                          {res.corpo && (
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-stone-100 text-stone-600">
+                              {res.corpo}
+                            </span>
+                          )}
                           <span className="text-xs text-stone-500 flex items-center gap-1 font-medium">
                             <Clock className="w-3.5 h-3.5" />
                             {formatTempo(res.tempoGasto)}

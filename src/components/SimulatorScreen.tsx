@@ -4,6 +4,7 @@ import { Pergunta, RespostasUsuario, ConcursoType } from "../types";
 
 interface SimulatorScreenProps {
   ministerio: ConcursoType;
+  corpo?: string;
   perguntas: Pergunta[];
   respostas: RespostasUsuario;
   onSelectOption: (perguntaId: number, opcaoIndice: number) => void;
@@ -12,6 +13,7 @@ interface SimulatorScreenProps {
 
 export default function SimulatorScreen({
   ministerio,
+  corpo,
   perguntas,
   respostas,
   onSelectOption,
@@ -77,7 +79,7 @@ export default function SimulatorScreen({
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white border border-[#E3D9C4] shadow-sm rounded-xl p-4 mb-6 gap-4">
         <div className="flex items-center space-x-3">
           <div className="p-2 rounded-lg font-bold text-xs bg-[#E3D9C4] text-[#12233F] uppercase tracking-wider">
-            CONCURSO {ministerio}
+            CONCURSO {ministerio}{corpo ? ` • ${corpo}` : ""}
           </div>
           <span className="text-[#E3D9C4]">|</span>
           <span className="text-xs md:text-sm font-medium text-[#5C5346]">

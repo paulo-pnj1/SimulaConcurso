@@ -3,15 +3,21 @@ import { requireAuth } from "./_lib/auth.js";
 import { admin, getDb } from "./_lib/admin.js";
 import {
   ACCESS_DENIED_MESSAGE,
+  CORPOS_MININT,
   ConcursoType,
+  CorpoMinint,
   hasFullAccess,
   loadFullQuestionBank,
 } from "./_lib/questions.js";
 
 /**
  * POST /api/submitExam
- * Body: { ministerio, respostas: Record<number, number>, secondsElapsed }
+ * Body: { ministerio, corpo?, respostas: Record<number, number>, secondsElapsed }
  * Header: Authorization: Bearer <Firebase ID token>
+ *
+ * `corpo` deve ser o mesmo corpo usado em /api/getExamQuestions, para que a
+ * grelha de correção corresponda exatamente ao caderno de perguntas que foi
+ * mostrado ao candidato.
  *
  * Grades the exam server-side. The client only ever sends chosen option
  * indices; correct answers/explanations are only returned after grading.
@@ -25,14 +31,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const { uid, email } = await requireAuth(req);
 
-    const { ministerio, respostas, secondsElapsed } = (req.body || {}) as {
+    const { ministerio, corpo, respostas, secondsElapsed } = (req.body || {}) as {
       ministerio: ConcursoType;
+      corpo?: CorpoMinint;
       respostas: Record<number, number>;
       secondsElapsed: number;
     };
 
     if (ministerio !== "MININT" && ministerio !== "MINSA") {
       res.status(400).json({ error: "invalid-argument", message: "Ministério inválido." });
+      return;
+    }
+    if (ministerio === "MININT" && (!corpo || !CORPOS_MININT.includes(corpo))) {
+      res.status(400).json({
+        error: "invalid-argument",
+        message: "Corpo do MININT inválido ou em falta.",
+      });
       return;
     }
     if (!respostas || typeof respostas !== "object") {
@@ -50,7 +64,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const userSnap = await db.collection("users").doc(uid).get();
     const userData = userSnap.exists ? (userSnap.data() as { name?: string }) : undefined;
 
-    const graded = await loadFullQuestionBank(ministerio);
+    const graded = await loadFullQuestionBank(ministerio, corpo);
 
     let acertosCount = 0;
     const revisao = graded.map((p) => {
@@ -68,6 +82,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       candidateName: userData?.name || email?.split("@")[0] || "Candidato",
       candidateEmail: email || "",
       ministerio,
+      ...(ministerio === "MININT" && corpo ? { corpo } : {}),
       score: scorePercentage,
       respostasCorretas: acertosCount,
       totalPerguntas: graded.length,

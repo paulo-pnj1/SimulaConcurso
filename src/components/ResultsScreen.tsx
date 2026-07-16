@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 
 interface ResultsScreenProps {
   ministerio: ConcursoType;
+  corpo?: string;
   perguntas: Pergunta[];
   respostas: RespostasUsuario;
   onRestart: () => void;
@@ -11,6 +12,7 @@ interface ResultsScreenProps {
 
 export default function ResultsScreen({
   ministerio,
+  corpo,
   perguntas,
   respostas,
   onRestart,
@@ -39,7 +41,7 @@ export default function ResultsScreen({
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="text-center md:text-left">
             <span className="text-xs font-bold text-[#7A7060] uppercase tracking-widest block mb-2">
-              Resultado Oficial • Simulação {ministerio}
+              Resultado Oficial • Simulação {ministerio}{corpo ? ` • ${corpo}` : ""}
             </span>
             <h2 className="font-display text-2xl md:text-3xl font-semibold text-[#12233F] mb-4">
               Folha de Avaliação Individual

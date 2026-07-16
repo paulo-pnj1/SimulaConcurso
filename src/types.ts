@@ -1,6 +1,45 @@
+export type CorpoMinint =
+  | "Polícia Nacional"
+  | "Serviço de Investigação Criminal (SIC)"
+  | "Serviço de Migração e Estrangeiros (SME)"
+  | "Serviço Penitenciário"
+  | "Proteção Civil e Bombeiros";
+
+export const CORPOS_MININT: { id: CorpoMinint; sigla: string; descricao: string }[] = [
+  {
+    id: "Polícia Nacional",
+    sigla: "PN",
+    descricao: "Manutenção da ordem, segurança e tranquilidade públicas em todo o território nacional.",
+  },
+  {
+    id: "Serviço de Investigação Criminal (SIC)",
+    sigla: "SIC",
+    descricao: "Investigação criminal, recolha de prova e coadjuvação do Ministério Público.",
+  },
+  {
+    id: "Serviço de Migração e Estrangeiros (SME)",
+    sigla: "SME",
+    descricao: "Controlo de fronteiras, vistos, permanência e regime de estrangeiros em Angola.",
+  },
+  {
+    id: "Serviço Penitenciário",
+    sigla: "SP",
+    descricao: "Custódia, segurança e reinserção social de reclusos nos estabelecimentos prisionais.",
+  },
+  {
+    id: "Proteção Civil e Bombeiros",
+    sigla: "PCB",
+    descricao: "Socorro, combate a incêndios e resposta a catástrofes e emergências civis.",
+  },
+];
+
 export interface Pergunta {
   id: number;
   ministerio: "MININT" | "MINSA";
+  // Só se aplica a perguntas de MININT. Perguntas sem "corpo" são gerais
+  // (Constituição, símbolos nacionais, etc.) e entram no exame de qualquer
+  // corpo; perguntas com "corpo" só entram no exame desse corpo específico.
+  corpo?: CorpoMinint;
   categoria: string;
   enunciado: string;
   opcoes: string[];
@@ -20,6 +59,7 @@ export interface Resultado {
   candidateName: string;
   candidateEmail: string;
   ministerio: ConcursoType;
+  corpo?: CorpoMinint;
   score: number;
   respostasCorretas: number;
   totalPerguntas: number;

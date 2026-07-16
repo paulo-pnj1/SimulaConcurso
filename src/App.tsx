@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Pergunta, ConcursoType, RespostasUsuario, UserProfile, Resultado, SubmitExamResponse } from "./types";
+import { Pergunta, ConcursoType, CorpoMinint, RespostasUsuario, UserProfile, Resultado, SubmitExamResponse } from "./types";
 import SelectionScreen from "./components/SelectionScreen";
+import CorpoSelectionScreen from "./components/CorpoSelectionScreen";
 import SimulatorScreen from "./components/SimulatorScreen";
 import ResultsScreen from "./components/ResultsScreen";
 import AuthScreen from "./components/AuthScreen";
@@ -12,13 +13,14 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc, setDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { isAdminEmail } from "./config/admin";
 
-type ScreenType = "auth" | "selection" | "simulator" | "results" | "manage";
+type ScreenType = "auth" | "selection" | "corpo-selection" | "simulator" | "results" | "manage";
 
 export default function App() {
   const [screen, setScreen] = useState<ScreenType>("auth");
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
 
   const [selectedMinisterio, setSelectedMinisterio] = useState<ConcursoType | null>(null);
+  const [selectedCorpo, setSelectedCorpo] = useState<CorpoMinint | null>(null);
   const [perguntasFiltro, setPerguntasFiltro] = useState<Pergunta[]>([]);
   const [respostas, setRespostas] = useState<RespostasUsuario>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -131,7 +133,25 @@ export default function App() {
     }
   }, [currentUser]);
 
+  // MININT tem corpos (Polícia Nacional, SIC, SME, Serviço Penitenciário,
+  // Proteção Civil e Bombeiros) que precisam de ser escolhidos antes do
+  // exame; MINSA não tem essa subdivisão e vai direto para o simulador.
   const handleSelectMinistry = async (ministerio: ConcursoType) => {
+    setError(null);
+    if (ministerio === "MININT") {
+      setSelectedMinisterio(ministerio);
+      setScreen("corpo-selection");
+      return;
+    }
+    await fetchExamQuestions(ministerio);
+  };
+
+  const handleSelectCorpo = async (corpo: CorpoMinint) => {
+    setSelectedCorpo(corpo);
+    await fetchExamQuestions("MININT", corpo);
+  };
+
+  const fetchExamQuestions = async (ministerio: ConcursoType, corpo?: CorpoMinint) => {
     setIsLoading(true);
     setError(null);
 
@@ -140,7 +160,7 @@ export default function App() {
       // strips `resposta`/`explicacao` server-side and applies the trial
       // limit for non-premium candidates. This is what stops anyone from
       // reading the answer key out of the network tab before answering.
-      const response = await getExamQuestionsFn({ ministerio });
+      const response = await getExamQuestionsFn({ ministerio, corpo });
       const { perguntas } = response.data as { perguntas: Pergunta[] };
 
       setPerguntasFiltro(perguntas);
@@ -176,6 +196,7 @@ export default function App() {
     try {
       const response = await submitExamFn({
         ministerio: selectedMinisterio,
+        corpo: selectedCorpo || undefined,
         respostas,
         secondsElapsed,
       });
@@ -200,8 +221,15 @@ export default function App() {
 
   const handleRestart = () => {
     setSelectedMinisterio(null);
+    setSelectedCorpo(null);
     setPerguntasFiltro([]);
     setRespostas({});
+    setScreen("selection");
+  };
+
+  const handleBackToMinistrySelection = () => {
+    setSelectedMinisterio(null);
+    setError(null);
     setScreen("selection");
   };
 
@@ -317,6 +345,15 @@ export default function App() {
           />
         )}
 
+        {screen === "corpo-selection" && currentUser && (
+          <CorpoSelectionScreen
+            onSelect={handleSelectCorpo}
+            onBack={handleBackToMinistrySelection}
+            isLoading={isLoading}
+            error={error}
+          />
+        )}
+
         {screen === "manage" && currentUser && (
           <AdminDashboard adminUser={currentUser} onBack={() => setScreen("selection")} />
         )}
@@ -324,6 +361,7 @@ export default function App() {
         {screen === "simulator" && selectedMinisterio && (
           <SimulatorScreen
             ministerio={selectedMinisterio}
+            corpo={selectedCorpo || undefined}
             perguntas={perguntasFiltro}
             respostas={respostas}
             onSelectOption={handleSelectOption}
@@ -334,6 +372,7 @@ export default function App() {
         {screen === "results" && selectedMinisterio && (
           <ResultsScreen
             ministerio={selectedMinisterio}
+            corpo={selectedCorpo || undefined}
             perguntas={perguntasFiltro}
             respostas={respostas}
             onRestart={handleRestart}

@@ -21,7 +21,7 @@ import {
   ShieldOff,
   Wallet
 } from "lucide-react";
-import { Pergunta, ConcursoType, PREMIUM_CONFIG } from "../types";
+import { Pergunta, ConcursoType, CorpoMinint, CORPOS_MININT, PREMIUM_CONFIG } from "../types";
 import { db, handleFirestoreError, OperationType } from "../firebase";
 import {
   collection,
@@ -87,6 +87,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
 
   // Form State for Adding Questions
   const [ministerio, setMinisterio] = useState<ConcursoType>("MININT");
+  const [corpo, setCorpo] = useState<CorpoMinint | "">("");
   const [categoria, setCategoria] = useState<string>("");
   const [enunciado, setEnunciado] = useState<string>("");
   const [opcoes, setOpcoes] = useState<string[]>(["", "", "", ""]);
@@ -254,6 +255,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
     const newQuestion: Pergunta & { createdBy: string; createdAt: string } = {
       id: questionId as any, // Cast for matching string ID
       ministerio,
+      ...(ministerio === "MININT" && corpo ? { corpo } : {}),
       categoria: categoria.trim(),
       enunciado: enunciado.trim(),
       opcoes: opcoes.map((opt) => opt.trim()),
@@ -275,6 +277,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
       localStorage.setItem("custom_perguntas", JSON.stringify(updatedList));
 
       // Reset Form
+      setCorpo("");
       setCategoria("");
       setEnunciado("");
       setOpcoes(["", "", "", ""]);
@@ -809,6 +812,31 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                 </div>
               </div>
 
+              {/* Corpo (só MININT) */}
+              {ministerio === "MININT" && (
+                <div>
+                  <label className="block text-xs font-bold text-[#5C5346] uppercase tracking-wider mb-1.5">
+                    Corpo / Serviço (opcional)
+                  </label>
+                  <select
+                    value={corpo}
+                    onChange={(e) => setCorpo(e.target.value as CorpoMinint | "")}
+                    className="w-full bg-stone-50 border border-[#D8CBB0] rounded-lg px-3 py-2 text-sm text-[#201C16] font-semibold focus:outline-none focus:ring-2 focus:ring-[#12233F]"
+                  >
+                    <option value="">Geral (entra no exame de qualquer corpo)</option>
+                    {CORPOS_MININT.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.id}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-[10px] text-stone-400 mt-1">
+                    Deixe em "Geral" para uma pergunta comum (Constituição, símbolos nacionais, etc.).
+                    Escolha um corpo específico para uma pergunta que só deve aparecer nesse exame.
+                  </p>
+                </div>
+              )}
+
               {/* Enunciado */}
               <div>
                 <label className="block text-xs font-bold text-[#5C5346] uppercase tracking-wider mb-1.5">
@@ -940,6 +968,11 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                         >
                           {q.ministerio}
                         </span>
+                        {q.corpo && (
+                          <span className="text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider bg-stone-200 text-stone-600 max-w-[130px] truncate">
+                            {q.corpo}
+                          </span>
+                        )}
                         <span className="text-[10px] font-semibold text-stone-500 max-w-[120px] truncate">
                           {q.categoria}
                         </span>

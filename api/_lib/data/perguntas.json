@@ -1342,5 +1342,455 @@
     ],
     "resposta": 1,
     "explicacao": "A pandemia corresponde à propagação de uma epidemia por uma área geográfica muito ampla, atingindo vários países ou continentes, ao contrário da epidemia, geralmente circunscrita a uma região."
+  },
+  {
+    "id": 97,
+    "ministerio": "MININT",
+    "corpo": "Polícia Nacional",
+    "categoria": "Missão da Polícia Nacional",
+    "enunciado": "Qual é a missão fundamental da Polícia Nacional de Angola (PNA), de acordo com a sua Lei Orgânica?",
+    "opcoes": [
+      "Investigar exclusivamente crimes económicos",
+      "Garantir a ordem, segurança e tranquilidade públicas, defendendo a legalidade democrática e os direitos dos cidadãos",
+      "Administrar os estabelecimentos prisionais do país",
+      "Controlar exclusivamente a entrada e saída de estrangeiros no território nacional"
+    ],
+    "resposta": 1,
+    "explicacao": "A PNA é a força policial de natureza civil e carácter armado que tem como missão fundamental garantir a lei e a ordem, a segurança pública e a proteção dos direitos e liberdades dos cidadãos."
+  },
+  {
+    "id": 98,
+    "ministerio": "MININT",
+    "corpo": "Polícia Nacional",
+    "categoria": "Deontologia Policial",
+    "enunciado": "O uso da força por um agente da Polícia Nacional deve obedecer, acima de tudo, a que princípio?",
+    "opcoes": [
+      "Iniciativa própria, sem necessidade de justificação",
+      "Proporcionalidade e necessidade, sendo o último recurso perante a resistência",
+      "Autorização prévia da comunicação social",
+      "Decisão exclusiva do superior hierárquico mais próximo, independentemente da situação"
+    ],
+    "resposta": 1,
+    "explicacao": "O Código Deontológico do Agente Policial estabelece que o uso da força deve ser proporcional à ameaça, necessário e usado apenas quando outros meios se mostrarem ineficazes."
+  },
+  {
+    "id": 99,
+    "ministerio": "MININT",
+    "corpo": "Polícia Nacional",
+    "categoria": "Organização Policial",
+    "enunciado": "Como se designa a unidade da Polícia Nacional vocacionada para o patrulhamento de proximidade e prevenção da criminalidade nos bairros?",
+    "opcoes": [
+      "Polícia de Ordem e Segurança Pública (Polícia de Giro/Patrulhamento)",
+      "Serviço de Investigação Criminal",
+      "Polícia de Migração e Estrangeiros",
+      "Corpo de Bombeiros"
+    ],
+    "resposta": 0,
+    "explicacao": "O patrulhamento de proximidade e a prevenção criminal nos bairros são funções nucleares da Polícia de Ordem Pública, através do policiamento de giro e comunitário."
+  },
+  {
+    "id": 100,
+    "ministerio": "MININT",
+    "corpo": "Polícia Nacional",
+    "categoria": "Direitos e Garantias",
+    "enunciado": "Ao efetuar uma detenção, o agente da Polícia Nacional deve, entre outras obrigações legais, informar o detido de que direito fundamental?",
+    "opcoes": [
+      "Do direito ao silêncio e dos motivos da sua detenção",
+      "Do valor da caução a pagar de imediato",
+      "Da obrigatoriedade de confissão perante a autoridade",
+      "Da proibição de contactar um advogado"
+    ],
+    "resposta": 0,
+    "explicacao": "É garantia constitucional que todo o detido seja informado imediatamente dos motivos da detenção e dos seus direitos, incluindo o direito ao silêncio e à assistência de defensor."
+  },
+  {
+    "id": 101,
+    "ministerio": "MININT",
+    "corpo": "Polícia Nacional",
+    "categoria": "Hierarquia Policial",
+    "enunciado": "Na estrutura de patentes da Polícia Nacional de Angola, qual destas carreiras corresponde ao corpo de Oficiais?",
+    "opcoes": [
+      "Guarda Principal",
+      "Subcomissário",
+      "Cabo",
+      "Soldado"
+    ],
+    "resposta": 1,
+    "explicacao": "O corpo de Oficiais da PNA inclui patentes como Subcomissário, Comissário e Superintendente, distintas das carreiras de Sargentos e Guardas."
+  },
+  {
+    "id": 102,
+    "ministerio": "MININT",
+    "corpo": "Polícia Nacional",
+    "categoria": "Ordem Pública",
+    "enunciado": "Perante uma manifestação pública não autorizada mas pacífica, qual deve ser a atuação prioritária da Polícia Nacional?",
+    "opcoes": [
+      "Dispersão imediata com recurso a força máxima",
+      "Gestão negocial e diálogo, recorrendo à força apenas em caso de violência ou perigo iminente",
+      "Ignorar a situação por completo",
+      "Deter todos os participantes de imediato, independentemente do comportamento"
+    ],
+    "resposta": 1,
+    "explicacao": "A doutrina de manutenção de ordem pública privilegia a mediação e o diálogo, reservando a coação física para situações de violência efetiva ou risco iminente para pessoas e bens."
+  },
+  {
+    "id": 103,
+    "ministerio": "MININT",
+    "corpo": "Serviço de Investigação Criminal (SIC)",
+    "categoria": "Competências do SIC",
+    "enunciado": "O Serviço de Investigação Criminal (SIC) atua principalmente sob a direção de que entidade nos processos-crime?",
+    "opcoes": [
+      "Diretamente do Presidente da República",
+      "Do Ministério Público, como órgão de coadjuvação na investigação criminal",
+      "Exclusivamente da Polícia Nacional",
+      "De organizações internacionais de polícia"
+    ],
+    "resposta": 1,
+    "explicacao": "O SIC funciona como órgão auxiliar da administração da justiça, coadjuvando o Ministério Público na investigação criminal e recolha de prova, sob direção funcional deste."
+  },
+  {
+    "id": 104,
+    "ministerio": "MININT",
+    "corpo": "Serviço de Investigação Criminal (SIC)",
+    "categoria": "Cadeia de Custódia",
+    "enunciado": "Para que serve a chamada 'cadeia de custódia' na investigação criminal conduzida pelo SIC?",
+    "opcoes": [
+      "Para calcular o valor da fiança do arguido",
+      "Para documentar e preservar a integridade da prova, desde a recolha até à sua apresentação em tribunal",
+      "Para determinar a pena aplicável ao crime",
+      "Para escolher o defensor oficioso do arguido"
+    ],
+    "resposta": 1,
+    "explicacao": "A cadeia de custódia garante que uma prova recolhida na cena do crime chega a tribunal sem contaminação, adulteração ou dúvidas sobre a sua origem e manuseamento."
+  },
+  {
+    "id": 105,
+    "ministerio": "MININT",
+    "corpo": "Serviço de Investigação Criminal (SIC)",
+    "categoria": "Processo Penal",
+    "enunciado": "Que designação é dada à fase de investigação conduzida pelo SIC, destinada a recolher indícios sobre a existência de um crime e o seu autor?",
+    "opcoes": [
+      "Instrução contraditória",
+      "Inquérito",
+      "Julgamento",
+      "Recurso"
+    ],
+    "resposta": 1,
+    "explicacao": "O inquérito é a fase processual, sob direção do Ministério Público e coadjuvação do SIC, em que se investigam os factos e se recolhem os indícios sobre a existência do crime e a identidade dos seus autores."
+  },
+  {
+    "id": 106,
+    "ministerio": "MININT",
+    "corpo": "Serviço de Investigação Criminal (SIC)",
+    "categoria": "Diferenciação de Competências",
+    "enunciado": "Qual a principal diferença de atuação entre a Polícia Nacional e o Serviço de Investigação Criminal?",
+    "opcoes": [
+      "Não existe qualquer diferença, são o mesmo corpo",
+      "A PN foca-se na prevenção e ordem pública imediata; o SIC foca-se na investigação técnico-científica de crimes",
+      "O SIC só atua fora do território nacional",
+      "A PN só investiga crimes económicos"
+    ],
+    "resposta": 1,
+    "explicacao": "Enquanto a Polícia Nacional se dedica sobretudo à prevenção criminal e manutenção da ordem pública, o SIC especializa-se na investigação criminal, perícia e recolha de prova."
+  },
+  {
+    "id": 107,
+    "ministerio": "MININT",
+    "corpo": "Serviço de Investigação Criminal (SIC)",
+    "categoria": "Meios de Prova",
+    "enunciado": "Num crime de homicídio, qual destes elementos é tipicamente prioritário para a equipa do SIC preservar na cena do crime?",
+    "opcoes": [
+      "A opinião dos vizinhos sobre o suspeito",
+      "Vestígios físicos, biológicos e balísticos no local, antes de qualquer alteração",
+      "O historial bancário da vítima, de imediato",
+      "A reputação da vítima na comunidade"
+    ],
+    "resposta": 1,
+    "explicacao": "A preservação imediata dos vestígios físicos, biológicos e balísticos na cena do crime é essencial, pois são facilmente alteráveis ou destruíveis e fundamentais para a investigação."
+  },
+  {
+    "id": 108,
+    "ministerio": "MININT",
+    "corpo": "Serviço de Investigação Criminal (SIC)",
+    "categoria": "Direitos do Arguido",
+    "enunciado": "Durante um interrogatório conduzido por um investigador do SIC, o que é constitucionalmente proibido?",
+    "opcoes": [
+      "Perguntar o nome completo do arguido",
+      "Obter declarações mediante tortura, coação ou qualquer forma de ofensa à integridade física ou moral",
+      "Registar o depoimento por escrito",
+      "Permitir a presença de um advogado"
+    ],
+    "resposta": 1,
+    "explicacao": "A Constituição da República de Angola proíbe expressamente a obtenção de prova ou declarações através de tortura, coação, ofensa à integridade física ou moral, ou qualquer forma de tratamento desumano."
+  },
+  {
+    "id": 109,
+    "ministerio": "MININT",
+    "corpo": "Serviço de Migração e Estrangeiros (SME)",
+    "categoria": "Missão do SME",
+    "enunciado": "Qual é a principal atribuição do Serviço de Migração e Estrangeiros (SME)?",
+    "opcoes": [
+      "Emitir apenas o Bilhete de Identidade nacional",
+      "Controlar e fiscalizar a entrada, permanência e saída de cidadãos nacionais e estrangeiros no território angolano",
+      "Gerir o sistema prisional",
+      "Combater incêndios em zonas fronteiriças"
+    ],
+    "resposta": 1,
+    "explicacao": "O SME é o órgão do MININT responsável pelo controlo migratório, incluindo a fiscalização de fronteiras e a gestão da permanência de estrangeiros em Angola."
+  },
+  {
+    "id": 110,
+    "ministerio": "MININT",
+    "corpo": "Serviço de Migração e Estrangeiros (SME)",
+    "categoria": "Documentos de Viagem",
+    "enunciado": "Que documento é, regra geral, exigido a um cidadão estrangeiro para entrar legalmente em Angola?",
+    "opcoes": [
+      "Apenas o bilhete de avião",
+      "Passaporte válido e visto adequado à finalidade da viagem",
+      "Apenas a carta de condução",
+      "Nenhum documento é necessário para entrada"
+    ],
+    "resposta": 1,
+    "explicacao": "A entrada de estrangeiros em Angola exige, regra geral, passaporte válido acompanhado do visto correspondente ao motivo da viagem (turismo, trabalho, estudo, etc.)."
+  },
+  {
+    "id": 111,
+    "ministerio": "MININT",
+    "corpo": "Serviço de Migração e Estrangeiros (SME)",
+    "categoria": "Regime de Estrangeiros",
+    "enunciado": "O que caracteriza a situação de um estrangeiro em 'permanência irregular' no território angolano?",
+    "opcoes": [
+      "Ter entrado legalmente mas ultrapassado o prazo de validade do visto sem regularização",
+      "Ser titular de autorização de residência válida",
+      "Ter nascido em Angola",
+      "Ser funcionário de uma embaixada"
+    ],
+    "resposta": 0,
+    "explicacao": "A permanência irregular ocorre, entre outras situações, quando o estrangeiro ultrapassa o período de validade do visto ou da autorização de permanência sem regularizar a sua situação junto do SME."
+  },
+  {
+    "id": 112,
+    "ministerio": "MININT",
+    "corpo": "Serviço de Migração e Estrangeiros (SME)",
+    "categoria": "Postos de Fronteira",
+    "enunciado": "Nos postos de fronteira, qual é uma das principais funções dos agentes do SME?",
+    "opcoes": [
+      "Verificar a autenticidade dos documentos de viagem e registar a entrada/saída de pessoas",
+      "Cobrar impostos aduaneiros sobre mercadorias",
+      "Combater incêndios florestais junto à fronteira",
+      "Investigar crimes económicos internacionais"
+    ],
+    "resposta": 0,
+    "explicacao": "O controlo documental e o registo de entradas e saídas nos postos de fronteira são funções centrais do SME, prevenindo a entrada irregular e a falsificação documental."
+  },
+  {
+    "id": 113,
+    "ministerio": "MININT",
+    "corpo": "Serviço de Migração e Estrangeiros (SME)",
+    "categoria": "Tipos de Visto",
+    "enunciado": "Um cidadão estrangeiro que pretenda trabalhar em Angola deve, regra geral, obter que tipo de visto?",
+    "opcoes": [
+      "Visto de trânsito",
+      "Visto de trabalho",
+      "Visto de cortesia apenas",
+      "Nenhum visto, apenas o passaporte"
+    ],
+    "resposta": 1,
+    "explicacao": "O exercício de atividade laboral remunerada em Angola por um estrangeiro exige, regra geral, a obtenção prévia de visto de trabalho junto das autoridades competentes."
+  },
+  {
+    "id": 114,
+    "ministerio": "MININT",
+    "corpo": "Serviço de Migração e Estrangeiros (SME)",
+    "categoria": "Cooperação Internacional",
+    "enunciado": "Por que motivo o SME coopera frequentemente com a Interpol e outros serviços de migração estrangeiros?",
+    "opcoes": [
+      "Para partilhar receitas fiscais",
+      "Para identificar documentos falsificados e pessoas procuradas internacionalmente que tentem atravessar fronteiras",
+      "Para organizar eventos culturais",
+      "Para gerir hospitais em zonas fronteiriças"
+    ],
+    "resposta": 1,
+    "explicacao": "A cooperação com a Interpol e serviços congéneres permite ao SME identificar documentos de viagem falsificados e pessoas com mandados de captura internacional, reforçando a segurança das fronteiras."
+  },
+  {
+    "id": 115,
+    "ministerio": "MININT",
+    "corpo": "Serviço Penitenciário",
+    "categoria": "Missão do Serviço Penitenciário",
+    "enunciado": "Qual é a dupla finalidade essencial do Serviço Penitenciário angolano relativamente aos reclusos?",
+    "opcoes": [
+      "Apenas castigar, sem qualquer preocupação com o futuro do recluso",
+      "Garantir a segurança e custódia dos reclusos, promovendo simultaneamente a sua reinserção social",
+      "Gerir exclusivamente a alimentação dos estabelecimentos prisionais",
+      "Substituir as funções dos tribunais na determinação da pena"
+    ],
+    "resposta": 1,
+    "explicacao": "O sistema penitenciário angolano visa não só a custódia segura dos reclusos, mas também a sua reeducação, formação e reinserção social, preparando o regresso à vida em liberdade."
+  },
+  {
+    "id": 116,
+    "ministerio": "MININT",
+    "corpo": "Serviço Penitenciário",
+    "categoria": "Direitos dos Reclusos",
+    "enunciado": "Mesmo estando privado de liberdade, que direito fundamental o recluso continua a ter garantido pela Constituição?",
+    "opcoes": [
+      "Direito à integridade física e moral, não podendo ser submetido a tortura ou tratamento degradante",
+      "Direito de sair do estabelecimento prisional sempre que desejar",
+      "Direito de anular a sua própria pena",
+      "Direito de ausência total de vigilância"
+    ],
+    "resposta": 0,
+    "explicacao": "A Constituição da República de Angola garante que nenhuma pessoa, incluindo o recluso, pode ser submetida a tortura, tratamento cruel, degradante ou desumano."
+  },
+  {
+    "id": 117,
+    "ministerio": "MININT",
+    "corpo": "Serviço Penitenciário",
+    "categoria": "Regime Prisional",
+    "enunciado": "O que distingue, em termos gerais, o regime prisional 'fechado' do regime 'aberto'?",
+    "opcoes": [
+      "No fechado há maior restrição e vigilância; no aberto o recluso tem maior autonomia e contacto com o exterior, mediante certas condições",
+      "Não existe qualquer diferença prática entre os dois",
+      "O regime aberto aplica-se apenas a menores",
+      "O regime fechado é usado apenas para visitas familiares"
+    ],
+    "resposta": 0,
+    "explicacao": "O regime fechado implica maior vigilância e restrição de movimentos, enquanto o regime aberto permite maior autonomia e proximidade com o exterior, normalmente associado a boa conduta e fase avançada da pena."
+  },
+  {
+    "id": 118,
+    "ministerio": "MININT",
+    "corpo": "Serviço Penitenciário",
+    "categoria": "Segurança Prisional",
+    "enunciado": "Qual destas é uma prática recomendada de segurança para um agente penitenciário durante uma revista a uma cela?",
+    "opcoes": [
+      "Atuar sozinho e sem qualquer registo da revista",
+      "Seguir os procedimentos estabelecidos, atuar em equipa e registar formalmente qualquer ocorrência ou objeto apreendido",
+      "Permitir que o recluso escolha quando a revista deve ocorrer",
+      "Ignorar objetos suspeitos encontrados"
+    ],
+    "resposta": 1,
+    "explicacao": "As revistas em estabelecimentos prisionais devem seguir procedimentos formais de segurança, realizadas preferencialmente em equipa, com registo detalhado de qualquer ocorrência."
+  },
+  {
+    "id": 119,
+    "ministerio": "MININT",
+    "corpo": "Serviço Penitenciário",
+    "categoria": "Reinserção Social",
+    "enunciado": "Qual destas iniciativas contribui diretamente para a reinserção social dos reclusos?",
+    "opcoes": [
+      "Isolamento total, sem qualquer atividade",
+      "Programas de formação profissional, educação e trabalho dentro do estabelecimento prisional",
+      "Proibição de qualquer contacto com a família",
+      "Ausência de qualquer acompanhamento psicológico"
+    ],
+    "resposta": 1,
+    "explicacao": "A formação profissional, a educação e o trabalho durante o cumprimento da pena são instrumentos centrais na preparação do recluso para o regresso à vida em sociedade."
+  },
+  {
+    "id": 120,
+    "ministerio": "MININT",
+    "corpo": "Serviço Penitenciário",
+    "categoria": "Hierarquia e Disciplina",
+    "enunciado": "Em caso de motim ou incidente grave num estabelecimento prisional, qual deve ser a primeira prioridade dos agentes penitenciários?",
+    "opcoes": [
+      "Preservar a vida e a integridade física de reclusos e funcionários, seguindo o protocolo de gestão de crise",
+      "Divulgar imediatamente o incidente na imprensa",
+      "Abandonar o posto até à chegada de reforços",
+      "Negociar sem qualquer coordenação com a chefia"
+    ],
+    "resposta": 0,
+    "explicacao": "A prioridade máxima em qualquer incidente prisional grave é a preservação da vida e integridade física de todos os envolvidos, seguindo protocolos de gestão de crise coordenados pela chefia."
+  },
+  {
+    "id": 121,
+    "ministerio": "MININT",
+    "corpo": "Proteção Civil e Bombeiros",
+    "categoria": "Missão da Proteção Civil",
+    "enunciado": "Qual é o principal objetivo do Serviço de Proteção Civil e Bombeiros (SPCB)?",
+    "opcoes": [
+      "Investigar crimes financeiros",
+      "Prevenir riscos coletivos e providenciar socorro em situações de acidente, catástrofe ou calamidade",
+      "Controlar a entrada de estrangeiros no país",
+      "Administrar estabelecimentos prisionais"
+    ],
+    "resposta": 1,
+    "explicacao": "A Proteção Civil e Bombeiros tem como missão a prevenção de riscos coletivos e a organização do socorro a pessoas e bens em situações de acidente grave, catástrofe ou calamidade."
+  },
+  {
+    "id": 122,
+    "ministerio": "MININT",
+    "corpo": "Proteção Civil e Bombeiros",
+    "categoria": "Combate a Incêndios",
+    "enunciado": "Qual destes é o procedimento correto ao chegar primeiro a um incêndio estrutural com pessoas presas no interior?",
+    "opcoes": [
+      "Avaliar rapidamente a situação, isolar o perímetro e priorizar o salvamento de vidas em segurança antes de outras ações",
+      "Entrar imediatamente sem qualquer avaliação prévia do risco",
+      "Aguardar instruções sem tomar qualquer ação inicial",
+      "Concentrar-se apenas em salvar bens materiais"
+    ],
+    "resposta": 0,
+    "explicacao": "O procedimento operacional padrão exige uma avaliação inicial rápida da cena, isolamento do perímetro e priorização do salvamento de vidas humanas, sempre com segurança da equipa."
+  },
+  {
+    "id": 123,
+    "ministerio": "MININT",
+    "corpo": "Proteção Civil e Bombeiros",
+    "categoria": "Especialidade de Mergulhador",
+    "enunciado": "Para exercer funções na especialidade de mergulhador dentro do Corpo de Bombeiros, que competência básica é geralmente exigida ao candidato?",
+    "opcoes": [
+      "Saber nadar e ter aptidão física para operações aquáticas",
+      "Ter formação em direito penal",
+      "Ser fluente em várias línguas estrangeiras",
+      "Ter experiência em investigação criminal"
+    ],
+    "resposta": 0,
+    "explicacao": "As especialidades de mergulho e salvamento aquático exigem que o candidato saiba nadar e possua aptidão física e psicológica para operar em ambiente aquático, muitas vezes em condições adversas."
+  },
+  {
+    "id": 124,
+    "ministerio": "MININT",
+    "corpo": "Proteção Civil e Bombeiros",
+    "categoria": "Primeiros Socorros",
+    "enunciado": "Perante uma vítima inconsciente mas que respira normalmente, qual é a posição recomendada enquanto se aguarda socorro especializado?",
+    "opcoes": [
+      "Posição lateral de segurança (PLS)",
+      "Sentada e com as pernas cruzadas",
+      "De pé, apoiada numa parede",
+      "De bruços, com a cabeça virada para baixo"
+    ],
+    "resposta": 0,
+    "explicacao": "A posição lateral de segurança (PLS) mantém as vias aéreas desobstruídas e reduz o risco de aspiração de vómito em vítimas inconscientes que respiram normalmente."
+  },
+  {
+    "id": 125,
+    "ministerio": "MININT",
+    "corpo": "Proteção Civil e Bombeiros",
+    "categoria": "Gestão de Catástrofes",
+    "enunciado": "O que significa, em proteção civil, o conceito de 'plano de contingência'?",
+    "opcoes": [
+      "Um documento que define ações e recursos previamente organizados para responder a um risco específico identificado",
+      "Um relatório financeiro anual do serviço",
+      "Uma lista de multas por infrações de trânsito",
+      "Um manual exclusivamente sobre construção civil"
+    ],
+    "resposta": 0,
+    "explicacao": "O plano de contingência estabelece, de forma prévia e organizada, as ações, meios e responsabilidades necessários para responder eficazmente a um risco ou emergência identificada."
+  },
+  {
+    "id": 126,
+    "ministerio": "MININT",
+    "corpo": "Proteção Civil e Bombeiros",
+    "categoria": "Classificação de Emergências",
+    "enunciado": "Qual a diferença essencial entre 'acidente grave' e 'catástrofe' no contexto da Proteção Civil?",
+    "opcoes": [
+      "A catástrofe tem impacto e gravidade significativamente maiores, exigindo mobilização de meios excecionais e afetando um número elevado de pessoas",
+      "Não existe diferença entre os dois conceitos",
+      "Acidente grave só ocorre em zonas urbanas",
+      "Catástrofe refere-se apenas a fenómenos meteorológicos"
+    ],
+    "resposta": 0,
+    "explicacao": "Uma catástrofe distingue-se do acidente grave pela dimensão do impacto, exigindo geralmente a mobilização de meios excecionais e afetando de forma significativa pessoas, bens ou o ambiente."
   }
 ]
