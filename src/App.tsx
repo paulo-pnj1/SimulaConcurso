@@ -9,7 +9,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import PaymentGateScreen from "./components/PaymentGateScreen";
 import ManualsScreen from "./components/ManualsScreen";
 import InstallAppPrompt from "./components/InstallAppPrompt";
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, Home, BookOpen, LogOut, ShieldCheck } from "lucide-react";
 import { auth, db, getExamQuestionsFn, submitExamFn } from "./firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc, setDoc, collection, getDocs, query, where } from "firebase/firestore";
@@ -235,6 +235,21 @@ export default function App() {
     setScreen("selection");
   };
 
+  // Sair do simulador a meio da prova: descarta as respostas e perguntas
+  // carregadas e volta ao ecrã de seleção de corpo (se era MININT) ou à
+  // seleção de ministério, tal como um "voltar" normal faria.
+  const handleExitSimulator = () => {
+    setPerguntasFiltro([]);
+    setRespostas({});
+    if (selectedMinisterio === "MININT") {
+      setSelectedCorpo(null);
+      setScreen("corpo-selection");
+    } else {
+      setSelectedMinisterio(null);
+      setScreen("selection");
+    }
+  };
+
   const handleSignOut = async () => {
     try {
       await signOut(auth);
@@ -288,6 +303,13 @@ export default function App() {
     }
   };
 
+  // Barra de navegação inferior (estilo app nativa) só faz sentido nos
+  // ecrãs "hub" do candidato — não durante o fluxo de prova/pagamento,
+  // onde já existe um botão "Voltar" próprio e dedicado.
+  const isAdminUser = currentUser?.role === "admin";
+  const hasHubAccess = !!currentUser && (isAdminUser || currentUser.isPremium);
+  const showBottomNav = hasHubAccess && (screen === "selection" || screen === "manuais" || screen === "manage");
+
   return (
     <div className="min-h-screen bg-[var(--color-paper)] flex flex-col justify-between text-[var(--color-ink)]">
       {/* Top Main Navbar */}
@@ -322,7 +344,7 @@ export default function App() {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-grow">
+      <main className={`flex-grow ${showBottomNav ? "pb-20 md:pb-0" : ""}`}>
         {screen === "auth" && <AuthScreen onAuthSuccess={handleAuthSuccess} />}
 
         {screen === "selection" && currentUser && currentUser.role !== "admin" && !currentUser.isPremium && (
@@ -373,6 +395,7 @@ export default function App() {
             respostas={respostas}
             onSelectOption={handleSelectOption}
             onSubmit={handleSubmitExam}
+            onExit={handleExitSimulator}
           />
         )}
 
@@ -387,8 +410,9 @@ export default function App() {
         )}
       </main>
 
-      {/* Institutional Footer */}
-      <footer className="bg-[var(--color-paper-light)] border-t border-[var(--color-line)] py-6 text-center text-xs text-[var(--color-ink-faint)]">
+      {/* Institutional Footer — no telemóvel dá lugar à barra de navegação
+          inferior, por isso só aparece a partir do breakpoint md */}
+      <footer className="hidden md:block bg-[var(--color-paper-light)] border-t border-[var(--color-line)] py-6 text-center text-xs text-[var(--color-ink-faint)]">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
           <p>© {new Date().getFullYear()} Simulador de Exames Angola. Todos os direitos reservados.</p>
           <div className="flex space-x-4">
@@ -398,6 +422,54 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Mobile Bottom Tab Bar — dá ao painel do candidato uma navegação
+          fixa e tátil, como uma app nativa, nos ecrãs "hub" (Início e
+          Manuais). Ecrãs de fluxo (prova, resultados, escolha de corpo,
+          autenticação) mantêm o seu próprio botão "Voltar" dedicado. */}
+      {showBottomNav && currentUser && (
+        <nav
+          className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--color-navy)] border-t-2 border-[var(--color-gold)] shadow-[0_-2px_10px_rgba(12,26,46,0.25)]"
+          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+        >
+          <div className={`grid ${isAdminUser ? "grid-cols-3" : "grid-cols-2"} h-16`}>
+            <button
+              id="tab-inicio"
+              onClick={() => setScreen("selection")}
+              className={`flex flex-col items-center justify-center gap-1 transition-colors ${
+                screen === "selection" ? "text-[var(--color-gold)]" : "text-white/60 active:text-white/90"
+              }`}
+            >
+              <Home className="w-5 h-5" />
+              <span className="text-[10px] font-semibold tracking-wide">Início</span>
+            </button>
+
+            <button
+              id="tab-manuais"
+              onClick={() => setScreen("manuais")}
+              className={`flex flex-col items-center justify-center gap-1 transition-colors ${
+                screen === "manuais" ? "text-[var(--color-gold)]" : "text-white/60 active:text-white/90"
+              }`}
+            >
+              <BookOpen className="w-5 h-5" />
+              <span className="text-[10px] font-semibold tracking-wide">Manuais</span>
+            </button>
+
+            {isAdminUser && (
+              <button
+                id="tab-admin"
+                onClick={() => setScreen("manage")}
+                className={`flex flex-col items-center justify-center gap-1 transition-colors ${
+                  screen === "manage" ? "text-[var(--color-gold)]" : "text-white/60 active:text-white/90"
+                }`}
+              >
+                <ShieldCheck className="w-5 h-5" />
+                <span className="text-[10px] font-semibold tracking-wide">Painel</span>
+              </button>
+            )}
+          </div>
+        </nav>
+      )}
 
       <InstallAppPrompt />
     </div>

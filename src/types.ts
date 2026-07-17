@@ -116,7 +116,7 @@ export interface UserProfile {
 }
 
 // ==========================================================
-// CONFIGURAÇÃO DO PLANO PREMIUM -  edite estes valores livremente
+// CONFIGURAÇÃO DO PLANO PREMIUM — edite estes valores livremente
 // ==========================================================
 export const PREMIUM_CONFIG = {
   // Preço de acesso vitalício (ajuste conforme desejar)

@@ -50,10 +50,10 @@ export default function SelectionScreen({
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
+    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
       {/* Profile Header Bar */}
       {currentUser && (
-        <div className="bg-white border border-[#E3D9C4] rounded-2xl p-4 mb-6 sm:mb-10 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 shadow-xs">
+        <div className="bg-white border border-[#E3D9C4] rounded-2xl p-3.5 sm:p-4 mb-5 sm:mb-10 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 sm:gap-4 shadow-xs">
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
               isAdmin ? "bg-red-50 text-[#A62639]" : "bg-[#EAF0F7] text-[#12233F]"
@@ -79,7 +79,7 @@ export default function SelectionScreen({
             {isAdmin && (
               <button
                 onClick={onOpenManage}
-                className="flex-1 sm:flex-initial justify-center bg-[#12233F] hover:bg-[#0C1A2E] text-white text-xs font-bold px-4 py-2.5 sm:py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
+                className="hidden sm:flex flex-initial justify-center bg-[#12233F] hover:bg-[#0C1A2E] text-white text-xs font-bold px-4 py-2 rounded-xl transition-all cursor-pointer items-center gap-1.5 shadow-xs"
               >
                 <Lock className="w-3.5 h-3.5" />
                 <span>Painel Administrativo</span>
@@ -98,15 +98,15 @@ export default function SelectionScreen({
       )}
 
       {/* Institutional Header */}
-      <div className="text-center mb-8 md:mb-12">
-        <div className="inline-flex items-center justify-center space-x-2 bg-[#E3D9C4] text-[#5C5346] px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 border border-[#D8CBB0]">
-          <GraduationCap className="w-4 h-4" />
+      <div className="text-center mb-6 md:mb-12">
+        <div className="inline-flex items-center justify-center space-x-2 bg-[#E3D9C4] text-[#5C5346] px-3 sm:px-4 py-1.5 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-wider mb-3 sm:mb-4 border border-[#D8CBB0]">
+          <GraduationCap className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           <span>Portal de Preparação Oficial</span>
         </div>
-        <h1 className="font-display text-2xl sm:text-3xl md:text-5xl font-semibold tracking-tight text-[#12233F] mb-3 sm:mb-4">
+        <h1 className="font-display text-xl sm:text-3xl md:text-5xl font-semibold tracking-tight text-[#12233F] mb-2 sm:mb-4 px-2">
           Selecione o Ministério do Concurso
         </h1>
-        <p className="text-sm md:text-base text-[#7A7060] max-w-2xl mx-auto leading-relaxed">
+        <p className="text-xs sm:text-base text-[#7A7060] max-w-2xl mx-auto leading-relaxed px-2">
           Prepare-se para os concursos públicos de ingresso na Função Pública de Angola. Teste os seus conhecimentos com a nossa simulação de exames oficiais de admissão.
         </p>
       </div>
@@ -121,7 +121,7 @@ export default function SelectionScreen({
       )}
 
       {/* Grid of ministries */}
-      <div className="grid md:grid-cols-2 gap-4 sm:gap-8 max-w-3xl mx-auto">
+      <div className="flex flex-col md:grid md:grid-cols-2 gap-3 sm:gap-4 md:gap-8 max-w-3xl mx-auto">
         {/* MININT Card */}
         <motion.button
           id="card-minint"
@@ -130,27 +130,38 @@ export default function SelectionScreen({
           transition={{ duration: 0.2 }}
           onClick={() => onSelect("MININT")}
           disabled={isLoading}
-          className="group flex flex-col text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] rounded-xl p-5 sm:p-8 shadow-sm hover:shadow-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden cursor-pointer"
+          className="group flex items-center md:flex-col md:items-stretch text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] active:border-[#12233F] rounded-xl p-4 md:p-8 shadow-sm hover:shadow-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden cursor-pointer gap-3.5 md:gap-0"
         >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-[#12233F]" />
-          <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <div className="p-3 sm:p-4 bg-stone-100 text-[#12233F] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300">
-              <Shield className="w-7 h-7 sm:w-8 sm:h-8" />
+          <div className="hidden md:block absolute top-0 left-0 w-full h-1.5 bg-[#12233F]" />
+          <div className="p-3 md:p-4 bg-stone-100 text-[#12233F] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300 shrink-0 md:mb-6 md:self-start">
+            <Shield className="w-6 h-6 md:w-8 md:h-8" />
+          </div>
+
+          <div className="min-w-0 flex-1 md:flex md:flex-col">
+            <div className="flex items-center justify-between md:mb-6">
+              <h2 className="font-display text-base md:text-xl lg:text-2xl font-semibold text-[#12233F] md:mb-2 truncate">
+                Ministério do Interior
+              </h2>
+              <span className="hidden md:inline-block text-xs font-bold text-[#12233F] tracking-wider bg-stone-100 px-3 py-1 rounded-full uppercase shrink-0">
+                MININT
+              </span>
             </div>
-            <span className="text-xs font-bold text-[#12233F] tracking-wider bg-stone-100 px-3 py-1 rounded-full uppercase">
+            <span className="md:hidden text-[10px] font-bold text-[#12233F] tracking-wider bg-stone-100 px-2 py-0.5 rounded-full uppercase inline-block w-fit mb-1.5">
               MININT
             </span>
+            <p className="hidden md:block text-sm text-[#7A7060] leading-relaxed mb-6 flex-grow">
+              Exames para a Polícia Nacional, Serviço de Investigação Criminal (SIC), Migração e Estrangeiros (SME) e Proteção Civil. Incide sobre a Constituição da República, Legislação Policial e Deontologia.
+            </p>
+            <p className="md:hidden text-xs text-[#7A7060] leading-snug line-clamp-2">
+              Polícia Nacional, SIC, SME e Proteção Civil.
+            </p>
+            <div className="hidden md:flex items-center text-sm font-semibold text-[#12233F] mt-auto">
+              <span>Iniciar Simulação</span>
+              <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+            </div>
           </div>
-          <h2 className="font-display text-lg sm:text-xl md:text-2xl font-semibold text-[#12233F] mb-2">
-            Ministério do Interior
-          </h2>
-          <p className="text-sm text-[#7A7060] leading-relaxed mb-4 sm:mb-6 flex-grow">
-            Exames para a Polícia Nacional, Serviço de Investigação Criminal (SIC), Migração e Estrangeiros (SME) e Proteção Civil. Incide sobre a Constituição da República, Legislação Policial e Deontologia.
-          </p>
-          <div className="flex items-center text-sm font-semibold text-[#12233F] mt-auto">
-            <span>Iniciar Simulação</span>
-            <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-          </div>
+
+          <ChevronRight className="md:hidden w-5 h-5 text-stone-400 group-hover:text-[#12233F] transition-colors shrink-0" />
         </motion.button>
 
         {/* MINSA Card */}
@@ -161,45 +172,57 @@ export default function SelectionScreen({
           transition={{ duration: 0.2 }}
           onClick={() => onSelect("MINSA")}
           disabled={isLoading}
-          className="group flex flex-col text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] rounded-xl p-5 sm:p-8 shadow-sm hover:shadow-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden cursor-pointer"
+          className="group flex items-center md:flex-col md:items-stretch text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] active:border-[#12233F] rounded-xl p-4 md:p-8 shadow-sm hover:shadow-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden cursor-pointer gap-3.5 md:gap-0"
         >
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-[#A62639]" />
-          <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <div className="p-3 sm:p-4 bg-stone-100 text-[#A62639] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300">
-              <HeartPulse className="w-7 h-7 sm:w-8 sm:h-8" />
+          <div className="hidden md:block absolute top-0 left-0 w-full h-1.5 bg-[#A62639]" />
+          <div className="p-3 md:p-4 bg-stone-100 text-[#A62639] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300 shrink-0 md:mb-6 md:self-start">
+            <HeartPulse className="w-6 h-6 md:w-8 md:h-8" />
+          </div>
+
+          <div className="min-w-0 flex-1 md:flex md:flex-col">
+            <div className="flex items-center justify-between md:mb-6">
+              <h2 className="font-display text-base md:text-xl lg:text-2xl font-semibold text-[#12233F] md:mb-2 truncate">
+                Ministério da Saúde
+              </h2>
+              <span className="hidden md:inline-block text-xs font-bold text-[#A62639] tracking-wider bg-red-50 px-3 py-1 rounded-full uppercase shrink-0">
+                MINSA
+              </span>
             </div>
-            <span className="text-xs font-bold text-[#A62639] tracking-wider bg-red-50 px-3 py-1 rounded-full uppercase">
+            <span className="md:hidden text-[10px] font-bold text-[#A62639] tracking-wider bg-red-50 px-2 py-0.5 rounded-full uppercase inline-block w-fit mb-1.5">
               MINSA
             </span>
+            <p className="hidden md:block text-sm text-[#7A7060] leading-relaxed mb-6 flex-grow">
+              Exames para Médicos, Enfermeiros, Técnicos de Diagnóstico e Terapeutas. Incide sobre o Serviço Nacional de Saúde (SNS), Saúde Pública de Angola, Epidemiologia, Ética e Cuidados de Saúde Primários.
+            </p>
+            <p className="md:hidden text-xs text-[#7A7060] leading-snug line-clamp-2">
+              Médicos, Enfermeiros e Técnicos de Diagnóstico.
+            </p>
+            <div className="hidden md:flex items-center text-sm font-semibold text-[#12233F] mt-auto">
+              <span>Iniciar Simulação</span>
+              <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+            </div>
           </div>
-          <h2 className="font-display text-lg sm:text-xl md:text-2xl font-semibold text-[#12233F] mb-2">
-            Ministério da Saúde
-          </h2>
-          <p className="text-sm text-[#7A7060] leading-relaxed mb-4 sm:mb-6 flex-grow">
-            Exames para Médicos, Enfermeiros, Técnicos de Diagnóstico e Terapeutas. Incide sobre o Serviço Nacional de Saúde (SNS), Saúde Pública de Angola, Epidemiologia, Ética e Cuidados de Saúde Primários.
-          </p>
-          <div className="flex items-center text-sm font-semibold text-[#12233F] mt-auto">
-            <span>Iniciar Simulação</span>
-            <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-          </div>
+
+          <ChevronRight className="md:hidden w-5 h-5 text-stone-400 group-hover:text-[#12233F] transition-colors shrink-0" />
         </motion.button>
       </div>
 
       {/* Manuais de Estudo CTA */}
-      <div className="max-w-3xl mx-auto mt-6">
+      <div className="max-w-3xl mx-auto mt-3 sm:mt-6">
         <motion.button
           whileHover={{ y: -3 }}
+          whileTap={{ scale: 0.98 }}
           transition={{ duration: 0.2 }}
           onClick={onOpenManuais}
-          className="group w-full flex items-center gap-3 sm:gap-4 text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
+          className="group w-full flex items-center gap-3 sm:gap-4 text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] active:border-[#12233F] rounded-xl p-3.5 sm:p-5 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
         >
-          <div className="p-3 sm:p-3.5 bg-stone-100 text-[#12233F] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300 flex-shrink-0">
+          <div className="p-2.5 sm:p-3.5 bg-stone-100 text-[#12233F] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300 flex-shrink-0">
             <FileText className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
-          <div className="flex-grow">
-            <h3 className="font-display text-base md:text-lg font-semibold text-[#12233F]">Manuais de Estudo</h3>
-            <p className="text-xs md:text-sm text-[#7A7060] leading-relaxed">
-              Descarregue os PDFs de preparação para consultar a qualquer momento, mesmo offline.
+          <div className="flex-grow min-w-0">
+            <h3 className="font-display text-sm sm:text-base md:text-lg font-semibold text-[#12233F]">Manuais de Estudo</h3>
+            <p className="text-xs md:text-sm text-[#7A7060] leading-relaxed truncate sm:whitespace-normal">
+              Descarregue os PDFs de preparação, mesmo offline.
             </p>
           </div>
           <ChevronRight className="w-5 h-5 text-stone-400 group-hover:text-[#12233F] group-hover:translate-x-1 transition-all flex-shrink-0" />
@@ -207,17 +230,17 @@ export default function SelectionScreen({
       </div>
 
       {isLoading && (
-        <div className="mt-8 text-center text-stone-500 animate-pulse text-sm">
+        <div className="mt-6 sm:mt-8 text-center text-stone-500 animate-pulse text-sm">
           A carregar caderno de perguntas oficiais...
         </div>
       )}
 
       {/* Candidate History Section */}
       {!isAdmin && currentUser && (
-        <div className="mt-8 sm:mt-12 max-w-3xl mx-auto bg-white border border-[#E3D9C4] rounded-2xl p-4 sm:p-6 shadow-xs">
-          <h2 className="font-display text-base sm:text-lg font-semibold text-[#12233F] mb-4 flex items-center gap-2 border-b border-[#E3D9C4] pb-3">
-            <Award className="w-5 h-5 text-stone-500" />
-            As Minhas Simulações Recentes (Base de Dados)
+        <div className="mt-6 sm:mt-12 max-w-3xl mx-auto bg-white border border-[#E3D9C4] rounded-2xl p-3.5 sm:p-6 shadow-xs">
+          <h2 className="font-display text-sm sm:text-lg font-semibold text-[#12233F] mb-3 sm:mb-4 flex items-center gap-2 border-b border-[#E3D9C4] pb-2.5 sm:pb-3">
+            <Award className="w-4 h-4 sm:w-5 sm:h-5 text-stone-500 shrink-0" />
+            <span>As Minhas Simulações Recentes</span>
           </h2>
 
           {loadingResults ? (
@@ -239,61 +262,57 @@ export default function SelectionScreen({
                 return (
                   <div
                     key={res.id}
-                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 border border-[#E3D9C4] rounded-xl hover:border-stone-300 transition-colors bg-stone-50/50 gap-3"
+                    className="flex items-center justify-between p-3 border border-[#E3D9C4] rounded-xl hover:border-stone-300 transition-colors bg-stone-50/50 gap-2.5"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-9 h-9 rounded-lg flex items-center justify-center font-black text-xs ${
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className={`w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-lg flex items-center justify-center font-black text-[11px] sm:text-xs ${
                         isPassed ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"
                       }`}>
                         {res.score}%
                       </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className={`px-1.5 py-0.5 rounded text-[9px] font-extrabold ${
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className={`px-1.5 py-0.5 rounded text-[9px] font-extrabold shrink-0 ${
                             res.ministerio === "MININT" ? "bg-[#D9E4F0] text-[#12233F]" : "bg-red-100 text-[#A62639]"
                           }`}>
                             {res.ministerio}
                           </span>
                           {res.corpo && (
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-stone-100 text-stone-600">
+                            <span className="hidden sm:inline px-1.5 py-0.5 rounded text-[9px] font-bold bg-stone-100 text-stone-600">
                               {res.corpo}
                             </span>
                           )}
-                          <span className="text-xs text-stone-500 flex items-center gap-1 font-medium">
-                            <Clock className="w-3.5 h-3.5" />
+                          <span className="text-[11px] sm:text-xs text-stone-500 flex items-center gap-1 font-medium shrink-0">
+                            <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                             {formatTempo(res.tempoGasto)}
                           </span>
                         </div>
-                        <span className="text-[10px] text-stone-400 block mt-1 flex items-center gap-1 font-medium">
-                          <Calendar className="w-3.5 h-3.5" />
+                        <span className="text-[9px] sm:text-[10px] text-stone-400 block mt-1 flex items-center gap-1 font-medium">
+                          <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
                           {new Date(res.createdAt).toLocaleDateString("pt-AO", {
                             day: "2-digit",
                             month: "2-digit",
                             year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit"
                           })}
                         </span>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 self-end sm:self-center">
-                      <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold ${
-                        isPassed ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-800"
-                      }`}>
-                        {isPassed ? (
-                          <>
-                            <CheckCircle className="w-3 h-3 text-emerald-600" />
-                            <span>Aprovado (Apto)</span>
-                          </>
-                        ) : (
-                          <>
-                            <XCircle className="w-3 h-3 text-red-600" />
-                            <span>Reprovado</span>
-                          </>
-                        )}
-                      </span>
-                    </div>
+                    <span className={`shrink-0 inline-flex items-center gap-1 px-2 py-1 rounded-full text-[9px] sm:text-[10px] font-bold ${
+                      isPassed ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-800"
+                    }`}>
+                      {isPassed ? (
+                        <>
+                          <CheckCircle className="w-3 h-3 text-emerald-600" />
+                          <span className="hidden sm:inline">Apto</span>
+                        </>
+                      ) : (
+                        <>
+                          <XCircle className="w-3 h-3 text-red-600" />
+                          <span className="hidden sm:inline">Reprovado</span>
+                        </>
+                      )}
+                    </span>
                   </div>
                 );
               })}
@@ -303,8 +322,8 @@ export default function SelectionScreen({
       )}
 
       {/* Secondary info / Footer decor */}
-      <div className="mt-16 md:mt-20 text-center border-t border-stone-100 pt-8 max-w-lg mx-auto">
-        <p className="text-xs text-stone-400">
+      <div className="mt-8 md:mt-20 text-center border-t border-stone-100 pt-5 sm:pt-8 max-w-lg mx-auto">
+        <p className="text-[11px] sm:text-xs text-stone-400 px-4">
           República de Angola • Ministério da Administração do Território • Escola de Formação de Quadros
         </p>
       </div>

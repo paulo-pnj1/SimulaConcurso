@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Clock, ChevronLeft, ChevronRight, CheckSquare, HelpCircle, AlertTriangle, X } from "lucide-react";
+import { Clock, ChevronLeft, ChevronRight, CheckSquare, HelpCircle, AlertTriangle, X, ArrowLeft } from "lucide-react";
 import { Pergunta, RespostasUsuario, ConcursoType } from "../types";
 
 interface SimulatorScreenProps {
@@ -9,6 +9,7 @@ interface SimulatorScreenProps {
   respostas: RespostasUsuario;
   onSelectOption: (perguntaId: number, opcaoIndice: number) => void;
   onSubmit: (secondsElapsed: number) => void;
+  onExit: () => void;
 }
 
 export default function SimulatorScreen({
@@ -18,10 +19,14 @@ export default function SimulatorScreen({
   respostas,
   onSelectOption,
   onSubmit,
+  onExit,
 }: SimulatorScreenProps) {
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [tempoRestante, setTempoRestante] = useState<number>(45 * 60); // 45 minutos em segundos
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
+  // Sair a meio da prova perde o progresso, por isso pede confirmação em
+  // vez de sair diretamente ao tocar/clicar no botão "Voltar".
+  const [showExitConfirm, setShowExitConfirm] = useState<boolean>(false);
   // Em telemóvel a "Folha de Respostas" fica escondida por trás de um botão
   // para não obrigar o candidato a percorrer a página só para ver o
   // enunciado; em ecrãs largos (lg+) continua sempre visível ao lado.
@@ -80,17 +85,27 @@ export default function SimulatorScreen({
   const progressPct = (respondidasCount / totalPerguntas) * 100;
 
   return (
-    <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
-      {/* Top Header of Simulator -  one compact strip on mobile, roomier on desktop */}
+    <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6 pb-28 lg:pb-6">
+      {/* Top Header of Simulator — one compact strip on mobile, roomier on desktop */}
       <div className="bg-white border border-[#E3D9C4] shadow-sm rounded-xl p-3 sm:p-4 mb-4 sm:mb-6">
         <div className="flex items-center justify-between gap-3">
-          <div className="min-w-0 flex-1">
-            <div className="inline-block max-w-full truncate p-1.5 sm:p-2 rounded-lg font-bold text-[10px] sm:text-xs bg-[#E3D9C4] text-[#12233F] uppercase tracking-wider">
-              {ministerio}{corpo ? ` • ${corpo}` : ""}
+          <div className="min-w-0 flex-1 flex items-center gap-2 sm:gap-3">
+            <button
+              id="btn-sair-simulador"
+              onClick={() => setShowExitConfirm(true)}
+              aria-label="Voltar"
+              className="shrink-0 flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-[#E3D9C4] text-[#5C5346] hover:bg-[#FBF7EE] hover:text-[#12233F] transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </button>
+            <div className="min-w-0">
+              <div className="inline-block max-w-full truncate p-1.5 sm:p-2 rounded-lg font-bold text-[10px] sm:text-xs bg-[#E3D9C4] text-[#12233F] uppercase tracking-wider">
+                {ministerio}{corpo ? ` • ${corpo}` : ""}
+              </div>
+              <span className="hidden sm:inline text-xs md:text-sm font-medium text-[#5C5346] ml-3">
+                {respondidasCount} de {totalPerguntas} respondidas
+              </span>
             </div>
-            <span className="hidden sm:inline text-xs md:text-sm font-medium text-[#5C5346] ml-3">
-              {respondidasCount} de {totalPerguntas} respondidas
-            </span>
           </div>
 
           {/* Timer Badge */}
@@ -130,21 +145,21 @@ export default function SimulatorScreen({
       {/* Main 2-Column Grid */}
       <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Left Column: Question area (2 cols wide on desktop) */}
-        <div className="lg:col-span-2 flex flex-col justify-between bg-white border border-[#E3D9C4] rounded-xl p-4 sm:p-6 shadow-sm min-h-[500px]">
+        <div className="lg:col-span-2 flex flex-col justify-between bg-white border border-[#E3D9C4] rounded-xl p-4 sm:p-6 shadow-sm lg:min-h-[500px]">
           <div>
             {/* Category and Index */}
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-6 border-b border-[#E3D9C4] pb-4">
-              <span className="inline-flex items-center self-start px-3 py-1 rounded-full text-xs font-semibold bg-[#E3D9C4] text-[#5C5346] border border-[#D8CBB0] uppercase tracking-wider">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1.5 sm:gap-2 mb-4 sm:mb-6 border-b border-[#E3D9C4] pb-3 sm:pb-4">
+              <span className="inline-flex items-center self-start px-2.5 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-[#E3D9C4] text-[#5C5346] border border-[#D8CBB0] uppercase tracking-wider">
                 <HelpCircle className="w-3.5 h-3.5 mr-1" />
                 {currentPergunta.categoria}
               </span>
-              <span className="text-sm font-medium text-[#7A7060]">
+              <span className="text-xs sm:text-sm font-medium text-[#7A7060]">
                 Questão {currentIdx + 1} de {totalPerguntas}
               </span>
             </div>
 
             {/* Enunciado */}
-            <h3 id={`pergunta-${currentPergunta.id}-enunciado`} className="text-lg md:text-xl font-medium text-[#201C16] mb-6 leading-relaxed">
+            <h3 id={`pergunta-${currentPergunta.id}-enunciado`} className="text-base sm:text-lg md:text-xl font-medium text-[#201C16] mb-4 sm:mb-6 leading-relaxed">
               {currentPergunta.enunciado}
             </h3>
 
@@ -177,8 +192,8 @@ export default function SimulatorScreen({
             </div>
           </div>
 
-          {/* Navigation Controls */}
-          <div className="flex items-center justify-between mt-8 border-t border-[#E3D9C4] pt-6">
+          {/* Navigation Controls — desktop/tablet only; mobile uses the fixed bottom bar below */}
+          <div className="hidden lg:flex items-center justify-between mt-8 border-t border-[#E3D9C4] pt-6">
             <button
               id="btn-anterior"
               onClick={handlePrev}
@@ -201,7 +216,7 @@ export default function SimulatorScreen({
           </div>
         </div>
 
-        {/* Right Column: Status Panel -  always visible on lg+, overlay on mobile/tablet */}
+        {/* Right Column: Status Panel — always visible on lg+, overlay on mobile/tablet */}
         <div
           className={`${
             showAnswerSheetMobile
@@ -276,6 +291,36 @@ export default function SimulatorScreen({
         </div>
       </div>
 
+      {/* Mobile Bottom Action Bar — Anterior/Seguinte fixos, como uma app nativa.
+          Não aparece quando a folha de respostas está aberta em overlay. */}
+      {!showAnswerSheetMobile && (
+        <div
+          className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-[#E3D9C4] shadow-[0_-2px_10px_rgba(12,26,46,0.1)] px-3 py-3 flex items-center gap-3"
+          style={{ paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}
+        >
+          <button
+            id="btn-anterior-mobile"
+            onClick={handlePrev}
+            disabled={isFirst}
+            aria-label="Pergunta anterior"
+            className={`flex items-center justify-center w-12 h-12 shrink-0 rounded-xl border border-[#E3D9C4] text-[#5C5346] transition-colors ${
+              isFirst ? "opacity-40" : "active:bg-[#FBF7EE]"
+            }`}
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          <button
+            id="btn-seguinte-mobile"
+            onClick={handleNext}
+            className="flex-1 flex items-center justify-center gap-1.5 h-12 rounded-xl font-semibold text-white shadow-sm transition-all bg-[#12233F] active:bg-[#16294A]"
+          >
+            <span>{isLast ? "Terminar e Corrigir" : "Seguinte"}</span>
+            {!isLast && <ChevronRight className="w-4 h-4" />}
+          </button>
+        </div>
+      )}
+
       {/* Confirmation Modal */}
       {showConfirmModal && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
@@ -310,6 +355,42 @@ export default function SimulatorScreen({
                 className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 font-semibold text-white shadow-sm hover:shadow-rose-100 transition-all text-sm"
               >
                 Sim, Submeter
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Exit Confirmation Modal — sair perde o progresso da prova atual */}
+      {showExitConfirm && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl border border-stone-100 max-w-md w-full p-6 animate-in fade-in zoom-in-95 duration-250">
+            <div className="flex items-center space-x-3 text-amber-600 mb-4">
+              <AlertTriangle className="w-8 h-8" />
+              <h3 className="font-display text-lg font-semibold text-stone-900">Sair da Simulação?</h3>
+            </div>
+
+            <p className="text-sm text-stone-500 leading-relaxed mb-6">
+              Se sair agora, <strong>perde o progresso desta prova</strong> ({respondidasCount} de {totalPerguntas} respondidas) e terá de a recomeçar do início.
+            </p>
+
+            <div className="flex space-x-3">
+              <button
+                id="btn-exit-cancelar"
+                onClick={() => setShowExitConfirm(false)}
+                className="flex-1 py-2.5 rounded-xl border border-stone-200 font-semibold text-stone-700 hover:bg-stone-50 transition-colors text-sm"
+              >
+                Continuar Prova
+              </button>
+              <button
+                id="btn-exit-confirmar"
+                onClick={() => {
+                  setShowExitConfirm(false);
+                  onExit();
+                }}
+                className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 font-semibold text-white shadow-sm hover:shadow-rose-100 transition-all text-sm"
+              >
+                Sim, Sair
               </button>
             </div>
           </div>

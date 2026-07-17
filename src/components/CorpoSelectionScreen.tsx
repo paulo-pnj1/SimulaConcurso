@@ -58,37 +58,46 @@ export default function CorpoSelectionScreen({
         </div>
       )}
 
-      <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+      <div className="flex flex-col sm:grid sm:grid-cols-2 gap-3 sm:gap-6 max-w-3xl mx-auto">
         {CORPOS_MININT.map((corpo) => {
           const Icon = CORPO_ICONS[corpo.id];
           return (
             <motion.button
               key={corpo.id}
               whileHover={{ y: -4 }}
+              whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.2 }}
               onClick={() => onSelect(corpo.id)}
               disabled={isLoading}
-              className="group flex flex-col text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden cursor-pointer"
+              className="group flex items-center sm:flex-col sm:items-stretch text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] active:border-[#12233F] rounded-xl p-3.5 sm:p-6 shadow-sm hover:shadow-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden cursor-pointer gap-3 sm:gap-0"
             >
-              <div className="absolute top-0 left-0 w-full h-1.5 bg-[#12233F]" />
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-3 bg-stone-100 text-[#12233F] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300">
-                  <Icon className="w-6 h-6" />
+              <div className="hidden sm:block absolute top-0 left-0 w-full h-1.5 bg-[#12233F]" />
+              <div className="p-2.5 sm:p-3 bg-stone-100 text-[#12233F] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300 shrink-0 sm:mb-4 sm:self-start">
+                <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+
+              <div className="min-w-0 flex-1 sm:flex sm:flex-col">
+                <div className="flex items-center gap-2 sm:justify-between sm:mb-4">
+                  <h2 className="font-display text-sm sm:text-lg font-semibold text-[#12233F] sm:mb-1.5 truncate">
+                    {corpo.id}
+                  </h2>
+                  <span className="hidden sm:inline-block text-[10px] font-bold text-[#12233F] tracking-wider bg-stone-100 px-2.5 py-1 rounded-full uppercase shrink-0">
+                    {corpo.sigla}
+                  </span>
                 </div>
-                <span className="text-[10px] font-bold text-[#12233F] tracking-wider bg-stone-100 px-2.5 py-1 rounded-full uppercase">
+                <p className="hidden sm:block text-xs text-[#7A7060] leading-relaxed mb-4 flex-grow">
+                  {corpo.descricao}
+                </p>
+                <span className="sm:hidden text-[10px] font-bold text-[#7A7060] tracking-wider bg-stone-100 px-2 py-0.5 rounded-full uppercase inline-block w-fit">
                   {corpo.sigla}
                 </span>
+                <div className="hidden sm:flex items-center text-sm font-semibold text-[#12233F] mt-auto">
+                  <span>Iniciar Simulação</span>
+                  <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                </div>
               </div>
-              <h2 className="font-display text-lg font-semibold text-[#12233F] mb-1.5">
-                {corpo.id}
-              </h2>
-              <p className="text-xs text-[#7A7060] leading-relaxed mb-4 flex-grow">
-                {corpo.descricao}
-              </p>
-              <div className="flex items-center text-sm font-semibold text-[#12233F] mt-auto">
-                <span>Iniciar Simulação</span>
-                <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-              </div>
+
+              <ChevronRight className="sm:hidden w-5 h-5 text-stone-400 group-hover:text-[#12233F] transition-colors shrink-0" />
             </motion.button>
           );
         })}

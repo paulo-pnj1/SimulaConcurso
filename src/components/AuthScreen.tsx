@@ -59,7 +59,7 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
 
   // Login do administrador: acontece automaticamente quando o identificador
   // introduzido é o email de admin configurado em src/config/admin.ts. Não
-  // há nenhuma opção visível no ecrã para isto -  é apenas uma verificação
+  // há nenhuma opção visível no ecrã para isto — é apenas uma verificação
   // silenciosa das credenciais.
   const handleAdminLogin = async (email: string) => {
     const result = await signInWithEmailAndPassword(auth, email, senha);
@@ -192,18 +192,18 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
   };
 
   return (
-    <div className="max-w-md mx-auto px-4 py-12">
+    <div className="max-w-md mx-auto px-4 py-6 sm:py-12">
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white border border-[#E3D9C4] border-t-4 border-t-[#C89B3C] rounded-2xl p-8 shadow-md"
+        className="bg-white border border-[#E3D9C4] border-t-4 border-t-[#C89B3C] rounded-2xl p-5 sm:p-8 shadow-md"
       >
         {/* Header Icon / Branding */}
-        <div className="text-center mb-6">
-          <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-[#12233F] border-2 border-[#12233F] mb-4">
-            <GraduationCap className="w-8 h-8" />
+        <div className="text-center mb-5 sm:mb-6">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full mx-auto flex items-center justify-center text-[#12233F] border-2 border-[#12233F] mb-3 sm:mb-4">
+            <GraduationCap className="w-7 h-7 sm:w-8 sm:h-8" />
           </div>
-          <h2 className="font-display text-2xl font-semibold tracking-tight text-[#12233F]">
+          <h2 className="font-display text-xl sm:text-2xl font-semibold tracking-tight text-[#12233F]">
             Aceder ao Simulador
           </h2>
         </div>
@@ -251,7 +251,7 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
                 placeholder="Ex: 923 000 000"
-                className="w-full bg-white border border-[#D8CBB0] rounded-xl pl-10 pr-4 py-3 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
+                className="w-full bg-white border border-[#D8CBB0] rounded-xl pl-10 pr-4 py-3 text-base sm:text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
               />
             </div>
           </div>
@@ -268,7 +268,7 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
                   placeholder="O seu nome"
-                  className="w-full bg-white border border-[#D8CBB0] rounded-xl pl-10 pr-4 py-3 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
+                  className="w-full bg-white border border-[#D8CBB0] rounded-xl pl-10 pr-4 py-3 text-base sm:text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
                 />
               </div>
             </div>
@@ -283,7 +283,7 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
                 placeholder="••••••"
-                className="w-full bg-white border border-[#D8CBB0] rounded-xl pl-10 pr-4 py-3 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
+                className="w-full bg-white border border-[#D8CBB0] rounded-xl pl-10 pr-4 py-3 text-base sm:text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
               />
             </div>
           </div>
