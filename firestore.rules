@@ -180,7 +180,7 @@ service cloud.firestore {
                       incoming().fileUrl.size() > 0 &&
                       incoming().fileUrl.size() <= 1000 &&
                       incoming().createdBy == request.auth.uid &&
-                      incoming().createdAt == request.time;
+                      incoming().createdAt is string;
 
       allow update: if isAdmin() &&
                       incoming().id == manualId &&
