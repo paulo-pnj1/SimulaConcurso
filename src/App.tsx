@@ -7,13 +7,15 @@ import ResultsScreen from "./components/ResultsScreen";
 import AuthScreen from "./components/AuthScreen";
 import AdminDashboard from "./components/AdminDashboard";
 import PaymentGateScreen from "./components/PaymentGateScreen";
+import ManualsScreen from "./components/ManualsScreen";
+import InstallAppPrompt from "./components/InstallAppPrompt";
 import { GraduationCap } from "lucide-react";
 import { auth, db, getExamQuestionsFn, submitExamFn } from "./firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc, setDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { isAdminEmail } from "./config/admin";
 
-type ScreenType = "auth" | "selection" | "corpo-selection" | "simulator" | "results" | "manage";
+type ScreenType = "auth" | "selection" | "corpo-selection" | "simulator" | "results" | "manage" | "manuais";
 
 export default function App() {
   const [screen, setScreen] = useState<ScreenType>("auth");
@@ -340,9 +342,14 @@ export default function App() {
             isLoading={isLoading}
             error={error}
             onOpenManage={() => setScreen("manage")}
+            onOpenManuais={() => setScreen("manuais")}
             userResults={userResults}
             loadingResults={loadingResults}
           />
+        )}
+
+        {screen === "manuais" && currentUser && (
+          <ManualsScreen currentUser={currentUser} onBack={() => setScreen("selection")} />
         )}
 
         {screen === "corpo-selection" && currentUser && (
@@ -391,6 +398,8 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      <InstallAppPrompt />
     </div>
   );
 }

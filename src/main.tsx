@@ -8,3 +8,14 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>,
 );
+
+// Regista o service worker (necessário para o "Instalar app" funcionar e
+// para a app abrir mais depressa). Só corre em produção/https, nunca falha
+// o carregamento da app se o browser não suportar.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch((err) => {
+      console.warn('Falha ao registar o service worker:', err);
+    });
+  });
+}

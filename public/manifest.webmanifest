@@ -1,0 +1,32 @@
+{
+  "name": "Simulador de Exames Angola — MININT / MINSA",
+  "short_name": "Simulador Exames",
+  "description": "Simulação de exames oficiais de ingresso na Função Pública de Angola (MININT e MINSA) e manuais de estudo para descarregar.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f3ecda",
+  "theme_color": "#12233F",
+  "lang": "pt-AO",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

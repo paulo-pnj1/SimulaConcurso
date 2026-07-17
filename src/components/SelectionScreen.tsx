@@ -13,6 +13,7 @@ import {
   Lock,
   CheckCircle,
   XCircle,
+  FileText,
 } from "lucide-react";
 import { ConcursoType, UserProfile } from "../types";
 import { motion } from "motion/react";
@@ -24,6 +25,7 @@ interface SelectionScreenProps {
   isLoading: boolean;
   error: string | null;
   onOpenManage: () => void;
+  onOpenManuais: () => void;
   userResults: any[];
   loadingResults: boolean;
 }
@@ -35,6 +37,7 @@ export default function SelectionScreen({
   isLoading,
   error,
   onOpenManage,
+  onOpenManuais,
   userResults,
   loadingResults,
 }: SelectionScreenProps) {
@@ -177,6 +180,27 @@ export default function SelectionScreen({
             <span>Iniciar Simulação</span>
             <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
           </div>
+        </motion.button>
+      </div>
+
+      {/* Manuais de Estudo CTA */}
+      <div className="max-w-3xl mx-auto mt-6">
+        <motion.button
+          whileHover={{ y: -3 }}
+          transition={{ duration: 0.2 }}
+          onClick={onOpenManuais}
+          className="group w-full flex items-center gap-4 text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] rounded-xl p-5 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
+        >
+          <div className="p-3.5 bg-stone-100 text-[#12233F] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300 flex-shrink-0">
+            <FileText className="w-6 h-6" />
+          </div>
+          <div className="flex-grow">
+            <h3 className="font-display text-base md:text-lg font-semibold text-[#12233F]">Manuais de Estudo</h3>
+            <p className="text-xs md:text-sm text-[#7A7060] leading-relaxed">
+              Descarregue os PDFs de preparação para consultar a qualquer momento, mesmo offline.
+            </p>
+          </div>
+          <ChevronRight className="w-5 h-5 text-stone-400 group-hover:text-[#12233F] group-hover:translate-x-1 transition-all flex-shrink-0" />
         </motion.button>
       </div>
 

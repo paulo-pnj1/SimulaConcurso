@@ -153,7 +153,46 @@ service cloud.firestore {
     }
 
     // ==========================================
-    // 3. RESULTADOS (EXAM RESULTS) COLLECTION
+    // 3. MANUAIS (STUDY MANUALS) COLLECTION
+    // ==========================================
+    // Metadados dos PDFs (título, descrição, link). O ficheiro em si vive no
+    // Firebase Storage (ver storage.rules); esta coleção só guarda a
+    // referência. Leitura: admin ou candidato Premium (mesmo critério de
+    // acesso usado para as perguntas do exame). Escrita: só admin.
+    function isPremiumCandidate() {
+      return isSignedIn() &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isPremium == true;
+    }
+
+    match /manuais/{manualId} {
+      allow get: if isAdmin() || isPremiumCandidate();
+      allow list: if isAdmin() || isPremiumCandidate();
+
+      allow create: if isAdmin() &&
+                      incoming().id == manualId &&
+                      incoming().titulo is string &&
+                      incoming().titulo.size() > 0 &&
+                      incoming().titulo.size() <= 150 &&
+                      incoming().descricao is string &&
+                      incoming().descricao.size() <= 500 &&
+                      incoming().ministerio in ['MININT', 'MINSA', 'TODOS'] &&
+                      incoming().fileName is string &&
+                      incoming().fileUrl is string &&
+                      incoming().storagePath is string &&
+                      incoming().fileSizeBytes is int &&
+                      incoming().createdBy == request.auth.uid &&
+                      incoming().createdAt == request.time;
+
+      allow update: if isAdmin() &&
+                      incoming().id == manualId &&
+                      incoming().createdBy == existing().createdBy &&
+                      incoming().createdAt == existing().createdAt;
+
+      allow delete: if isAdmin();
+    }
+
+    // ==========================================
+    // 4. RESULTADOS (EXAM RESULTS) COLLECTION
     // ==========================================
     match /resultados/{resultadoId} {
       allow get: if isSignedIn() && (resource.data.candidateUid == request.auth.uid || isAdmin());

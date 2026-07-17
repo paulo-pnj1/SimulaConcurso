@@ -1,0 +1,40 @@
+rules_version = '2';
+
+// Regras do Firebase Storage para os Manuais de Estudo (PDFs).
+// Espelha o mesmo critério de acesso do Firestore (firestore.rules):
+// só o Admin e candidatos com isPremium == true podem descarregar;
+// só o Admin pode carregar/apagar ficheiros.
+//
+// Nota: `firestore.get()` faz uma leitura cross-service ao Firestore a
+// partir das Storage Rules (suportado desde 2023). Se o projeto Firebase
+// ainda não tiver isto ativo, é preciso confirmar no Console que o Storage
+// e o Firestore estão na mesma `default` database.
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isAdmin() {
+      return request.auth != null &&
+             request.auth.token.email == 'pnjpaulo175@gmail.com';
+    }
+
+    function isPremiumCandidate() {
+      return request.auth != null &&
+             firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.isPremium == true;
+    }
+
+    match /manuais/{fileName} {
+      allow read: if isAdmin() || isPremiumCandidate();
+
+      allow write: if isAdmin() &&
+                     request.resource.size < 30 * 1024 * 1024 &&
+                     request.resource.contentType == 'application/pdf';
+
+      allow delete: if isAdmin();
+    }
+
+    // Bloqueio por omissão para qualquer outro caminho.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

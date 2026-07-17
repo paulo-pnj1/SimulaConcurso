@@ -84,6 +84,24 @@ export interface SubmitExamResponse {
   revisao: RevisaoItem[];
 }
 
+// Manual de estudo em PDF, carregado pelo Admin e disponível para download
+// pelos candidatos Premium. "ministerio" pode ser MININT/MINSA ou "TODOS"
+// (manuais gerais, ex: Constituição da República). "corpo" só se aplica
+// quando ministerio === "MININT" e o manual é específico de um corpo.
+export interface Manual {
+  id: string;
+  titulo: string;
+  descricao: string;
+  ministerio: ConcursoType | "TODOS";
+  corpo?: CorpoMinint;
+  fileName: string;
+  fileUrl: string;
+  storagePath: string;
+  fileSizeBytes: number;
+  createdBy: string;
+  createdAt: string;
+}
+
 export interface UserProfile {
   uid: string;
   name: string;
