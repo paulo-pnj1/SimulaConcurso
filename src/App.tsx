@@ -356,7 +356,7 @@ export default function App() {
             </div>
             <div className="min-w-0">
               <span className="font-display font-semibold text-sm sm:text-base md:text-lg text-white tracking-tight block leading-none truncate">
-                Simulador de Exames Angola
+                EstudaBué
               </span>
               <span className="hidden sm:block text-[10px] font-semibold text-white/60 uppercase tracking-[0.2em] mt-1">
                 Função Pública de Angola
@@ -452,7 +452,7 @@ export default function App() {
           inferior, por isso só aparece a partir do breakpoint md */}
       <footer className="hidden md:block bg-[var(--color-paper-light)] border-t border-[var(--color-line)] py-6 text-center text-xs text-[var(--color-ink-faint)]">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
-          <p>© {new Date().getFullYear()} Simulador de Exames Angola. Todos os direitos reservados.</p>
+          <p>© {new Date().getFullYear()} EstudaBué. Todos os direitos reservados.</p>
           <div className="flex space-x-4">
             <span className="hover:text-[var(--color-navy)] cursor-help transition-colors">Termos de Utilização</span>
             <span>•</span>

@@ -92,7 +92,7 @@ export default function CorpoSelectionScreen({
                   {corpo.sigla}
                 </span>
                 <div className="hidden sm:flex items-center text-sm font-semibold text-[#12233F] mt-auto">
-                  <span>Iniciar Simulação</span>
+                  <span>Iniciar Teste</span>
                   <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>

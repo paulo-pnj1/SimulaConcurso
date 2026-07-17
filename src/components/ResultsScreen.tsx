@@ -245,7 +245,7 @@ export default function ResultsScreen({
       </div>
 
       <div className="text-center mt-8 sm:mt-12 mb-4 sm:mb-6 text-[10px] sm:text-xs text-stone-400 px-4">
-        Simulador de Concurso Público em Angola • MININT & MINSA • Todos os direitos reservados.
+        EstudaBué • MININT & MINSA • Todos os direitos reservados.
       </div>
     </div>
   );

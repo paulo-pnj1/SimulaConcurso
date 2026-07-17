@@ -1,7 +1,7 @@
 {
-  "name": "Simulador de Exames Angola — MININT / MINSA",
-  "short_name": "Simulador Exames",
-  "description": "Simulação de exames oficiais de ingresso na Função Pública de Angola (MININT e MINSA) e manuais de estudo para descarregar.",
+  "name": "EstudaBué — Preparação para Concursos Públicos",
+  "short_name": "EstudaBué",
+  "description": "EstudaBué: plataforma de preparação para os exames oficiais de ingresso na Função Pública de Angola (MININT e MINSA), com testes de treino e manuais de estudo para descarregar.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

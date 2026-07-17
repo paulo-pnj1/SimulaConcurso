@@ -42,7 +42,7 @@ export default function PaymentGateScreen({
   };
 
   const whatsappMessage = encodeURIComponent(
-    `Olá! Fiz o pagamento de ${PREMIUM_CONFIG.priceLabel} para ativar o acesso ao Simulador de Exames Angola.\nNome: ${currentUser.name}\nNúmero registado: ${currentUser.telefone || ""}\nEnvio o comprovativo em anexo.`
+    `Olá! Fiz o pagamento de ${PREMIUM_CONFIG.priceLabel} para ativar o acesso ao EstudaBué.\nNome: ${currentUser.name}\nNúmero registado: ${currentUser.telefone || ""}\nEnvio o comprovativo em anexo.`
   );
   const whatsappLink = `https://wa.me/${PREMIUM_CONFIG.whatsappAdmin}?text=${whatsappMessage}`;
 
@@ -125,7 +125,7 @@ export default function PaymentGateScreen({
                 Acesso Bloqueado
               </h2>
               <p className="text-sm text-[#7A7060] leading-relaxed">
-                Para aceder aos estudos e simulações de exame de MININT e MINSA, ative o seu acesso com um
+                Para aceder aos estudos e testes de treino de MININT e MINSA, ative o seu acesso com um
                 pagamento único.
               </p>
             </div>
@@ -138,7 +138,7 @@ export default function PaymentGateScreen({
             <ul className="space-y-2 mb-6">
               {[
                 "Banco completo de perguntas MININT e MINSA",
-                "Simulações ilimitadas, sem restrições",
+                "Testes de treino ilimitados, sem restrições",
                 "Histórico completo de classificações",
                 "Explicações detalhadas de cada resposta",
               ].map((item) => (

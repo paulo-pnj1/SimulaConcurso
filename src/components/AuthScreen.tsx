@@ -204,7 +204,7 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
             <GraduationCap className="w-7 h-7 sm:w-8 sm:h-8" />
           </div>
           <h2 className="font-display text-xl sm:text-2xl font-semibold tracking-tight text-[#12233F]">
-            Aceder ao Simulador
+            Aceder à Plataforma
           </h2>
         </div>
 

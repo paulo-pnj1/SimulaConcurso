@@ -501,7 +501,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
           className="inline-flex items-center space-x-2 text-stone-600 hover:text-[#12233F] font-bold text-sm transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Voltar ao Simulador</span>
+          <span>Voltar à Plataforma</span>
         </button>
 
         <div className="bg-[#12233F]/10 text-[#12233F] text-xs font-bold px-3.5 py-1.5 rounded-full flex items-center gap-1.5">

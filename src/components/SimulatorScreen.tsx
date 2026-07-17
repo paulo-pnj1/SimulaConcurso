@@ -401,7 +401,7 @@ export default function SimulatorScreen({
           <div className="bg-white rounded-2xl shadow-xl border border-stone-100 max-w-md w-full p-6 animate-in fade-in zoom-in-95 duration-250">
             <div className="flex items-center space-x-3 text-amber-600 mb-4">
               <AlertTriangle className="w-8 h-8" />
-              <h3 className="font-display text-lg font-semibold text-stone-900">Finalizar Simulação?</h3>
+              <h3 className="font-display text-lg font-semibold text-stone-900">Finalizar Prova?</h3>
             </div>
             
             <p className="text-sm text-stone-500 leading-relaxed mb-6">
@@ -441,7 +441,7 @@ export default function SimulatorScreen({
           <div className="bg-white rounded-2xl shadow-xl border border-stone-100 max-w-md w-full p-6 animate-in fade-in zoom-in-95 duration-250">
             <div className="flex items-center space-x-3 text-amber-600 mb-4">
               <AlertTriangle className="w-8 h-8" />
-              <h3 className="font-display text-lg font-semibold text-stone-900">Sair da Simulação?</h3>
+              <h3 className="font-display text-lg font-semibold text-stone-900">Sair da Prova?</h3>
             </div>
 
             <p className="text-sm text-stone-500 leading-relaxed mb-6">

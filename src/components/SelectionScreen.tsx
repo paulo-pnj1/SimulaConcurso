@@ -107,7 +107,7 @@ export default function SelectionScreen({
           Selecione o Ministério do Concurso
         </h1>
         <p className="text-xs sm:text-base text-[#7A7060] max-w-2xl mx-auto leading-relaxed px-2">
-          Prepare-se para os concursos públicos de ingresso na Função Pública de Angola. Teste os seus conhecimentos com a nossa simulação de exames oficiais de admissão.
+          Prepare-se para os concursos públicos de ingresso na Função Pública de Angola. Teste os seus conhecimentos com os nossos testes de treino baseados nos exames oficiais de admissão.
         </p>
       </div>
 
@@ -156,7 +156,7 @@ export default function SelectionScreen({
               Polícia Nacional, SIC, SME e Proteção Civil.
             </p>
             <div className="hidden md:flex items-center text-sm font-semibold text-[#12233F] mt-auto">
-              <span>Iniciar Simulação</span>
+              <span>Iniciar Teste</span>
               <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
@@ -198,7 +198,7 @@ export default function SelectionScreen({
               Médicos, Enfermeiros e Técnicos de Diagnóstico.
             </p>
             <div className="hidden md:flex items-center text-sm font-semibold text-[#12233F] mt-auto">
-              <span>Iniciar Simulação</span>
+              <span>Iniciar Teste</span>
               <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
@@ -240,7 +240,7 @@ export default function SelectionScreen({
         <div className="mt-6 sm:mt-12 max-w-3xl mx-auto bg-white border border-[#E3D9C4] rounded-2xl p-3.5 sm:p-6 shadow-xs">
           <h2 className="font-display text-sm sm:text-lg font-semibold text-[#12233F] mb-3 sm:mb-4 flex items-center gap-2 border-b border-[#E3D9C4] pb-2.5 sm:pb-3">
             <Award className="w-4 h-4 sm:w-5 sm:h-5 text-stone-500 shrink-0" />
-            <span>As Minhas Simulações Recentes</span>
+            <span>As Minhas Provas Recentes</span>
           </h2>
 
           {loadingResults ? (
@@ -252,7 +252,7 @@ export default function SelectionScreen({
             <div className="py-10 text-center">
               <BookOpen className="w-10 h-10 text-stone-300 mx-auto mb-2" />
               <p className="text-xs text-stone-400 leading-normal">
-                Ainda não completou nenhuma simulação de concurso. As suas notas aparecerão gravadas permanentemente aqui assim que terminar um exame.
+                Ainda não completou nenhuma prova de treino. As suas notas aparecerão gravadas permanentemente aqui assim que terminar um exame.
               </p>
             </div>
           ) : (
