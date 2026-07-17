@@ -59,7 +59,7 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
 
   // Login do administrador: acontece automaticamente quando o identificador
   // introduzido é o email de admin configurado em src/config/admin.ts. Não
-  // há nenhuma opção visível no ecrã para isto — é apenas uma verificação
+  // há nenhuma opção visível no ecrã para isto -  é apenas uma verificação
   // silenciosa das credenciais.
   const handleAdminLogin = async (email: string) => {
     const result = await signInWithEmailAndPassword(auth, email, senha);

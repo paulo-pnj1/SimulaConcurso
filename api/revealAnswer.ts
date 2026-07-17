@@ -15,7 +15,7 @@ import {
  * Header: Authorization: Bearer <Firebase ID token>
  *
  * Devolve a resposta certa e a explicação de UMA única pergunta, a pedido
- * explícito do candidato — para quem está a estudar e quer confirmar o
+ * explícito do candidato -  para quem está a estudar e quer confirmar o
  * gabarito de uma pergunta específica sem submeter a prova toda nem
  * terminar todas as rondas. Ao contrário de /api/submitExam, esta chamada
  * NÃO grava nenhum resultado em Firestore: é só consulta, não conta como
