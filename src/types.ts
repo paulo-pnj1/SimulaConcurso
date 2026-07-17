@@ -130,7 +130,7 @@ export interface UserProfile {
 // ==========================================================
 export const PREMIUM_CONFIG = {
   // Preço de acesso vitalício (ajuste conforme desejar)
-  priceLabel: "500 Kz",
+  priceLabel: "1000 Kz",
   // Dados de pagamento por Multicaixa Express / Transferência (EDITE com os seus dados reais)
   multicaixaExpressNumber: "926 419 463",
   ibanTransferencia: "AO06 0040 0000 9174 0854 1012 1",
