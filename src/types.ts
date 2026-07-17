@@ -84,6 +84,16 @@ export interface SubmitExamResponse {
   revisao: RevisaoItem[];
 }
 
+// Resposta do endpoint /api/revealAnswer: devolve a resposta certa e a
+// explicação de UMA única pergunta, a pedido do candidato, sem submeter
+// nem gravar a prova. Usado no modo de estudo dentro do simulador, para
+// quem quer ver o gabarito de uma pergunta sem terminar todas as rondas.
+export interface RevealAnswerResponse {
+  id: number;
+  resposta: number;
+  explicacao: string;
+}
+
 // Manual de estudo em PDF. O Admin regista o título e um link (Google
 // Drive, Dropbox, etc.) e os candidatos Premium descarregam a partir daí.
 // Não usa Firebase Storage (esse serviço passou a exigir o plano pago

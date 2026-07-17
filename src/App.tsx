@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Pergunta, ConcursoType, CorpoMinint, RespostasUsuario, UserProfile, Resultado, SubmitExamResponse } from "./types";
+import { Pergunta, ConcursoType, CorpoMinint, RespostasUsuario, UserProfile, Resultado, SubmitExamResponse, RevealAnswerResponse } from "./types";
 import SelectionScreen from "./components/SelectionScreen";
 import CorpoSelectionScreen from "./components/CorpoSelectionScreen";
 import SimulatorScreen from "./components/SimulatorScreen";
@@ -10,7 +10,7 @@ import PaymentGateScreen from "./components/PaymentGateScreen";
 import ManualsScreen from "./components/ManualsScreen";
 import InstallAppPrompt from "./components/InstallAppPrompt";
 import { GraduationCap, Home, BookOpen, LogOut, ShieldCheck } from "lucide-react";
-import { auth, db, getExamQuestionsFn, submitExamFn } from "./firebase";
+import { auth, db, getExamQuestionsFn, submitExamFn, revealAnswerFn } from "./firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc, setDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { isAdminEmail } from "./config/admin";
@@ -27,6 +27,12 @@ export default function App() {
   const [respostas, setRespostas] = useState<RespostasUsuario>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Modo de estudo dentro do simulador: candidato pede para ver a resposta
+  // certa de uma pergunta específica, a qualquer momento, sem submeter a
+  // prova toda nem terminar todas as rondas.
+  const [revealingId, setRevealingId] = useState<number | null>(null);
+  const [revealError, setRevealError] = useState<string | null>(null);
 
   // Candidate Exam History
   const [userResults, setUserResults] = useState<Resultado[]>([]);
@@ -221,11 +227,39 @@ export default function App() {
     }
   };
 
+  // Candidato em modo de estudo pede para ver o gabarito de UMA pergunta,
+  // sem submeter a prova nem terminar todas as rondas. Só a pergunta
+  // pedida fica com resposta/explicacao preenchidas em perguntasFiltro; as
+  // restantes continuam "por revelar" até serem pedidas ou até o exame ser
+  // submetido normalmente.
+  const handleRevealAnswer = async (perguntaId: number) => {
+    if (!selectedMinisterio) return;
+    setRevealError(null);
+    setRevealingId(perguntaId);
+    try {
+      const response = await revealAnswerFn({
+        ministerio: selectedMinisterio,
+        corpo: selectedCorpo || undefined,
+        perguntaId,
+      });
+      const { resposta, explicacao } = response.data as RevealAnswerResponse;
+      setPerguntasFiltro((prev) =>
+        prev.map((p) => (p.id === perguntaId ? { ...p, resposta, explicacao } : p))
+      );
+    } catch (err: any) {
+      console.error("Erro ao revelar resposta:", err);
+      setRevealError(err.message || "Não foi possível obter a resposta certa. Tente novamente.");
+    } finally {
+      setRevealingId(null);
+    }
+  };
+
   const handleRestart = () => {
     setSelectedMinisterio(null);
     setSelectedCorpo(null);
     setPerguntasFiltro([]);
     setRespostas({});
+    setRevealError(null);
     setScreen("selection");
   };
 
@@ -241,6 +275,7 @@ export default function App() {
   const handleExitSimulator = () => {
     setPerguntasFiltro([]);
     setRespostas({});
+    setRevealError(null);
     if (selectedMinisterio === "MININT") {
       setSelectedCorpo(null);
       setScreen("corpo-selection");
@@ -396,6 +431,9 @@ export default function App() {
             onSelectOption={handleSelectOption}
             onSubmit={handleSubmitExam}
             onExit={handleExitSimulator}
+            onRevealAnswer={handleRevealAnswer}
+            revealingId={revealingId}
+            revealError={revealError}
           />
         )}
 

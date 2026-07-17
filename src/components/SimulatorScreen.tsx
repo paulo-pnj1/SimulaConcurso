@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Clock, ChevronLeft, ChevronRight, CheckSquare, HelpCircle, AlertTriangle, X, ArrowLeft } from "lucide-react";
+import { Clock, ChevronLeft, ChevronRight, CheckSquare, HelpCircle, AlertTriangle, X, ArrowLeft, Eye, Loader2, AlertCircle } from "lucide-react";
 import { Pergunta, RespostasUsuario, ConcursoType } from "../types";
 
 interface SimulatorScreenProps {
@@ -10,6 +10,12 @@ interface SimulatorScreenProps {
   onSelectOption: (perguntaId: number, opcaoIndice: number) => void;
   onSubmit: (secondsElapsed: number) => void;
   onExit: () => void;
+  // Modo de estudo: pede a resposta certa + explicação de UMA pergunta, a
+  // qualquer momento, sem submeter a prova. `revealingId` é o id da
+  // pergunta a ser pedida no momento (mostra spinner só nessa).
+  onRevealAnswer: (perguntaId: number) => void;
+  revealingId: number | null;
+  revealError: string | null;
 }
 
 export default function SimulatorScreen({
@@ -20,6 +26,9 @@ export default function SimulatorScreen({
   onSelectOption,
   onSubmit,
   onExit,
+  onRevealAnswer,
+  revealingId,
+  revealError,
 }: SimulatorScreenProps) {
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [tempoRestante, setTempoRestante] = useState<number>(45 * 60); // 45 minutos em segundos
@@ -60,6 +69,12 @@ export default function SimulatorScreen({
   const respondidasCount = Object.keys(respostas).length;
   const isFirst = currentIdx === 0;
   const isLast = currentIdx === totalPerguntas - 1;
+
+  // Modo de estudo: fica "revelada" assim que o gabarito desta pergunta
+  // chega do servidor (ver App.tsx: handleRevealAnswer). Antes disso, o
+  // objeto Pergunta nem tem os campos resposta/explicacao preenchidos.
+  const isRevealed = currentPergunta.resposta !== undefined && currentPergunta.explicacao !== undefined;
+  const isRevealingCurrent = revealingId === currentPergunta.id;
 
   const handleNext = () => {
     if (!isLast) {
@@ -167,28 +182,87 @@ export default function SimulatorScreen({
             <div className="space-y-3.5">
               {currentPergunta.opcoes.map((opcao, idx) => {
                 const isSelected = respostas[currentPergunta.id] === idx;
+                const isCorrectAnswer = isRevealed && currentPergunta.resposta === idx;
+                const isWrongSelected = isRevealed && isSelected && currentPergunta.resposta !== idx;
+
+                let optionStyles = "bg-white border-[#E3D9C4] hover:bg-[#FBF7EE] hover:border-[#D8CBB0] text-[#201C16]";
+                let badgeStyles = "bg-[#E3D9C4] text-[#5C5346]";
+                if (isCorrectAnswer) {
+                  optionStyles = "border-[#2F9E5E] ring-1 ring-[#2F9E5E] bg-[#F2F8F1] text-[#1F5C3B] font-semibold";
+                  badgeStyles = "bg-[#2F9E5E] text-white";
+                } else if (isWrongSelected) {
+                  optionStyles = "border-[#A62639] ring-1 ring-[#A62639] bg-[#FBF1EE] text-[#7A1E2B] font-semibold";
+                  badgeStyles = "bg-[#A62639] text-white";
+                } else if (isSelected) {
+                  optionStyles = "border-[#12233F] bg-[#EAF0F7] text-[#12233F] font-semibold";
+                  badgeStyles = "bg-[#12233F] text-white";
+                }
+
                 return (
                   <button
                     key={idx}
                     id={`opcao-${idx}`}
                     onClick={() => handleOptionClick(idx)}
-                    className={`w-full text-left p-3.5 sm:p-4 rounded-xl border-2 transition-all duration-200 flex items-start space-x-3 text-sm md:text-base ${
-                      isSelected
-                        ? "border-[#12233F] bg-[#EAF0F7] text-[#12233F] font-semibold"
-                        : "bg-white border-[#E3D9C4] hover:bg-[#FBF7EE] hover:border-[#D8CBB0] text-[#201C16]"
+                    disabled={isRevealed}
+                    className={`w-full text-left p-3.5 sm:p-4 rounded-xl border-2 transition-all duration-200 flex items-start space-x-3 text-sm md:text-base ${optionStyles} ${
+                      isRevealed ? "cursor-default" : ""
                     }`}
                   >
-                    <span className={`w-6 h-6 flex-shrink-0 rounded-full flex items-center justify-center font-bold text-xs uppercase ${
-                      isSelected
-                        ? "bg-[#12233F] text-white"
-                        : "bg-[#E3D9C4] text-[#5C5346]"
-                    }`}>
+                    <span className={`w-6 h-6 flex-shrink-0 rounded-full flex items-center justify-center font-bold text-xs uppercase ${badgeStyles}`}>
                       {["A", "B", "C", "D"][idx]}
                     </span>
                     <span className="flex-1 pt-0.5 leading-tight">{opcao}</span>
+                    {isCorrectAnswer && (
+                      <span className="shrink-0 text-[10px] sm:text-xs font-bold text-[#1F5C3B] bg-[#DCEEDF] px-2 py-0.5 rounded uppercase">
+                        Certa
+                      </span>
+                    )}
+                    {isWrongSelected && (
+                      <span className="shrink-0 text-[10px] sm:text-xs font-bold text-[#7A1E2B] bg-[#F5DCD9] px-2 py-0.5 rounded uppercase">
+                        A tua escolha
+                      </span>
+                    )}
                   </button>
                 );
               })}
+            </div>
+
+            {/* Modo de estudo: ver a resposta certa desta pergunta sem
+                submeter a prova toda nem terminar todas as rondas. */}
+            <div className="mt-4">
+              {!isRevealed ? (
+                <>
+                  <button
+                    id="btn-ver-resposta"
+                    onClick={() => onRevealAnswer(currentPergunta.id)}
+                    disabled={isRevealingCurrent}
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 border border-[#D8CBB0] bg-[#FBF7EE] text-[#5C5346] hover:bg-[#F2ECDD] hover:text-[#12233F] font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition-colors disabled:opacity-60"
+                  >
+                    {isRevealingCurrent ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>A obter resposta...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Eye className="w-4 h-4" />
+                        <span>Ver Resposta Certa</span>
+                      </>
+                    )}
+                  </button>
+                  {revealError && revealingId === null && (
+                    <p className="mt-2 text-xs text-[#A62639]">{revealError}</p>
+                  )}
+                </>
+              ) : (
+                <div className="bg-[#FBF7EE] border border-[#E3D9C4] rounded-xl p-3.5 sm:p-4 text-xs sm:text-sm text-[#201C16] leading-relaxed">
+                  <div className="font-bold flex items-center mb-1.5 text-[#12233F] text-[10px] sm:text-xs uppercase tracking-wider">
+                    <AlertCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 text-[#12233F] shrink-0" />
+                    Enquadramento Legal e Pedagógico
+                  </div>
+                  <p className="font-light text-[#5C5346]">{currentPergunta.explicacao}</p>
+                </div>
+              )}
             </div>
           </div>
 
