@@ -155,8 +155,8 @@ service cloud.firestore {
     // ==========================================
     // 3. MANUAIS (STUDY MANUALS) COLLECTION
     // ==========================================
-    // Metadados dos PDFs (título, descrição, link). O ficheiro em si vive no
-    // Firebase Storage (ver storage.rules); esta coleção só guarda a
+    // Metadados dos PDFs (título, descrição, link). O ficheiro em si fica
+    // alojado fora (Google Drive, Dropbox, etc.), esta coleção só guarda a
     // referência. Leitura: admin ou candidato Premium (mesmo critério de
     // acesso usado para as perguntas do exame). Escrita: só admin.
     function isPremiumCandidate() {
@@ -176,10 +176,9 @@ service cloud.firestore {
                       incoming().descricao is string &&
                       incoming().descricao.size() <= 500 &&
                       incoming().ministerio in ['MININT', 'MINSA', 'TODOS'] &&
-                      incoming().fileName is string &&
                       incoming().fileUrl is string &&
-                      incoming().storagePath is string &&
-                      incoming().fileSizeBytes is int &&
+                      incoming().fileUrl.size() > 0 &&
+                      incoming().fileUrl.size() <= 1000 &&
                       incoming().createdBy == request.auth.uid &&
                       incoming().createdAt == request.time;
 

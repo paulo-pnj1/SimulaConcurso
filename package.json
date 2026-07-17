@@ -10,9 +10,9 @@
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
     "functions:build": "npm --prefix functions run build",
-    "deploy:rules": "firebase deploy --only firestore:rules,storage:rules",
+    "deploy:rules": "firebase deploy --only firestore:rules",
     "deploy:functions": "firebase deploy --only functions",
-    "deploy": "npm run build && firebase deploy --only hosting,functions,firestore:rules,storage:rules"
+    "deploy": "npm run build && firebase deploy --only hosting,functions,firestore:rules"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",

@@ -1,16 +1,11 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, doc, getDocFromServer } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
 import firebaseConfig from "./firebase-applet-config.json";
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
-// Usado para os Manuais de Estudo em PDF (upload pelo Admin, download pelos
-// candidatos Premium). Ver src/components/AdminDashboard.tsx (aba "Manuais")
-// e src/components/ManualsScreen.tsx.
-export const storage = getStorage(app);
 
 // Server-side question delivery + grading now live as Vercel Serverless
 // Functions under /api (see /api/getExamQuestions.ts and /api/submitExam.ts),

@@ -84,20 +84,20 @@ export interface SubmitExamResponse {
   revisao: RevisaoItem[];
 }
 
-// Manual de estudo em PDF, carregado pelo Admin e disponível para download
-// pelos candidatos Premium. "ministerio" pode ser MININT/MINSA ou "TODOS"
-// (manuais gerais, ex: Constituição da República). "corpo" só se aplica
-// quando ministerio === "MININT" e o manual é específico de um corpo.
+// Manual de estudo em PDF. O Admin regista o título e um link (Google
+// Drive, Dropbox, etc.) e os candidatos Premium descarregam a partir daí.
+// Não usa Firebase Storage (esse serviço passou a exigir o plano pago
+// Blaze); os ficheiros ficam alojados fora, só a referência vive aqui.
+// "ministerio" pode ser MININT/MINSA ou "TODOS" (manuais gerais, ex:
+// Constituição da República). "corpo" só se aplica quando
+// ministerio === "MININT" e o manual é específico de um corpo.
 export interface Manual {
   id: string;
   titulo: string;
   descricao: string;
   ministerio: ConcursoType | "TODOS";
   corpo?: CorpoMinint;
-  fileName: string;
   fileUrl: string;
-  storagePath: string;
-  fileSizeBytes: number;
   createdBy: string;
   createdAt: string;
 }

@@ -9,12 +9,6 @@ interface ManualsScreenProps {
   onBack: () => void;
 }
 
-function formatSize(bytes: number): string {
-  if (!bytes) return "";
-  const mb = bytes / (1024 * 1024);
-  return mb >= 1 ? `${mb.toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
-}
-
 function ministerioIcon(ministerio: Manual["ministerio"]) {
   if (ministerio === "MININT") return <Shield className="w-4 h-4" />;
   if (ministerio === "MINSA") return <HeartPulse className="w-4 h-4" />;
@@ -125,11 +119,10 @@ export default function ManualsScreen({ currentUser, onBack }: ManualsScreenProp
                 href={manual.fileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                download
                 className="mt-auto inline-flex items-center justify-center gap-2 bg-[#12233F] hover:bg-[#0C1A2E] text-white text-xs font-bold px-4 py-2.5 rounded-lg transition-colors cursor-pointer"
               >
                 <Download className="w-3.5 h-3.5" />
-                <span>Descarregar PDF{manual.fileSizeBytes ? ` (${formatSize(manual.fileSizeBytes)})` : ""}</span>
+                <span>Abrir / Descarregar PDF</span>
               </a>
             </div>
           ))}

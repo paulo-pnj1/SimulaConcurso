@@ -25,7 +25,7 @@ import {
   Download
 } from "lucide-react";
 import { Pergunta, ConcursoType, CorpoMinint, CORPOS_MININT, PREMIUM_CONFIG, Manual } from "../types";
-import { db, storage, handleFirestoreError, OperationType } from "../firebase";
+import { db, handleFirestoreError, OperationType } from "../firebase";
 import {
   collection,
   getDocs,
@@ -36,7 +36,6 @@ import {
   orderBy,
   limit
 } from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import { motion } from "motion/react";
 
 interface AdminDashboardProps {
@@ -72,16 +71,15 @@ interface CandidateUser {
 export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProps) {
   const [activeTab, setActiveTab] = useState<"candidates" | "questions" | "premium" | "manuais">("candidates");
 
-  // State for Study Manuals (PDF) Management
+  // State for Study Manuals (link-based, no Firebase Storage / no paid plan needed)
   const [manuais, setManuais] = useState<Manual[]>([]);
   const [loadingManuais, setLoadingManuais] = useState(false);
   const [manualTitulo, setManualTitulo] = useState("");
   const [manualDescricao, setManualDescricao] = useState("");
   const [manualMinisterio, setManualMinisterio] = useState<ConcursoType | "TODOS">("TODOS");
   const [manualCorpo, setManualCorpo] = useState<CorpoMinint | "">("");
-  const [manualFile, setManualFile] = useState<File | null>(null);
-  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
-  const [uploadingManual, setUploadingManual] = useState(false);
+  const [manualFileUrl, setManualFileUrl] = useState("");
+  const [savingManual, setSavingManual] = useState(false);
   const [deletingManualId, setDeletingManualId] = useState<string | null>(null);
 
   // State for Premium Management
@@ -255,96 +253,68 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
     }
   };
 
-  const handleUploadManual = async (e: React.FormEvent) => {
+  // Validação simples: aceita um URL http(s) qualquer (Google Drive,
+  // Dropbox, OneDrive, etc.). Não valida se o link é mesmo um PDF nem se é
+  // "de download direto" — isso é responsabilidade de quem cola o link.
+  const isValidUrl = (value: string): boolean => {
+    try {
+      const parsed = new URL(value.trim());
+      return parsed.protocol === "http:" || parsed.protocol === "https:";
+    } catch {
+      return false;
+    }
+  };
+
+  const handleSaveManual = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!manualTitulo.trim()) {
       setFeedback({ type: "error", message: "Indique um título para o manual." });
       return;
     }
-    if (!manualFile) {
-      setFeedback({ type: "error", message: "Selecione um ficheiro PDF para carregar." });
-      return;
-    }
-    if (manualFile.type !== "application/pdf") {
-      setFeedback({ type: "error", message: "Só são aceites ficheiros no formato PDF." });
-      return;
-    }
-    if (manualFile.size > 30 * 1024 * 1024) {
-      setFeedback({ type: "error", message: "O ficheiro excede o limite de 30 MB." });
+    if (!manualFileUrl.trim() || !isValidUrl(manualFileUrl)) {
+      setFeedback({
+        type: "error",
+        message: "Cole um link válido (começado por http:// ou https://) para o PDF.",
+      });
       return;
     }
 
     const manualId = "man-" + Date.now();
-    const storagePath = `manuais/${manualId}-${manualFile.name}`;
-    const storageRef = ref(storage, storagePath);
 
-    setUploadingManual(true);
-    setUploadProgress(0);
+    const newManual: Manual = {
+      id: manualId,
+      titulo: manualTitulo.trim(),
+      descricao: manualDescricao.trim(),
+      ministerio: manualMinisterio,
+      ...(manualMinisterio === "MININT" && manualCorpo ? { corpo: manualCorpo } : {}),
+      fileUrl: manualFileUrl.trim(),
+      createdBy: adminUser.uid,
+      createdAt: new Date().toISOString(),
+    };
 
-    const uploadTask = uploadBytesResumable(storageRef, manualFile, {
-      contentType: "application/pdf",
-    });
+    setSavingManual(true);
+    try {
+      await setDoc(doc(db, "manuais", manualId), newManual);
 
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const pct = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        setUploadProgress(pct);
-      },
-      (err) => {
-        console.error("Erro ao carregar o PDF para o Storage:", err);
-        setFeedback({
-          type: "error",
-          message: `Falha no envio do PDF. Verifique as regras do Storage. (${err.message})`,
-        });
-        setUploadingManual(false);
-        setUploadProgress(null);
-        setTimeout(() => setFeedback(null), 5000);
-      },
-      async () => {
-        try {
-          const fileUrl = await getDownloadURL(uploadTask.snapshot.ref);
+      setManuais((prev) => [newManual, ...prev]);
+      setManualTitulo("");
+      setManualDescricao("");
+      setManualMinisterio("TODOS");
+      setManualCorpo("");
+      setManualFileUrl("");
 
-          const newManual: Manual = {
-            id: manualId,
-            titulo: manualTitulo.trim(),
-            descricao: manualDescricao.trim(),
-            ministerio: manualMinisterio,
-            ...(manualMinisterio === "MININT" && manualCorpo ? { corpo: manualCorpo } : {}),
-            fileName: manualFile.name,
-            fileUrl,
-            storagePath,
-            fileSizeBytes: manualFile.size,
-            createdBy: adminUser.uid,
-            createdAt: new Date().toISOString(),
-          };
-
-          await setDoc(doc(db, "manuais", manualId), newManual);
-
-          setManuais((prev) => [newManual, ...prev]);
-          setManualTitulo("");
-          setManualDescricao("");
-          setManualMinisterio("TODOS");
-          setManualCorpo("");
-          setManualFile(null);
-          const fileInput = document.getElementById("manual-file-input") as HTMLInputElement | null;
-          if (fileInput) fileInput.value = "";
-
-          setFeedback({ type: "success", message: "Manual carregado e publicado com sucesso!" });
-        } catch (err: any) {
-          console.error("Erro ao guardar metadados do manual:", err);
-          setFeedback({
-            type: "error",
-            message: `O PDF foi enviado, mas houve um erro ao guardar os dados. (${err.message})`,
-          });
-        } finally {
-          setUploadingManual(false);
-          setUploadProgress(null);
-          setTimeout(() => setFeedback(null), 4000);
-        }
-      }
-    );
+      setFeedback({ type: "success", message: "Manual publicado com sucesso!" });
+    } catch (err: any) {
+      console.error("Erro ao guardar o manual:", err);
+      setFeedback({
+        type: "error",
+        message: `Não foi possível publicar o manual. Verifique as regras do Firestore. (${err.message})`,
+      });
+    } finally {
+      setSavingManual(false);
+      setTimeout(() => setFeedback(null), 4000);
+    }
   };
 
   const handleDeleteManual = async (manual: Manual) => {
@@ -353,13 +323,6 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
     setDeletingManualId(manual.id);
     try {
       await deleteDoc(doc(db, "manuais", manual.id));
-      try {
-        await deleteObject(ref(storage, manual.storagePath));
-      } catch (storageErr) {
-        // O documento já foi apagado; se o ficheiro no Storage já não existir
-        // (ou já tiver sido removido manualmente), não bloqueia o fluxo.
-        console.warn("Aviso ao eliminar ficheiro do Storage:", storageErr);
-      }
       setManuais((prev) => prev.filter((m) => m.id !== manual.id));
       setFeedback({ type: "success", message: "Manual eliminado com sucesso." });
     } catch (err: any) {
@@ -369,12 +332,6 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
       setDeletingManualId(null);
       setTimeout(() => setFeedback(null), 4000);
     }
-  };
-
-  const formatFileSize = (bytes: number): string => {
-    if (!bytes) return "";
-    const mb = bytes / (1024 * 1024);
-    return mb >= 1 ? `${mb.toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
   };
 
   const handleOpcaoChange = (index: number, value: string) => {
@@ -1334,8 +1291,14 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
           <div className="lg:col-span-2 bg-white border border-[#E3D9C4] rounded-2xl p-6 shadow-xs h-fit">
             <h2 className="text-lg font-bold text-[#201C16] mb-5 border-b border-[#E3D9C4] pb-3 flex items-center gap-2">
               <Upload className="w-5 h-5 text-[#12233F]" />
-              Carregar Novo Manual (PDF)
+              Publicar Novo Manual
             </h2>
+
+            <div className="mb-5 p-3.5 rounded-xl bg-[#EAF0F7] border border-[#D9E4F0] text-[11px] text-[#12233F] leading-relaxed">
+              <strong>Como obter o link:</strong> carregue o PDF para o seu Google Drive → botão direito no
+              ficheiro → <strong>Partilhar</strong> → mude para <strong>"Qualquer pessoa com o link"</strong> →
+              copie o link e cole abaixo. Funciona também com Dropbox, OneDrive ou qualquer link direto de PDF.
+            </div>
 
             {feedback && (
               <motion.div
@@ -1356,7 +1319,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
               </motion.div>
             )}
 
-            <form onSubmit={handleUploadManual} className="space-y-5">
+            <form onSubmit={handleSaveManual} className="space-y-5">
               <div>
                 <label className="block text-xs font-bold text-[#5C5346] uppercase tracking-wider mb-1.5">
                   Título do Manual *
@@ -1422,37 +1385,24 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
 
               <div>
                 <label className="block text-xs font-bold text-[#5C5346] uppercase tracking-wider mb-1.5">
-                  Ficheiro PDF *
+                  Link do PDF *
                 </label>
                 <input
-                  id="manual-file-input"
-                  type="file"
-                  accept="application/pdf"
-                  onChange={(e) => setManualFile(e.target.files?.[0] || null)}
-                  className="w-full bg-stone-50 border border-[#D8CBB0] rounded-lg px-3 py-2 text-xs text-[#201C16] file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-[#12233F] file:text-white hover:file:bg-[#0C1A2E] file:cursor-pointer cursor-pointer"
+                  type="url"
+                  value={manualFileUrl}
+                  onChange={(e) => setManualFileUrl(e.target.value)}
+                  placeholder="https://drive.google.com/file/d/..."
+                  className="w-full bg-stone-50 border border-[#D8CBB0] rounded-lg px-3 py-2 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
                 />
-                <p className="text-[10px] text-stone-400 mt-1">Máximo 30 MB, apenas formato PDF.</p>
               </div>
-
-              {uploadingManual && uploadProgress !== null && (
-                <div>
-                  <div className="w-full bg-stone-100 rounded-full h-2 overflow-hidden">
-                    <div
-                      className="bg-[#12233F] h-2 rounded-full transition-all duration-200"
-                      style={{ width: `${uploadProgress}%` }}
-                    />
-                  </div>
-                  <p className="text-[10px] text-stone-400 mt-1">A enviar... {uploadProgress}%</p>
-                </div>
-              )}
 
               <button
                 type="submit"
-                disabled={uploadingManual}
+                disabled={savingManual}
                 className="w-full bg-[#12233F] hover:bg-[#0C1A2E] text-white text-sm font-bold py-2.5 rounded-lg transition-colors disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
               >
                 <Upload className="w-4 h-4" />
-                <span>{uploadingManual ? "A carregar..." : "Publicar Manual"}</span>
+                <span>{savingManual ? "A publicar..." : "Publicar Manual"}</span>
               </button>
             </form>
           </div>
@@ -1505,7 +1455,6 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                               {manual.corpo}
                             </span>
                           )}
-                          <span className="text-[10px] text-stone-400">{formatFileSize(manual.fileSizeBytes)}</span>
                         </div>
                         <h4 className="text-sm font-bold text-stone-800 truncate">{manual.titulo}</h4>
                         {manual.descricao && (
