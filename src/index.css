@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* Palette -  civic paper-and-seal, grounded in the Angolan flag without
+  /* Palette — civic paper-and-seal, grounded in the Angolan flag without
      leaning on its literal red/black/yellow triad everywhere. */
   --color-paper: #f3ecda;
   --color-paper-light: #fbf7ee;
@@ -48,7 +48,7 @@ body {
 }
 
 /* Signature element: a rotated wax/rubber-stamp mark used sparingly for
-   official-feeling status -  Premium access, Apto/Não Apto, etc. It's the
+   official-feeling status — Premium access, Apto/Não Apto, etc. It's the
    one recurring device that ties the "official exam bureau" concept
    together instead of a generic gradient badge. */
 .stamp {

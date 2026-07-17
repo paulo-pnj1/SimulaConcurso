@@ -101,7 +101,7 @@ export default function SimulatorScreen({
 
   return (
     <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6 pb-28 lg:pb-6">
-      {/* Top Header of Simulator -  one compact strip on mobile, roomier on desktop */}
+      {/* Top Header of Simulator — one compact strip on mobile, roomier on desktop */}
       <div className="bg-white border border-[#E3D9C4] shadow-sm rounded-xl p-3 sm:p-4 mb-4 sm:mb-6">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0 flex-1 flex items-center gap-2 sm:gap-3">
@@ -266,7 +266,7 @@ export default function SimulatorScreen({
             </div>
           </div>
 
-          {/* Navigation Controls -  desktop/tablet only; mobile uses the fixed bottom bar below */}
+          {/* Navigation Controls — desktop/tablet only; mobile uses the fixed bottom bar below */}
           <div className="hidden lg:flex items-center justify-between mt-8 border-t border-[#E3D9C4] pt-6">
             <button
               id="btn-anterior"
@@ -290,7 +290,7 @@ export default function SimulatorScreen({
           </div>
         </div>
 
-        {/* Right Column: Status Panel -  always visible on lg+, overlay on mobile/tablet */}
+        {/* Right Column: Status Panel — always visible on lg+, overlay on mobile/tablet */}
         <div
           className={`${
             showAnswerSheetMobile
@@ -365,7 +365,7 @@ export default function SimulatorScreen({
         </div>
       </div>
 
-      {/* Mobile Bottom Action Bar -  Anterior/Seguinte fixos, como uma app nativa.
+      {/* Mobile Bottom Action Bar — Anterior/Seguinte fixos, como uma app nativa.
           Não aparece quando a folha de respostas está aberta em overlay. */}
       {!showAnswerSheetMobile && (
         <div
@@ -435,7 +435,7 @@ export default function SimulatorScreen({
         </div>
       )}
 
-      {/* Exit Confirmation Modal -  sair perde o progresso da prova atual */}
+      {/* Exit Confirmation Modal — sair perde o progresso da prova atual */}
       {showExitConfirm && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl border border-stone-100 max-w-md w-full p-6 animate-in fade-in zoom-in-95 duration-250">

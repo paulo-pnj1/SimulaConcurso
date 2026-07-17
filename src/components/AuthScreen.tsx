@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { auth, db } from "../firebase";
-import { GraduationCap, AlertCircle, Phone, Lock, UserCircle } from "lucide-react";
+import { auth, db, getCandidateCount } from "../firebase";
+import { GraduationCap, AlertCircle, Phone, Lock, UserCircle, Users } from "lucide-react";
 import { motion } from "motion/react";
 import { UserProfile } from "../types";
 import { isAdminEmail } from "../config/admin";
+import { formatCandidateCountLabel } from "../lib/socialProof";
 
 interface AuthScreenProps {
   onAuthSuccess: (user: UserProfile) => void;
@@ -38,6 +39,21 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
   const [nome, setNome] = useState("");
   const [senha, setSenha] = useState("");
 
+  // Selo de prova social ("+X candidatos já estão a preparar-se...").
+  // Começa como null e só aparece se/quando a contagem chegar — nunca
+  // mostra um valor a "carregar" nem inventa um número por defeito.
+  const [candidateCountLabel, setCandidateCountLabel] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    getCandidateCount().then((count) => {
+      if (!cancelled) setCandidateCountLabel(formatCandidateCountLabel(count));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const friendlyAuthError = (err: any): string => {
     switch (err?.code) {
       case "auth/email-already-in-use":
@@ -59,7 +75,7 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
 
   // Login do administrador: acontece automaticamente quando o identificador
   // introduzido é o email de admin configurado em src/config/admin.ts. Não
-  // há nenhuma opção visível no ecrã para isto -  é apenas uma verificação
+  // há nenhuma opção visível no ecrã para isto — é apenas uma verificação
   // silenciosa das credenciais.
   const handleAdminLogin = async (email: string) => {
     const result = await signInWithEmailAndPassword(auth, email, senha);
@@ -207,6 +223,15 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
             Aceder à Plataforma
           </h2>
         </div>
+
+        {candidateCountLabel && (
+          <div className="flex items-center justify-center gap-1.5 mb-5 -mt-1">
+            <span className="flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold text-[#0C6B4F] bg-[#E7F5EE] border border-[#BFE3D2] rounded-full px-3 py-1.5">
+              <Users className="w-3.5 h-3.5 flex-shrink-0" />
+              {candidateCountLabel}
+            </span>
+          </div>
+        )}
 
         {/* Login / Registar */}
         <div className="flex text-xs font-bold mb-5 border-b border-[#E3D9C4]">
