@@ -50,12 +50,12 @@ export default function SelectionScreen({
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
       {/* Profile Header Bar */}
       {currentUser && (
-        <div className="bg-white border border-[#E3D9C4] rounded-2xl p-4 mb-10 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-xs">
+        <div className="bg-white border border-[#E3D9C4] rounded-2xl p-4 mb-6 sm:mb-10 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 shadow-xs">
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
               isAdmin ? "bg-red-50 text-[#A62639]" : "bg-[#EAF0F7] text-[#12233F]"
             }`}>
               {isAdmin ? <Shield className="w-5 h-5" /> : <User className="w-5 h-5" />}
@@ -75,11 +75,11 @@ export default function SelectionScreen({
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 w-full sm:w-auto">
             {isAdmin && (
               <button
                 onClick={onOpenManage}
-                className="bg-[#12233F] hover:bg-[#0C1A2E] text-white text-xs font-bold px-4 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
+                className="flex-1 sm:flex-initial justify-center bg-[#12233F] hover:bg-[#0C1A2E] text-white text-xs font-bold px-4 py-2.5 sm:py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
               >
                 <Lock className="w-3.5 h-3.5" />
                 <span>Painel Administrativo</span>
@@ -88,7 +88,7 @@ export default function SelectionScreen({
 
             <button
               onClick={onSignOut}
-              className="text-stone-500 hover:text-red-600 text-xs font-bold px-3 py-2 rounded-xl border border-[#D8CBB0] hover:border-red-100 hover:bg-red-50 transition-all cursor-pointer flex items-center gap-1"
+              className="flex-1 sm:flex-initial justify-center text-stone-500 hover:text-red-600 text-xs font-bold px-3 py-2.5 sm:py-2 rounded-xl border border-[#D8CBB0] hover:border-red-100 hover:bg-red-50 transition-all cursor-pointer flex items-center gap-1"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Sair</span>
@@ -98,12 +98,12 @@ export default function SelectionScreen({
       )}
 
       {/* Institutional Header */}
-      <div className="text-center mb-10 md:mb-12">
+      <div className="text-center mb-8 md:mb-12">
         <div className="inline-flex items-center justify-center space-x-2 bg-[#E3D9C4] text-[#5C5346] px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 border border-[#D8CBB0]">
           <GraduationCap className="w-4 h-4" />
           <span>Portal de Preparação Oficial</span>
         </div>
-        <h1 className="font-display text-3xl md:text-5xl font-semibold tracking-tight text-[#12233F] mb-4">
+        <h1 className="font-display text-2xl sm:text-3xl md:text-5xl font-semibold tracking-tight text-[#12233F] mb-3 sm:mb-4">
           Selecione o Ministério do Concurso
         </h1>
         <p className="text-sm md:text-base text-[#7A7060] max-w-2xl mx-auto leading-relaxed">
@@ -121,29 +121,30 @@ export default function SelectionScreen({
       )}
 
       {/* Grid of ministries */}
-      <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+      <div className="grid md:grid-cols-2 gap-4 sm:gap-8 max-w-3xl mx-auto">
         {/* MININT Card */}
         <motion.button
           id="card-minint"
           whileHover={{ y: -5 }}
+          whileTap={{ scale: 0.98 }}
           transition={{ duration: 0.2 }}
           onClick={() => onSelect("MININT")}
           disabled={isLoading}
-          className="group flex flex-col text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] rounded-xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden cursor-pointer"
+          className="group flex flex-col text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] rounded-xl p-5 sm:p-8 shadow-sm hover:shadow-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden cursor-pointer"
         >
           <div className="absolute top-0 left-0 w-full h-1.5 bg-[#12233F]" />
-          <div className="flex items-center justify-between mb-6">
-            <div className="p-4 bg-stone-100 text-[#12233F] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300">
-              <Shield className="w-8 h-8" />
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
+            <div className="p-3 sm:p-4 bg-stone-100 text-[#12233F] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300">
+              <Shield className="w-7 h-7 sm:w-8 sm:h-8" />
             </div>
             <span className="text-xs font-bold text-[#12233F] tracking-wider bg-stone-100 px-3 py-1 rounded-full uppercase">
               MININT
             </span>
           </div>
-          <h2 className="font-display text-xl md:text-2xl font-semibold text-[#12233F] mb-2">
+          <h2 className="font-display text-lg sm:text-xl md:text-2xl font-semibold text-[#12233F] mb-2">
             Ministério do Interior
           </h2>
-          <p className="text-sm text-[#7A7060] leading-relaxed mb-6 flex-grow">
+          <p className="text-sm text-[#7A7060] leading-relaxed mb-4 sm:mb-6 flex-grow">
             Exames para a Polícia Nacional, Serviço de Investigação Criminal (SIC), Migração e Estrangeiros (SME) e Proteção Civil. Incide sobre a Constituição da República, Legislação Policial e Deontologia.
           </p>
           <div className="flex items-center text-sm font-semibold text-[#12233F] mt-auto">
@@ -156,24 +157,25 @@ export default function SelectionScreen({
         <motion.button
           id="card-minsa"
           whileHover={{ y: -5 }}
+          whileTap={{ scale: 0.98 }}
           transition={{ duration: 0.2 }}
           onClick={() => onSelect("MINSA")}
           disabled={isLoading}
-          className="group flex flex-col text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] rounded-xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden cursor-pointer"
+          className="group flex flex-col text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] rounded-xl p-5 sm:p-8 shadow-sm hover:shadow-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden cursor-pointer"
         >
           <div className="absolute top-0 left-0 w-full h-1.5 bg-[#A62639]" />
-          <div className="flex items-center justify-between mb-6">
-            <div className="p-4 bg-stone-100 text-[#A62639] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300">
-              <HeartPulse className="w-8 h-8" />
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
+            <div className="p-3 sm:p-4 bg-stone-100 text-[#A62639] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300">
+              <HeartPulse className="w-7 h-7 sm:w-8 sm:h-8" />
             </div>
             <span className="text-xs font-bold text-[#A62639] tracking-wider bg-red-50 px-3 py-1 rounded-full uppercase">
               MINSA
             </span>
           </div>
-          <h2 className="font-display text-xl md:text-2xl font-semibold text-[#12233F] mb-2">
+          <h2 className="font-display text-lg sm:text-xl md:text-2xl font-semibold text-[#12233F] mb-2">
             Ministério da Saúde
           </h2>
-          <p className="text-sm text-[#7A7060] leading-relaxed mb-6 flex-grow">
+          <p className="text-sm text-[#7A7060] leading-relaxed mb-4 sm:mb-6 flex-grow">
             Exames para Médicos, Enfermeiros, Técnicos de Diagnóstico e Terapeutas. Incide sobre o Serviço Nacional de Saúde (SNS), Saúde Pública de Angola, Epidemiologia, Ética e Cuidados de Saúde Primários.
           </p>
           <div className="flex items-center text-sm font-semibold text-[#12233F] mt-auto">
@@ -189,10 +191,10 @@ export default function SelectionScreen({
           whileHover={{ y: -3 }}
           transition={{ duration: 0.2 }}
           onClick={onOpenManuais}
-          className="group w-full flex items-center gap-4 text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] rounded-xl p-5 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
+          className="group w-full flex items-center gap-3 sm:gap-4 text-left bg-white border border-[#E3D9C4] hover:border-[#12233F] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
         >
-          <div className="p-3.5 bg-stone-100 text-[#12233F] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300 flex-shrink-0">
-            <FileText className="w-6 h-6" />
+          <div className="p-3 sm:p-3.5 bg-stone-100 text-[#12233F] rounded-xl group-hover:bg-[#12233F] group-hover:text-white transition-colors duration-300 flex-shrink-0">
+            <FileText className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div className="flex-grow">
             <h3 className="font-display text-base md:text-lg font-semibold text-[#12233F]">Manuais de Estudo</h3>
@@ -212,8 +214,8 @@ export default function SelectionScreen({
 
       {/* Candidate History Section */}
       {!isAdmin && currentUser && (
-        <div className="mt-12 max-w-3xl mx-auto bg-white border border-[#E3D9C4] rounded-2xl p-6 shadow-xs">
-          <h2 className="font-display text-lg font-semibold text-[#12233F] mb-4 flex items-center gap-2 border-b border-[#E3D9C4] pb-3">
+        <div className="mt-8 sm:mt-12 max-w-3xl mx-auto bg-white border border-[#E3D9C4] rounded-2xl p-4 sm:p-6 shadow-xs">
+          <h2 className="font-display text-base sm:text-lg font-semibold text-[#12233F] mb-4 flex items-center gap-2 border-b border-[#E3D9C4] pb-3">
             <Award className="w-5 h-5 text-stone-500" />
             As Minhas Simulações Recentes (Base de Dados)
           </h2>

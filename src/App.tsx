@@ -292,16 +292,16 @@ export default function App() {
     <div className="min-h-screen bg-[var(--color-paper)] flex flex-col justify-between text-[var(--color-ink)]">
       {/* Top Main Navbar */}
       <header className="bg-[var(--color-navy)] text-white border-b-2 border-[var(--color-gold)] sticky top-0 z-40 shadow-[0_2px_10px_rgba(12,26,46,0.25)]">
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-3 cursor-pointer group" onClick={handleRestart}>
-            <div className="w-9 h-9 border border-white/25 rounded-full flex items-center justify-center text-[var(--color-gold)] group-hover:border-[var(--color-gold)] transition-colors">
-              <GraduationCap className="w-4.5 h-4.5" />
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 h-14 sm:h-16 flex items-center justify-between">
+          <div className="flex items-center space-x-2 sm:space-x-3 cursor-pointer group min-w-0" onClick={handleRestart}>
+            <div className="w-8 h-8 sm:w-9 sm:h-9 shrink-0 border border-white/25 rounded-full flex items-center justify-center text-[var(--color-gold)] group-hover:border-[var(--color-gold)] transition-colors">
+              <GraduationCap className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
             </div>
-            <div>
-              <span className="font-display font-semibold text-base md:text-lg text-white tracking-tight block leading-none">
+            <div className="min-w-0">
+              <span className="font-display font-semibold text-sm sm:text-base md:text-lg text-white tracking-tight block leading-none truncate">
                 Simulador de Exames Angola
               </span>
-              <span className="text-[10px] font-semibold text-white/60 uppercase tracking-[0.2em] block mt-1">
+              <span className="hidden sm:block text-[10px] font-semibold text-white/60 uppercase tracking-[0.2em] mt-1">
                 Função Pública de Angola
               </span>
             </div>

@@ -32,9 +32,9 @@ export default function ResultsScreen({
   const isApto = notaFinal >= 10;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
       {/* Result Card Summary */}
-      <div className="bg-white border border-[#E3D9C4] rounded-xl p-6 md:p-8 shadow-sm mb-8 relative overflow-hidden">
+      <div className="bg-white border border-[#E3D9C4] rounded-xl p-5 sm:p-6 md:p-8 shadow-sm mb-6 sm:mb-8 relative overflow-hidden">
         {/* Colorful top border representing status */}
         <div className={`absolute top-0 left-0 w-full h-2 ${isApto ? "bg-[#2F9E5E]" : "bg-[#A62639]"}`} />
 
@@ -210,7 +210,7 @@ export default function ResultsScreen({
                     return (
                       <div
                         key={optIdx}
-                        className={`flex items-start justify-between p-3.5 rounded-xl border-2 text-sm ${optionBorder} ${optionBg} ${textStyle}`}
+                        className={`flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 p-3.5 rounded-xl border-2 text-sm ${optionBorder} ${optionBg} ${textStyle}`}
                       >
                         <div className="flex items-start space-x-3">
                           <span className={`w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center font-bold text-[10px] uppercase ${
@@ -224,7 +224,7 @@ export default function ResultsScreen({
                           </span>
                           <span className="leading-tight">{opcao}</span>
                         </div>
-                        {badgeNode}
+                        {badgeNode && <div className="pl-8 sm:pl-0 flex-shrink-0">{badgeNode}</div>}
                       </div>
                     );
                   })}

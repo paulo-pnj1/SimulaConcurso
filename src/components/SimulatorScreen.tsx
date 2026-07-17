@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Clock, ChevronLeft, ChevronRight, CheckSquare, HelpCircle, AlertTriangle } from "lucide-react";
+import { Clock, ChevronLeft, ChevronRight, CheckSquare, HelpCircle, AlertTriangle, X } from "lucide-react";
 import { Pergunta, RespostasUsuario, ConcursoType } from "../types";
 
 interface SimulatorScreenProps {
@@ -22,6 +22,10 @@ export default function SimulatorScreen({
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [tempoRestante, setTempoRestante] = useState<number>(45 * 60); // 45 minutos em segundos
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
+  // Em telemóvel a "Folha de Respostas" fica escondida por trás de um botão
+  // para não obrigar o candidato a percorrer a página só para ver o
+  // enunciado; em ecrãs largos (lg+) continua sempre visível ao lado.
+  const [showAnswerSheetMobile, setShowAnswerSheetMobile] = useState<boolean>(false);
 
   // Timer effect
   useEffect(() => {
@@ -73,47 +77,64 @@ export default function SimulatorScreen({
   // Check if time is running out (less than 5 minutes)
   const isTimeLow = tempoRestante < 5 * 60;
 
+  const progressPct = (respondidasCount / totalPerguntas) * 100;
+
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6">
-      {/* Top Header of Simulator */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white border border-[#E3D9C4] shadow-sm rounded-xl p-4 mb-6 gap-4">
-        <div className="flex items-center space-x-3">
-          <div className="p-2 rounded-lg font-bold text-xs bg-[#E3D9C4] text-[#12233F] uppercase tracking-wider">
-            CONCURSO {ministerio}{corpo ? ` • ${corpo}` : ""}
+    <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
+      {/* Top Header of Simulator -  one compact strip on mobile, roomier on desktop */}
+      <div className="bg-white border border-[#E3D9C4] shadow-sm rounded-xl p-3 sm:p-4 mb-4 sm:mb-6">
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <div className="inline-block max-w-full truncate p-1.5 sm:p-2 rounded-lg font-bold text-[10px] sm:text-xs bg-[#E3D9C4] text-[#12233F] uppercase tracking-wider">
+              {ministerio}{corpo ? ` • ${corpo}` : ""}
+            </div>
+            <span className="hidden sm:inline text-xs md:text-sm font-medium text-[#5C5346] ml-3">
+              {respondidasCount} de {totalPerguntas} respondidas
+            </span>
           </div>
-          <span className="text-[#E3D9C4]">|</span>
-          <span className="text-xs md:text-sm font-medium text-[#5C5346]">
-            {respondidasCount} de {totalPerguntas} perguntas respondidas
+
+          {/* Timer Badge */}
+          <div className={`flex items-center gap-1.5 sm:gap-2.5 px-2.5 sm:px-4 py-1.5 rounded-xl border shrink-0 transition-colors ${
+            isTimeLow 
+              ? "bg-red-50 text-[#A62639] border-red-200 animate-pulse" 
+              : "bg-[#FBF7EE] text-[#A62639] border-[#E3D9C4]"
+          }`}>
+            <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#A62639]" />
+            <span className="font-mono text-base sm:text-xl font-bold tracking-wider">{formatTime(tempoRestante)}</span>
+          </div>
+        </div>
+
+        {/* Progress Bar (full width, always visible) */}
+        <div className="mt-3 flex items-center gap-2.5">
+          <div className="flex-1 bg-[#E3D9C4] rounded-full h-2">
+            <div
+              className="h-2 rounded-full transition-all duration-300 bg-[#12233F]"
+              style={{ width: `${progressPct}%` }}
+            />
+          </div>
+          <span className="sm:hidden text-[11px] font-semibold text-[#5C5346] shrink-0">
+            {respondidasCount}/{totalPerguntas}
           </span>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="w-full md:w-48 bg-[#E3D9C4] rounded-full h-2">
-          <div
-            className="h-2 rounded-full transition-all duration-300 bg-[#12233F]"
-            style={{ width: `${(respondidasCount / totalPerguntas) * 100}%` }}
-          />
-        </div>
-
-        {/* Timer Badge */}
-        <div className={`flex items-center space-x-2.5 px-4 py-1.5 rounded-xl border transition-colors ${
-          isTimeLow 
-            ? "bg-red-50 text-[#A62639] border-red-200 animate-pulse" 
-            : "bg-[#FBF7EE] text-[#A62639] border-[#E3D9C4]"
-        }`}>
-          <Clock className="w-4 h-4 text-[#A62639]" />
-          <span className="font-mono text-xl font-bold tracking-wider">{formatTime(tempoRestante)}</span>
         </div>
       </div>
 
+      {/* Mobile-only: quick access to the Folha de Respostas without scrolling */}
+      <button
+        onClick={() => setShowAnswerSheetMobile(true)}
+        className="lg:hidden w-full flex items-center justify-center gap-2 bg-white border border-[#E3D9C4] text-[#12233F] text-sm font-semibold rounded-xl px-4 py-3 mb-4 shadow-sm active:bg-[#FBF7EE] transition-colors"
+      >
+        <CheckSquare className="w-4 h-4" />
+        <span>Folha de Respostas ({respondidasCount}/{totalPerguntas})</span>
+      </button>
+
       {/* Main 2-Column Grid */}
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Left Column: Question area (2 cols wide on desktop) */}
         <div className="lg:col-span-2 flex flex-col justify-between bg-white border border-[#E3D9C4] rounded-xl p-4 sm:p-6 shadow-sm min-h-[500px]">
           <div>
             {/* Category and Index */}
-            <div className="flex justify-between items-center mb-6 border-b border-[#E3D9C4] pb-4">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#E3D9C4] text-[#5C5346] border border-[#D8CBB0] uppercase tracking-wider">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-6 border-b border-[#E3D9C4] pb-4">
+              <span className="inline-flex items-center self-start px-3 py-1 rounded-full text-xs font-semibold bg-[#E3D9C4] text-[#5C5346] border border-[#D8CBB0] uppercase tracking-wider">
                 <HelpCircle className="w-3.5 h-3.5 mr-1" />
                 {currentPergunta.categoria}
               </span>
@@ -180,54 +201,77 @@ export default function SimulatorScreen({
           </div>
         </div>
 
-        {/* Right Column: Status Panel (1 col wide on desktop) */}
-        <div className="bg-white border border-[#E3D9C4] rounded-xl p-4 sm:p-6 shadow-sm flex flex-col h-full justify-between">
-          <div>
-            <h4 className="text-sm font-bold text-[#201C16] uppercase tracking-wider mb-4 flex items-center border-b border-[#E3D9C4] pb-2">
-              <CheckSquare className="w-4 h-4 mr-2 text-[#5C5346]" />
-              Folha de Respostas
-            </h4>
-            <p className="text-xs text-[#7A7060] mb-4 leading-relaxed">
-              Clique num número para saltar diretamente para a pergunta correspondente. Os números ficam marcados a verde quando respondidos.
-            </p>
+        {/* Right Column: Status Panel -  always visible on lg+, overlay on mobile/tablet */}
+        <div
+          className={`${
+            showAnswerSheetMobile
+              ? "fixed inset-0 z-50 bg-black/50 flex items-end lg:items-stretch justify-center lg:static lg:bg-transparent lg:z-auto"
+              : "hidden"
+          } lg:flex lg:flex-col`}
+        >
+          <div className="bg-white border border-[#E3D9C4] rounded-t-2xl lg:rounded-xl p-4 sm:p-6 shadow-sm flex flex-col w-full max-h-[85vh] lg:max-h-none lg:h-full justify-between overflow-y-auto">
+            <div>
+              <div className="flex items-center justify-between mb-4 border-b border-[#E3D9C4] pb-2">
+                <h4 className="text-sm font-bold text-[#201C16] uppercase tracking-wider flex items-center">
+                  <CheckSquare className="w-4 h-4 mr-2 text-[#5C5346]" />
+                  Folha de Respostas
+                </h4>
+                <button
+                  onClick={() => setShowAnswerSheetMobile(false)}
+                  className="lg:hidden p-1 text-stone-400 hover:text-[#12233F]"
+                  aria-label="Fechar folha de respostas"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <p className="text-xs text-[#7A7060] mb-4 leading-relaxed">
+                Clique num número para saltar diretamente para a pergunta correspondente. Os números ficam marcados a verde quando respondidos.
+              </p>
 
-            {/* Grid of question states */}
-            <div className="grid grid-cols-5 gap-2.5 mb-6">
-              {perguntas.map((p, index) => {
-                const isAnswered = respostas[p.id] !== undefined;
-                const isActive = index === currentIdx;
+              {/* Grid of question states */}
+              <div className="grid grid-cols-6 sm:grid-cols-8 lg:grid-cols-5 gap-2 sm:gap-2.5 mb-6">
+                {perguntas.map((p, index) => {
+                  const isAnswered = respostas[p.id] !== undefined;
+                  const isActive = index === currentIdx;
 
-                let btnStyles = "";
-                if (isActive) {
-                  btnStyles = "border-2 border-[#12233F] bg-[#EAF0F7] text-[#12233F] font-bold shadow-sm";
-                } else if (isAnswered) {
-                  btnStyles = "bg-[#2F9E5E] border-[#278A4C] text-white font-medium hover:bg-[#278A4C]";
-                } else {
-                  btnStyles = "bg-white border-[#E3D9C4] text-[#7A7060] hover:bg-[#FBF7EE]";
-                }
+                  let btnStyles = "";
+                  if (isActive) {
+                    btnStyles = "border-2 border-[#12233F] bg-[#EAF0F7] text-[#12233F] font-bold shadow-sm";
+                  } else if (isAnswered) {
+                    btnStyles = "bg-[#2F9E5E] border-[#278A4C] text-white font-medium hover:bg-[#278A4C]";
+                  } else {
+                    btnStyles = "bg-white border-[#E3D9C4] text-[#7A7060] hover:bg-[#FBF7EE]";
+                  }
 
-                return (
-                  <button
-                    key={p.id}
-                    id={`folha-questao-${index + 1}`}
-                    onClick={() => setCurrentIdx(index)}
-                    className={`h-11 rounded-xl text-sm border flex items-center justify-center transition-all duration-150 ${btnStyles}`}
-                  >
-                    {index + 1}
-                  </button>
-                );
-              })}
+                  return (
+                    <button
+                      key={p.id}
+                      id={`folha-questao-${index + 1}`}
+                      onClick={() => {
+                        setCurrentIdx(index);
+                        setShowAnswerSheetMobile(false);
+                      }}
+                      className={`h-11 rounded-xl text-sm border flex items-center justify-center transition-all duration-150 ${btnStyles}`}
+                    >
+                      {index + 1}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
-          <div className="border-t border-[#E3D9C4] pt-4 mt-6">
-            <button
-              id="btn-submeter-lateral"
-              onClick={() => setShowConfirmModal(true)}
-              className="w-full flex items-center justify-center space-x-2 bg-red-50 text-[#A62639] hover:bg-red-100 border border-red-200 px-4 py-3 rounded-xl text-sm font-semibold transition-colors"
-            >
-              <span>Submeter Exame Agora</span>
-            </button>
+            <div className="border-t border-[#E3D9C4] pt-4 mt-2 lg:mt-6">
+              <button
+                id="btn-submeter-lateral"
+                onClick={() => {
+                  setShowAnswerSheetMobile(false);
+                  setShowConfirmModal(true);
+                }}
+                className="w-full flex items-center justify-center space-x-2 bg-red-50 text-[#A62639] hover:bg-red-100 border border-red-200 px-4 py-3 rounded-xl text-sm font-semibold transition-colors"
+              >
+                <span>Submeter Exame Agora</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>

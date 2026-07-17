@@ -26,7 +26,7 @@ export default function CorpoSelectionScreen({
   error,
 }: CorpoSelectionScreenProps) {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
       <button
         onClick={onBack}
         className="mb-6 text-stone-500 hover:text-[#12233F] text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
@@ -35,12 +35,12 @@ export default function CorpoSelectionScreen({
         <span>Voltar à seleção de Ministério</span>
       </button>
 
-      <div className="text-center mb-10">
+      <div className="text-center mb-8 sm:mb-10">
         <div className="inline-flex items-center justify-center space-x-2 bg-[#D9E4F0] text-[#12233F] px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 border border-[#C3D4E8]">
           <Shield className="w-4 h-4" />
           <span>Ministério do Interior</span>
         </div>
-        <h1 className="font-display text-3xl md:text-4xl font-semibold tracking-tight text-[#12233F] mb-4">
+        <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-[#12233F] mb-3 sm:mb-4">
           Selecione o Corpo / Serviço
         </h1>
         <p className="text-sm md:text-base text-[#7A7060] max-w-2xl mx-auto leading-relaxed">
