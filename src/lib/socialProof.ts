@@ -1,6 +1,6 @@
 /**
  * Transforma uma contagem real de candidatos numa etiqueta de prova social
- * honesta — arredondada sempre para BAIXO, nunca para cima. Isto garante
+ * honesta - arredondada sempre para BAIXO, nunca para cima. Isto garante
  * que a frase mostrada ("+X candidatos...") é sempre verdadeira ou
  * conservadora, nunca inflacionada.
  *

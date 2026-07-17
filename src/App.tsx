@@ -339,7 +339,7 @@ export default function App() {
   };
 
   // Barra de navegação inferior (estilo app nativa) só faz sentido nos
-  // ecrãs "hub" do candidato — não durante o fluxo de prova/pagamento,
+  // ecrãs "hub" do candidato - não durante o fluxo de prova/pagamento,
   // onde já existe um botão "Voltar" próprio e dedicado.
   const isAdminUser = currentUser?.role === "admin";
   const hasHubAccess = !!currentUser && (isAdminUser || currentUser.isPremium);
@@ -448,7 +448,7 @@ export default function App() {
         )}
       </main>
 
-      {/* Institutional Footer — no telemóvel dá lugar à barra de navegação
+      {/* Institutional Footer - no telemóvel dá lugar à barra de navegação
           inferior, por isso só aparece a partir do breakpoint md */}
       <footer className="hidden md:block bg-[var(--color-paper-light)] border-t border-[var(--color-line)] py-6 text-center text-xs text-[var(--color-ink-faint)]">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
@@ -461,7 +461,7 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Mobile Bottom Tab Bar — dá ao painel do candidato uma navegação
+      {/* Mobile Bottom Tab Bar - dá ao painel do candidato uma navegação
           fixa e tátil, como uma app nativa, nos ecrãs "hub" (Início e
           Manuais). Ecrãs de fluxo (prova, resultados, escolha de corpo,
           autenticação) mantêm o seu próprio botão "Voltar" dedicado. */}

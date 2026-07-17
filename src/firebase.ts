@@ -49,14 +49,14 @@ export const submitExamFn = (data: {
 }) => callApi("/api/submitExam", data);
 
 // Revela a resposta certa + explicação de UMA pergunta específica, sem
-// submeter a prova nem gravar tentativa nenhuma — usado no modo de estudo
+// submeter a prova nem gravar tentativa nenhuma - usado no modo de estudo
 // dentro do simulador (ver App.tsx: handleRevealAnswer).
 export const revealAnswerFn = (data: { ministerio: string; corpo?: string; perguntaId: number }) =>
   callApi("/api/revealAnswer", data);
 
 // Contagem pública de candidatos (para o selo de prova social no
 // AuthScreen). Ao contrário de callApi() acima, este endpoint NÃO exige
-// sessão iniciada — é lido antes do candidato entrar na plataforma.
+// sessão iniciada - é lido antes do candidato entrar na plataforma.
 export async function getCandidateCount(): Promise<number | null> {
   try {
     const res = await fetch("/api/candidateCount");

@@ -8,7 +8,7 @@ import { getDb } from "./_lib/admin.js";
  * candidatos registados. Usado para o selo de prova social no AuthScreen
  * ("+X candidatos já estão a preparar-se com o EstudaBué!").
  *
- * Corre com o Admin SDK (via getDb), portanto ignora as firestore.rules —
+ * Corre com o Admin SDK (via getDb), portanto ignora as firestore.rules -
  * é o único jeito de contar a coleção "users", já que as regras só
  * permitem `list` a administradores. Não devolve nenhum dado individual,
  * só a contagem agregada, por isso é seguro expor sem token.

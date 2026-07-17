@@ -20,7 +20,7 @@ interface PaymentGateScreenProps {
 
 // Ecrã de bloqueio: aparece a qualquer candidato que ainda não tenha o
 // acesso Premium ativado. Substitui por completo a seleção de ministério e
-// o simulador — só depois do admin confirmar o pagamento é que o candidato
+// o simulador - só depois do admin confirmar o pagamento é que o candidato
 // passa a ver o resto da aplicação.
 export default function PaymentGateScreen({
   currentUser,
@@ -92,7 +92,7 @@ export default function PaymentGateScreen({
               A sua conta será ativada em breve
             </h2>
             <p className="text-sm text-[#7A7060] leading-relaxed mb-6">
-              Recebemos a sua confirmação de pagamento. Aguarde — o administrador vai verificar se o número de
+              Recebemos a sua confirmação de pagamento. Aguarde - o administrador vai verificar se o número de
               telemóvel com que se registou (<strong>{currentUser.telefone || "não indicado"}</strong>) corresponde
               ao número do ordenante da transferência Multicaixa Express, e depois ativa o seu acesso manualmente.
             </p>
@@ -115,7 +115,7 @@ export default function PaymentGateScreen({
             </a>
           </div>
         ) : (
-          // Estado: ainda não pagou — ecrã de bloqueio com instruções
+          // Estado: ainda não pagou - ecrã de bloqueio com instruções
           <div>
             <div className="text-center mb-6">
               <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-[#12233F] border-2 border-[#12233F] mb-4">

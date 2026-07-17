@@ -255,7 +255,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
 
   // Validação simples: aceita um URL http(s) qualquer (Google Drive,
   // Dropbox, OneDrive, etc.). Não valida se o link é mesmo um PDF nem se é
-  // "de download direto" — isso é responsabilidade de quem cola o link.
+  // "de download direto" - isso é responsabilidade de quem cola o link.
   const isValidUrl = (value: string): boolean => {
     try {
       const parsed = new URL(value.trim());
@@ -1328,7 +1328,7 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
                   type="text"
                   value={manualTitulo}
                   onChange={(e) => setManualTitulo(e.target.value)}
-                  placeholder="Ex: Manual de Preparação — Polícia Nacional"
+                  placeholder="Ex: Manual de Preparação - Polícia Nacional"
                   className="w-full bg-stone-50 border border-[#D8CBB0] rounded-lg px-3 py-2 text-sm text-[#201C16] placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#12233F]"
                 />
               </div>

@@ -84,7 +84,7 @@ export default function ManualsScreen({ currentUser, onBack }: ManualsScreenProp
         <div className="max-w-lg mx-auto text-center py-16">
           <FileText className="w-10 h-10 text-stone-300 mx-auto mb-3" />
           <p className="text-sm text-stone-400 leading-relaxed">
-            Ainda não há manuais disponíveis. Volte a verificar em breve — a equipa está a preparar o material de
+            Ainda não há manuais disponíveis. Volte a verificar em breve - a equipa está a preparar o material de
             estudo.
           </p>
         </div>

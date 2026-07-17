@@ -40,7 +40,7 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
   const [senha, setSenha] = useState("");
 
   // Selo de prova social ("+X candidatos já estão a preparar-se...").
-  // Começa como null e só aparece se/quando a contagem chegar — nunca
+  // Começa como null e só aparece se/quando a contagem chegar - nunca
   // mostra um valor a "carregar" nem inventa um número por defeito.
   const [candidateCountLabel, setCandidateCountLabel] = useState<string | null>(null);
 
@@ -75,7 +75,7 @@ export default function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
 
   // Login do administrador: acontece automaticamente quando o identificador
   // introduzido é o email de admin configurado em src/config/admin.ts. Não
-  // há nenhuma opção visível no ecrã para isto — é apenas uma verificação
+  // há nenhuma opção visível no ecrã para isto - é apenas uma verificação
   // silenciosa das credenciais.
   const handleAdminLogin = async (email: string) => {
     const result = await signInWithEmailAndPassword(auth, email, senha);
