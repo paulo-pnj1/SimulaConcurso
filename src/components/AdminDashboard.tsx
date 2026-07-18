@@ -22,10 +22,20 @@ import {
   Wallet,
   Upload,
   FileText,
-  Download
+  Download,
+  Bell,
+  BellRing,
+  BellOff
 } from "lucide-react";
 import { Pergunta, ConcursoType, CorpoMinint, CORPOS_MININT, PREMIUM_CONFIG, Manual } from "../types";
 import { db, handleFirestoreError, OperationType } from "../firebase";
+import {
+  isPushSupported,
+  getNotificationPermission,
+  hasActivePushSubscription,
+  subscribeAdminToPush,
+  unsubscribeAdminFromPush,
+} from "../lib/push";
 import {
   collection,
   getDocs,
@@ -70,6 +80,33 @@ interface CandidateUser {
 
 export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProps) {
   const [activeTab, setActiveTab] = useState<"candidates" | "questions" | "premium" | "manuais">("candidates");
+
+  // State for admin push notifications ("Já Paguei" alerts)
+  const [pushEnabled, setPushEnabled] = useState(false);
+  const [pushLoading, setPushLoading] = useState(false);
+  const [pushError, setPushError] = useState<string | null>(null);
+
+  useEffect(() => {
+    hasActivePushSubscription().then(setPushEnabled);
+  }, []);
+
+  const handleTogglePush = async () => {
+    setPushLoading(true);
+    setPushError(null);
+    try {
+      if (pushEnabled) {
+        await unsubscribeAdminFromPush();
+        setPushEnabled(false);
+      } else {
+        await subscribeAdminToPush();
+        setPushEnabled(true);
+      }
+    } catch (e) {
+      setPushError(e instanceof Error ? e.message : "Erro ao ativar notificações.");
+    } finally {
+      setPushLoading(false);
+    }
+  };
 
   // State for Study Manuals (link-based, no Firebase Storage / no paid plan needed)
   const [manuais, setManuais] = useState<Manual[]>([]);
@@ -504,11 +541,36 @@ export default function AdminDashboard({ adminUser, onBack }: AdminDashboardProp
           <span>Voltar à Plataforma</span>
         </button>
 
-        <div className="bg-[#12233F]/10 text-[#12233F] text-xs font-bold px-3.5 py-1.5 rounded-full flex items-center gap-1.5">
-          <Lock className="w-3.5 h-3.5" />
-          <span>Portal Administrador: {adminUser.name}</span>
+        <div className="flex items-center gap-2">
+          <div className="bg-[#12233F]/10 text-[#12233F] text-xs font-bold px-3.5 py-1.5 rounded-full flex items-center gap-1.5">
+            <Lock className="w-3.5 h-3.5" />
+            <span>Portal Administrador: {adminUser.name}</span>
+          </div>
+
+          {isPushSupported() && (
+            <button
+              onClick={handleTogglePush}
+              disabled={pushLoading}
+              title={pushEnabled ? "Notificações ativadas - clique para desativar" : "Ativar notificação de 'Já Paguei'"}
+              className={`text-xs font-bold px-3.5 py-1.5 rounded-full flex items-center gap-1.5 border transition-all cursor-pointer disabled:opacity-50 ${
+                pushEnabled
+                  ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
+                  : "bg-white text-[#12233F] border-[#D8CBB0] hover:bg-stone-50"
+              }`}
+            >
+              {pushEnabled ? <BellRing className="w-3.5 h-3.5" /> : <Bell className="w-3.5 h-3.5" />}
+              <span>{pushLoading ? "A processar..." : pushEnabled ? "Notificações ativas" : "Ativar notificações"}</span>
+            </button>
+          )}
         </div>
       </div>
+
+      {pushError && (
+        <div className="mb-6 flex items-center gap-2 text-xs font-bold text-red-700 bg-red-50 border border-red-200 rounded-xl px-3.5 py-2.5">
+          <BellOff className="w-3.5 h-3.5 flex-shrink-0" />
+          <span>{pushError}</span>
+        </div>
+      )}
 
       <div className="mb-8">
         <h1 className="text-3xl font-sans font-extrabold tracking-tight text-[#12233F]">

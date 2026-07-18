@@ -205,5 +205,27 @@ service cloud.firestore {
       allow update: if isAdmin();
       allow delete: if isAdmin();
     }
+
+    // ==========================================
+    // 5. PUSH SUBSCRIPTIONS COLLECTION
+    // ==========================================
+    // Guarda a subscrição do Push Manager do browser do admin (endpoint +
+    // chaves de encriptação), usada pelo endpoint /api/sendAdminPush para
+    // notificar o admin sempre que um candidato clica em "Já Paguei". Só o
+    // próprio admin pode ler/escrever a sua subscrição (id do documento =
+    // uid do admin); o endpoint que efetivamente ENVIA o push usa o Admin
+    // SDK e ignora estas regras.
+    match /pushSubscriptions/{subId} {
+      allow get: if isAdmin() && subId == request.auth.uid;
+      allow list: if isAdmin();
+
+      allow create, update: if isAdmin() &&
+                      subId == request.auth.uid &&
+                      incoming().uid == request.auth.uid &&
+                      incoming().subscription is map &&
+                      incoming().updatedAt is string;
+
+      allow delete: if isAdmin() && subId == request.auth.uid;
+    }
   }
 }

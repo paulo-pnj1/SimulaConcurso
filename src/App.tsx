@@ -1,19 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import { Pergunta, ConcursoType, CorpoMinint, RespostasUsuario, UserProfile, Resultado, SubmitExamResponse, RevealAnswerResponse } from "./types";
 import SelectionScreen from "./components/SelectionScreen";
 import CorpoSelectionScreen from "./components/CorpoSelectionScreen";
-import SimulatorScreen from "./components/SimulatorScreen";
-import ResultsScreen from "./components/ResultsScreen";
 import AuthScreen from "./components/AuthScreen";
-import AdminDashboard from "./components/AdminDashboard";
 import PaymentGateScreen from "./components/PaymentGateScreen";
-import ManualsScreen from "./components/ManualsScreen";
 import InstallAppPrompt from "./components/InstallAppPrompt";
 import { GraduationCap, Home, BookOpen, LogOut, ShieldCheck } from "lucide-react";
 import { auth, db, getExamQuestionsFn, submitExamFn, revealAnswerFn } from "./firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc, setDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { isAdminEmail } from "./config/admin";
+
+// Ecrãs pesados carregados só quando são mesmo necessários: um candidato
+// comum nunca descarrega o código do painel de admin, e vice-versa. Isto
+// reduz bastante o tamanho do JS inicial e torna o primeiro carregamento
+// da app mais rápido para toda a gente.
+const SimulatorScreen = lazy(() => import("./components/SimulatorScreen"));
+const ResultsScreen = lazy(() => import("./components/ResultsScreen"));
+const AdminDashboard = lazy(() => import("./components/AdminDashboard"));
+const ManualsScreen = lazy(() => import("./components/ManualsScreen"));
+
+function ScreenLoadingFallback() {
+  return (
+    <div className="flex items-center justify-center py-24">
+      <div className="w-8 h-8 border-2 border-[#12233F] border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
+}
 
 type ScreenType = "auth" | "selection" | "corpo-selection" | "simulator" | "results" | "manage" | "manuais";
 
@@ -333,6 +346,30 @@ export default function App() {
       const userRef = doc(db, "users", currentUser.uid);
       await setDoc(userRef, { paymentStatus: "pending", pendingSince: new Date().toISOString() }, { merge: true });
       setCurrentUser((prev) => (prev ? { ...prev, paymentStatus: "pending", pendingSince: new Date().toISOString() } : prev));
+
+      // Avisa o admin por notificação push. Isto é "melhor esforço": se
+      // falhar (rede fraca, admin ainda não ativou notificações, etc.), o
+      // candidato já ficou marcado como "pending" na mesma - não bloqueia
+      // nem mostra erro nenhum ao candidato. Corre sem "await" de propósito
+      // (fire-and-forget), mas SEMPRE regista o resultado na consola.
+      (async () => {
+        try {
+          const user = auth.currentUser;
+          if (!user) {
+            console.warn("notificarAdmin: auth.currentUser é null, não é possível obter token.");
+            return;
+          }
+          const idToken = await user.getIdToken();
+          const resp = await fetch("/api/sendAdminPush", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+          });
+          const body = await resp.json().catch(() => null);
+          console.log("notificarAdmin: resposta do servidor", resp.status, body);
+        } catch (e) {
+          console.error("notificarAdmin: falhou", e);
+        }
+      })();
     } catch (e) {
       console.error("Erro ao registar pedido de ativação:", e);
     }
@@ -380,6 +417,7 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className={`flex-grow ${showBottomNav ? "pb-20 md:pb-0" : ""}`}>
+        <Suspense fallback={<ScreenLoadingFallback />}>
         {screen === "auth" && <AuthScreen onAuthSuccess={handleAuthSuccess} />}
 
         {screen === "selection" && currentUser && currentUser.role !== "admin" && !currentUser.isPremium && (
@@ -446,6 +484,7 @@ export default function App() {
             onRestart={handleRestart}
           />
         )}
+        </Suspense>
       </main>
 
       {/* Institutional Footer - no telemóvel dá lugar à barra de navegação
